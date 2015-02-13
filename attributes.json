@@ -1,0 +1,301 @@
+{
+    "AccessFeature": {
+        "copy": "literal", 
+        "ctype": "feature_t", 
+        "init": "0"
+    }, 
+    "AccessInfo": {
+        "copy": "function", 
+        "ctype": "access_info_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "ArgTab": {
+        "copy": "function", 
+        "ctype": "argtab_t*", 
+        "init": "NULL"
+    }, 
+    "BitField": {
+        "copy": "literal", 
+        "ctype": "int", 
+        "init": "0"
+    }, 
+    "Bool": {
+        "copy": "literal", 
+        "ctype": "bool", 
+        "init": "FALSE", 
+        "vtype": "int"
+    }, 
+    "Byte": {
+        "copy": "literal", 
+        "ctype": "char", 
+        "init": "0", 
+        "vtype": "int"
+    }, 
+    "Char": {
+        "copy": "literal", 
+        "ctype": "unsigned char", 
+        "init": "'\\0'", 
+        "vtype": "int"
+    }, 
+    "CodeLink": {
+        "copy": "hash", 
+        "ctype": "node*", 
+        "init": "NULL", 
+        "persist": true
+    }, 
+    "CompInfo": {
+        "copy": "function", 
+        "ctype": "compinfo*", 
+        "init": "NULL"
+    }, 
+    "CompilerPhase": {
+        "copy": "literal", 
+        "ctype": "compiler_phase_t", 
+        "init": "PH_initial"
+    }, 
+    "Constant": {
+        "copy": "function", 
+        "ctype": "constant*", 
+        "init": "NULL"
+    }, 
+    "CudaAccessInfo": {
+        "copy": "function", 
+        "ctype": "cuda_access_info_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "DFMask": {
+        "copy": "function", 
+        "ctype": "dfmask_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "DFMaskBase": {
+        "copy": "function", 
+        "ctype": "dfmask_base_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "Dag": {
+        "copy": "function", 
+        "ctype": "dag*", 
+        "init": "NULL"
+    }, 
+    "Double": {
+        "copy": "literal", 
+        "ctype": "double", 
+        "init": "0.0"
+    }, 
+    "ExtLink": {
+        "copy": "hash", 
+        "ctype": "node*", 
+        "init": "NULL", 
+        "persist": true
+    }, 
+    "FileType": {
+        "copy": "literal", 
+        "ctype": "file_type", 
+        "init": "FT_unknown"
+    }, 
+    "Float": {
+        "copy": "literal", 
+        "ctype": "float", 
+        "init": "0.0", 
+        "vtype": "double"
+    }, 
+    "Floatvec": {
+        "copy": "literal", 
+        "ctype": "floatvec", 
+        "init": "(floatvec){0., 0., 0., 0.}", 
+        "vtype": "floatvec"
+    }, 
+    "IdagFun": {
+        "copy": "function", 
+        "ctype": "idag_fun_t ", 
+        "init": "NULL"
+    }, 
+    "IndexInfo": {
+        "copy": "function", 
+        "ctype": "index_info*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "Int": {
+        "copy": "literal", 
+        "ctype": "int", 
+        "init": "0", 
+        "vtype": "int"
+    }, 
+    "Integer": {
+        "copy": "literal", 
+        "ctype": "int", 
+        "init": "0"
+    }, 
+    "LUT": {
+        "copy": "function", 
+        "ctype": "lut_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "Link": {
+        "copy": "hash", 
+        "ctype": "node*", 
+        "init": "NULL", 
+        "persist": true
+    }, 
+    "Long": {
+        "copy": "literal", 
+        "ctype": "long", 
+        "init": "0", 
+        "vtype": "long long"
+    }, 
+    "Longlong": {
+        "copy": "literal", 
+        "ctype": "long long", 
+        "init": "0", 
+        "vtype": "long long"
+    }, 
+    "MTExecMode": {
+        "copy": "literal", 
+        "ctype": "mtexecmode_t", 
+        "init": "MUTH_ANY"
+    }, 
+    "Namespace": {
+        "copy": "function", 
+        "ctype": "namespace_t*", 
+        "init": "NULL"
+    }, 
+    "NewType": {
+        "copy": "function", 
+        "ctype": "ntype*", 
+        "init": "NULL"
+    }, 
+    "Node": {
+        "copy": "function", 
+        "ctype": "node*", 
+        "init": "NULL"
+    }, 
+    "NodeList": {
+        "copy": "function", 
+        "ctype": "nodelist*", 
+        "init": "NULL"
+    }, 
+    "OldType": {
+        "copy": "function", 
+        "ctype": "types*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "OmpOP": {
+        "copy": "literal", 
+        "ctype": "omp_reduction_op", 
+        "init": "OMP_REDUCTION_NONE"
+    }, 
+    "Prf": {
+        "copy": "literal", 
+        "ctype": "prf", 
+        "init": "(prf)0"
+    }, 
+    "ReuseInfo": {
+        "copy": "function", 
+        "ctype": "reuse_info_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "Scheduling": {
+        "copy": "function", 
+        "ctype": "sched_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "Shape": {
+        "copy": "function", 
+        "ctype": "shape*", 
+        "init": "NULL"
+    }, 
+    "SharedString": {
+        "copy": "function", 
+        "ctype": "const char*", 
+        "init": "NULL"
+    }, 
+    "Short": {
+        "copy": "literal", 
+        "ctype": "short", 
+        "init": "0", 
+        "vtype": "int"
+    }, 
+    "ShpSeg": {
+        "copy": "function", 
+        "ctype": "shpseg*", 
+        "init": "NULL"
+    }, 
+    "SimpleType": {
+        "copy": "literal", 
+        "ctype": "simpletype", 
+        "init": "T_unknown"
+    }, 
+    "String": {
+        "copy": "function", 
+        "ctype": "char*", 
+        "init": "NULL"
+    }, 
+    "StringSet": {
+        "copy": "function", 
+        "ctype": "stringset_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "TaskSel": {
+        "copy": "function", 
+        "ctype": "tasksel_t*", 
+        "init": "NULL", 
+        "persist": false
+    }, 
+    "TypeCheckingStatus": {
+        "copy": "literal", 
+        "ctype": "NTC_stat", 
+        "init": "NTC_not_checked", 
+        "persist": true
+    }, 
+    "Ubyte": {
+        "copy": "literal", 
+        "ctype": "unsigned char", 
+        "init": "0", 
+        "vtype": "unsigned int"
+    }, 
+    "Uint": {
+        "copy": "literal", 
+        "ctype": "unsigned int", 
+        "init": "0", 
+        "vtype": "unsigned int"
+    }, 
+    "Ulong": {
+        "copy": "literal", 
+        "ctype": "unsigned long", 
+        "init": "0", 
+        "vtype": "unsigned long int"
+    }, 
+    "Ulonglong": {
+        "copy": "literal", 
+        "ctype": "unsigned long long", 
+        "init": "0", 
+        "vtype": "unsigned long long int"
+    }, 
+    "Ushort": {
+        "copy": "literal", 
+        "ctype": "unsigned short", 
+        "init": "0", 
+        "vtype": "unsigned int"
+    }, 
+    "Vertex": {
+        "copy": "function", 
+        "ctype": "vertex*", 
+        "init": "NULL"
+    }, 
+    "VertexWrapper": {
+        "copy": "function", 
+        "ctype": "vertex*", 
+        "init": "NULL"
+    }
+}

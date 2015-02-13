@@ -1,0 +1,72 @@
+{
+    "Expr": [
+        "Num",
+        "NumByte",
+        "NumShort",
+        "NumInt",
+        "NumLong",
+        "NumLonglong",
+        "NumUbyte",
+        "NumUshort",
+        "NumUint",
+        "NumUlong",
+        "NumUlonglong",
+        "Double",
+        "Float",
+        "Floatvec",
+        "Char",
+        "Bool",
+        "Id",
+        "SPId",
+        "With",
+        "With2",
+        "With3",
+        "Array",
+        "Ap",
+        "SPAp",
+        "Prf",
+        "Funcond",
+        "Cast",
+        "SPMop",
+        "SetWL",
+        "Dot",
+        "Str",
+        "Icm",
+        "Type",
+        "Globobj",
+        "Nested_init"
+    ],
+    "Stmt": [
+        "Let",
+        "Cond",
+        "Return",
+        "Do",
+        "Annotate",
+        "While",
+        "Icm",
+        "Cudast"
+    ],
+    "Interface": [
+        "Import",
+        "Export",
+        "Use",
+        "Provide"
+    ],
+    "WithOp": [
+        "Genarray",
+        "Modarray",
+        "SPFold",
+        "Fold",
+        "Break",
+        "Propagate"
+    ],
+    "IntValue": [
+        "Num",
+        "Array",
+        "Id"
+    ],
+    "Withloop": [
+        "With",
+        "With2"
+    ]
+}

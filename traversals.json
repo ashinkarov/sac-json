@@ -1,0 +1,4443 @@
+{
+    "ACTRAN": {
+        "default": "sons", 
+        "include": "annotate_cond_transfers.h", 
+        "name": "Annoate memory transfers in conditional function", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Prf", 
+            "Id", 
+            "Let", 
+            "Funcond"
+        ]
+    }, 
+    "ACUPTN": {
+        "default": "sons", 
+        "include": "annotate_cuda_partition.h", 
+        "name": "Annotate CUDA partitions", 
+        "travuser": [
+            "With", 
+            "Part", 
+            "Generator"
+        ]
+    }, 
+    "ACUWL": {
+        "default": "sons", 
+        "include": "annotate_cuda_withloop2.h", 
+        "name": "Annotate CUDA withloops", 
+        "travuser": [
+            "With", 
+            "Code", 
+            "Fundef", 
+            "Ap", 
+            "Fold", 
+            "Break", 
+            "Propagate", 
+            "Genarray", 
+            "Id", 
+            "Let"
+        ]
+    }, 
+    "AFB": {
+        "default": "sons", 
+        "include": "add_function_body.h", 
+        "name": "Add Function Body Traversal", 
+        "travuser": [
+            "Fundef", 
+            "Return", 
+            "Block", 
+            "Arg", 
+            "Ap"
+        ]
+    }, 
+    "AL": {
+        "default": "sons", 
+        "include": "associative_law.h", 
+        "name": "Associative Law Optimization", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Prf", 
+            "With", 
+            "Part", 
+            "Code"
+        ]
+    }, 
+    "AMTRAN": {
+        "default": "sons", 
+        "include": "annotate_memory_transfers.h", 
+        "name": "Annoate a memory transfer", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Prf", 
+            "Ap", 
+            "Id", 
+            "Arg", 
+            "Let", 
+            "Funcond"
+        ]
+    }, 
+    "ANS": {
+        "default": "sons", 
+        "include": "annotatenamespace.h", 
+        "name": "Annotate Namespaces", 
+        "travuser": [
+            "Symbol", 
+            "Use", 
+            "Import", 
+            "Export", 
+            "Provide", 
+            "Fundef", 
+            "Typedef", 
+            "Objdef", 
+            "While", 
+            "Do", 
+            "SPAp", 
+            "SPMop", 
+            "Avis", 
+            "Array", 
+            "Arg", 
+            "Ret", 
+            "Vardec", 
+            "SPIds", 
+            "SPId", 
+            "Let", 
+            "With", 
+            "SPFold", 
+            "Module", 
+            "Cast"
+        ]
+    }, 
+    "APC": {
+        "default": "sons", 
+        "include": "pad_collect.h", 
+        "name": "Array Padding Collect", 
+        "travuser": []
+    }, 
+    "APT": {
+        "default": "sons", 
+        "include": "pad_transform.h", 
+        "name": "Array Padding Transform", 
+        "travuser": []
+    }, 
+    "ARMP": {
+        "default": "sons", 
+        "include": "add_rc_mode_prf.h", 
+        "name": "Add RC Mode PRF", 
+        "travuser": [
+            "With3", 
+            "Assign", 
+            "Ap", 
+            "Id", 
+            "Fundef"
+        ]
+    }, 
+    "AS": {
+        "default": "sons", 
+        "include": "arithmetic_simplification.h", 
+        "name": "Arithmetic Simplification", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "ASD": {
+        "default": "sons", 
+        "include": "audscldist.h", 
+        "name": "AUD SCL distinction", 
+        "traverror": [
+            "Do"
+        ], 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Ap", 
+            "Cond", 
+            "With", 
+            "With2", 
+            "Code", 
+            "Prf", 
+            "Funcond"
+        ]
+    }, 
+    "ASHA": {
+        "default": "sons", 
+        "include": "adjust_shmem_access.h", 
+        "name": "CUDA Adjust shared memory access", 
+        "travnone": [
+            "With2"
+        ], 
+        "travuser": [
+            "Let", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Prf", 
+            "Assign", 
+            "Arg", 
+            "Vardec"
+        ]
+    }, 
+    "ASMRA": {
+        "default": "sons", 
+        "include": "assignments_rearrange.h", 
+        "name": "Assignments Rearrange", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Block"
+        ]
+    }, 
+    "ASS": {
+        "default": "sons", 
+        "include": "addSyncs.h", 
+        "name": "Add Syncs", 
+        "travuser": [
+            "Vardec", 
+            "Range", 
+            "With3"
+        ]
+    }, 
+    "AWLF": {
+        "default": "sons", 
+        "include": "algebraic_wlf.h", 
+        "name": "Algebraic With-Loop-Folding", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Code", 
+            "Part", 
+            "Prf"
+        ]
+    }, 
+    "AWLFI": {
+        "default": "sons", 
+        "include": "algebraic_wlfi.h", 
+        "name": "Algebraic With-Loop-Folding Inference", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Id", 
+            "Cond", 
+            "With", 
+            "Modarray", 
+            "Part", 
+            "Prf"
+        ]
+    }, 
+    "BTF": {
+        "default": "sons", 
+        "include": "bundle_to_fundef.h", 
+        "name": "Bundle to Fundef", 
+        "travuser": [
+            "FunBundle", 
+            "Fundef"
+        ]
+    }, 
+    "CADT": {
+        "default": "sons", 
+        "include": "change_arrays_to_dist.h", 
+        "name": "Change arrays to distributed type", 
+        "travuser": [
+            "Fundef", 
+            "Ret", 
+            "Avis"
+        ]
+    }, 
+    "CBL": {
+        "default": "sons", 
+        "include": "construct_bundles.h", 
+        "name": "Construct Bundles", 
+        "travuser": [
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "CCF": {
+        "default": "sons", 
+        "include": "create_cond_fun.h", 
+        "name": "Create conditional functions", 
+        "travuser": [
+            "Assign", 
+            "Ids", 
+            "Id"
+        ]
+    }, 
+    "CCWB": {
+        "default": "sons", 
+        "include": "create_c_wrapper_body.h", 
+        "name": "Create C wrapper body", 
+        "travuser": [
+            "FunBundle"
+        ]
+    }, 
+    "CCWH": {
+        "default": "sons", 
+        "include": "create_c_wrapper_header.h", 
+        "name": "Create C wrapper header", 
+        "travuser": [
+            "FunBundle", 
+            "Fundef", 
+            "Arg", 
+            "Ret", 
+            "Typedef", 
+            "Module"
+        ]
+    }, 
+    "CDFG": {
+        "default": "sons", 
+        "include": "create_dataflowgraph.h", 
+        "name": "Create Dataflowgraph", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Assign", 
+            "Block", 
+            "Id", 
+            "Withid"
+        ]
+    }, 
+    "CEGRO": {
+        "default": "sons", 
+        "include": "cell_growth.h", 
+        "name": "Cell Growth", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Assign", 
+            "Block"
+        ]
+    }, 
+    "CF": {
+        "default": "sons", 
+        "include": "constant_folding.h", 
+        "name": "Constant Folding", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Cond", 
+            "Let", 
+            "Ids", 
+            "Array", 
+            "Prf", 
+            "With", 
+            "Code", 
+            "Part", 
+            "Funcond"
+        ]
+    }, 
+    "CFP": {
+        "default": "sons", 
+        "include": "create_function_pairs.h", 
+        "name": "MUTC create function pairs", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "CHK": {
+        "default": "user", 
+        "ifndef": "DBUG_OFF", 
+        "include": "check.h", 
+        "name": "Check the Tree"
+    }, 
+    "CHKLACF": {
+        "default": "sons", 
+        "include": "check_lacfuns.h", 
+        "name": "Check LaC functions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Ap"
+        ]
+    }, 
+    "CHKM": {
+        "default": "user", 
+        "ifndef": "DBUG_OFF", 
+        "include": "check_node.h", 
+        "name": "Check the memspace"
+    }, 
+    "CHKRST": {
+        "default": "user", 
+        "ifndef": "DBUG_OFF", 
+        "include": "check_reset.h", 
+        "name": "Reset for Tree Check"
+    }, 
+    "CLF": {
+        "default": "sons", 
+        "include": "create_loop_fun.h", 
+        "name": "Create loop functions", 
+        "travuser": [
+            "Assign", 
+            "Ids", 
+            "Id"
+        ]
+    }, 
+    "CMPT": {
+        "default": "CMPTunknown", 
+        "include": "compare_tree.h", 
+        "name": "Compare Tree Traversal", 
+        "prefun": "CMPTnodeType", 
+        "travuser": [
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Char", 
+            "Bool", 
+            "Float", 
+            "Floatvec", 
+            "Double", 
+            "Type", 
+            "Str", 
+            "Id", 
+            "Ids", 
+            "Array", 
+            "Prf", 
+            "Ap", 
+            "Generator", 
+            "Fold", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Return", 
+            "Cond", 
+            "Do", 
+            "Funcond", 
+            "Exprs", 
+            "With", 
+            "Part", 
+            "Withid", 
+            "Code", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "CNSTASS": {
+        "default": "sons", 
+        "include": "create_constant_assignments.h", 
+        "name": "Insert shape, lower bound and upper bound constant assignments", 
+        "travuser": [
+            "Assign", 
+            "With", 
+            "Withs", 
+            "Fundef", 
+            "Generator"
+        ]
+    }, 
+    "COMP": {
+        "default": "sons", 
+        "include": "compile.h", 
+        "name": "Compile", 
+        "traverror": [
+            "Cast", 
+            "While", 
+            "Funcond"
+        ], 
+        "travnone": [
+            "Icm"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Array", 
+            "Assign", 
+            "Block", 
+            "Cond", 
+            "Fundef", 
+            "Id", 
+            "Let", 
+            "Do", 
+            "Module", 
+            "Objdef", 
+            "Prf", 
+            "Return", 
+            "Typedef", 
+            "Vardec", 
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Char", 
+            "Bool", 
+            "Float", 
+            "Floatvec", 
+            "Double", 
+            "With", 
+            "Withid", 
+            "Part", 
+            "Generator", 
+            "With2", 
+            "WLseg", 
+            "WLblock", 
+            "WLublock", 
+            "WLstride", 
+            "WLgrid", 
+            "Code", 
+            "With3", 
+            "Range"
+        ]
+    }, 
+    "CONCEL": {
+        "default": "sons", 
+        "include": "consolidate_cells.h", 
+        "name": "Consolidate Cells", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "EX", 
+            "Fundef", 
+            "MT", 
+            "ST"
+        ]
+    }, 
+    "COSMI": {
+        "default": "sons", 
+        "include": "movesharedmeminstr.h", 
+        "name": "Collect shared memory management instructions", 
+        "traverror": [
+            "With"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Ret", 
+            "Arg", 
+            "Block", 
+            "Vardec", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "With2", 
+            "Genarray", 
+            "Modarray", 
+            "Fold"
+        ]
+    }, 
+    "CP": {
+        "default": "sons", 
+        "include": "constant_propagation.h", 
+        "name": "Constant Propagation", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf", 
+            "Id", 
+            "Array", 
+            "Genarray", 
+            "Avis"
+        ]
+    }, 
+    "CRECE": {
+        "default": "sons", 
+        "include": "create_cells.h", 
+        "name": "Create Cells", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Assign", 
+            "Block"
+        ]
+    }, 
+    "CRTWRP": {
+        "default": "sons", 
+        "include": "create_wrappers.h", 
+        "name": "Create Wrappers", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Let", 
+            "SPAp", 
+            "Genarray", 
+            "SPFold"
+        ]
+    }, 
+    "CRWIW": {
+        "default": "sons", 
+        "include": "create_withinwith.h", 
+        "name": "Create Withinwith Replication", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef"
+        ]
+    }, 
+    "CS": {
+        "default": "sons", 
+        "include": "constraint_statistics.h", 
+        "name": "Print Constraint Statistics", 
+        "travuser": [
+            "Fundef", 
+            "Prf"
+        ]
+    }, 
+    "CSE": {
+        "default": "sons", 
+        "include": "SSACSE.h", 
+        "name": "Common Subexpression Elimination", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Avis", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Code", 
+            "Cond", 
+            "With", 
+            "Ap", 
+            "Ids", 
+            "Id", 
+            "Return"
+        ]
+    }, 
+    "CSGD": {
+        "default": "sons", 
+        "include": "check_and_simplify_generic_definitions.h", 
+        "name": "Check and Simplify Generic Definitions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg", 
+            "Ret", 
+            "Avis", 
+            "Cast", 
+            "Return", 
+            "Assign"
+        ]
+    }, 
+    "CSPF": {
+        "default": "sons", 
+        "include": "create_spawn_funs.h", 
+        "name": "MUTC create spawn functions", 
+        "travuser": [
+            "Module", 
+            "Ap"
+        ]
+    }, 
+    "CSS": {
+        "default": "sons", 
+        "include": "count_spawn_sync.h", 
+        "name": "Count Spawns and Syncs", 
+        "travuser": [
+            "Fundef", 
+            "Let", 
+            "Ap", 
+            "Prf"
+        ]
+    }, 
+    "CTR": {
+        "default": "sons", 
+        "include": "convert_type_representation.h", 
+        "name": "Converting to old type representation", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Block", 
+            "Vardec", 
+            "Ret"
+        ]
+    }, 
+    "CTZ": {
+        "default": "sons", 
+        "include": "comparison_to_zero.h", 
+        "name": "Comparison to Zero", 
+        "travuser": [
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "CTZG": {
+        "default": "sons", 
+        "include": "comparison_to_zero_guards.h", 
+        "name": "Comparison to Zero for Guards", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Fundef"
+        ]
+    }, 
+    "CU": {
+        "default": "sons", 
+        "include": "check_uniqueness.h", 
+        "name": "Check uniqueness", 
+        "travuser": [
+            "Avis", 
+            "Block", 
+            "Code", 
+            "Cond", 
+            "Funcond", 
+            "Fundef", 
+            "Id", 
+            "Ids", 
+            "Code", 
+            "Prf"
+        ]
+    }, 
+    "CUA": {
+        "default": "sons", 
+        "include": "check_uniqueness_annotations.h", 
+        "name": "Check uniqueness annotations", 
+        "travuser": [
+            "Objdef", 
+            "Arg", 
+            "Ret"
+        ]
+    }, 
+    "CUASR": {
+        "default": "sons", 
+        "include": "adjust_stknl_rets.h", 
+        "name": "CUDA Adjust return ids of single threaded kernel", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Ap", 
+            "Return", 
+            "Id", 
+            "Ids", 
+            "Module", 
+            "Let", 
+            "Arg", 
+            "Ret"
+        ]
+    }, 
+    "CUBSL": {
+        "default": "sons", 
+        "include": "cubeslicer.h", 
+        "name": "Algebraic With-Loop-Folding Cube Slicer", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Part", 
+            "Prf"
+        ]
+    }, 
+    "CUCC": {
+        "default": "sons", 
+        "include": "cuda_create_cells.h", 
+        "name": "CUDA Create cells", 
+        "travuser": [
+            "Fundef", 
+            "Assign"
+        ]
+    }, 
+    "CUCM": {
+        "default": "sons", 
+        "include": "cuda_cost_model.h", 
+        "name": "CUDA cost model", 
+        "travuser": [
+            "Fundef", 
+            "Let", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Part"
+        ]
+    }, 
+    "CUD": {
+        "default": "sons", 
+        "include": "cleanup_decls.h", 
+        "name": "Cleanup Declarations", 
+        "travuser": [
+            "Block", 
+            "Fundef", 
+            "Id", 
+            "Ids", 
+            "Vardec"
+        ]
+    }, 
+    "CUDR": {
+        "default": "sons", 
+        "include": "cuda_data_reuse.h", 
+        "name": "CUDA Exploiting data reuse with cuda shared memory", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Code", 
+            "With3", 
+            "Range", 
+            "Prf"
+        ]
+    }, 
+    "CUKNL": {
+        "default": "sons", 
+        "include": "create_cuda_kernels.h", 
+        "name": "Create cuda kernel functions", 
+        "travuser": [
+            "Assign", 
+            "Do", 
+            "Let", 
+            "With", 
+            "With2", 
+            "Withid", 
+            "Id", 
+            "Ids", 
+            "Fundef", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Part", 
+            "Code", 
+            "Generator", 
+            "Prf"
+        ]
+    }, 
+    "CUSKC": {
+        "default": "sons", 
+        "include": "cuda_sink_code.h", 
+        "name": "CUDA Sink scalar code into CUDA withloop", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Ids", 
+            "Id", 
+            "Let", 
+            "Block", 
+            "With"
+        ]
+    }, 
+    "CUTEM": {
+        "default": "sons", 
+        "include": "cuda_tag_executionmode.h", 
+        "name": "CUDA Tag execution mode", 
+        "travnone": [
+            "Return", 
+            "Funcond"
+        ], 
+        "travuser": [
+            "With", 
+            "Assign", 
+            "Id", 
+            "Ids", 
+            "Ap", 
+            "Let", 
+            "Fundef", 
+            "Vardec", 
+            "Cond", 
+            "Block", 
+            "Arg"
+        ]
+    }, 
+    "CWC": {
+        "default": "sons", 
+        "include": "create_wrapper_code.h", 
+        "name": "Create Wrapper Code", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "CWLE": {
+        "default": "sons", 
+        "include": "copywlelim.h", 
+        "name": "Copy With-Loop Elimination", 
+        "travuser": [
+            "Fundef", 
+            "With", 
+            "Let", 
+            "Code", 
+            "Assign", 
+            "Ids", 
+            "Arg"
+        ]
+    }, 
+    "DAA": {
+        "default": "sons", 
+        "include": "data_access_analysis.h", 
+        "name": "CUDA Data access analysis", 
+        "travuser": [
+            "Fundef", 
+            "Ap", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Prf"
+        ]
+    }, 
+    "DCI": {
+        "default": "sons", 
+        "include": "deadcodeinference.h", 
+        "name": "Dead Code Inference", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Vardec", 
+            "Block", 
+            "Assign", 
+            "Return", 
+            "Cond", 
+            "Let", 
+            "Ap", 
+            "Id", 
+            "Ids", 
+            "Code", 
+            "Withid", 
+            "Range"
+        ]
+    }, 
+    "DCR": {
+        "default": "sons", 
+        "include": "deadcoderemoval.h", 
+        "name": "Dead Code Removal", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Ret", 
+            "Vardec", 
+            "Block", 
+            "Assign", 
+            "Annotate", 
+            "Let", 
+            "Ids", 
+            "Code", 
+            "Cond", 
+            "Ap", 
+            "Return", 
+            "Module"
+        ]
+    }, 
+    "DDEPEND": {
+        "default": "sons", 
+        "include": "detectdependencies.h", 
+        "name": "Detect Dependencies", 
+        "travuser": [
+            "Assign", 
+            "Prf", 
+            "Id", 
+            "With", 
+            "Code"
+        ]
+    }, 
+    "DES": {
+        "default": "sons", 
+        "include": "destruct.h", 
+        "name": "Remove Structs", 
+        "travuser": [
+            "Module", 
+            "Typedef", 
+            "Structdef", 
+            "Fundef", 
+            "Arg", 
+            "Ret", 
+            "Assign", 
+            "Exprs", 
+            "Let", 
+            "Ids", 
+            "Vardec"
+        ]
+    }, 
+    "DFC": {
+        "default": "sons", 
+        "include": "dispatchfuncalls.h", 
+        "name": "Dispatch Funcalls and Create Foldfuns", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Propagate", 
+            "Let"
+        ]
+    }, 
+    "DFR": {
+        "default": "sons", 
+        "include": "DeadFunctionRemoval.h", 
+        "name": "Dead Function Removal", 
+        "travuser": [
+            "Module", 
+            "Objdef", 
+            "Fundef", 
+            "Arg", 
+            "Ap", 
+            "Fold"
+        ]
+    }, 
+    "DISTCOND": {
+        "default": "sons", 
+        "include": "create_dist_wl_cond.h", 
+        "name": "Create distributed with-loop conditional", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Withs", 
+            "With", 
+            "With2"
+        ]
+    }, 
+    "DL": {
+        "default": "sons", 
+        "include": "distributive_law.h", 
+        "name": "Distributive Law Optimization", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Prf"
+        ]
+    }, 
+    "DLIR": {
+        "default": "sons", 
+        "include": "loop_invariant_removal.h", 
+        "name": "Do-Loop Invariants Traversal", 
+        "travuser": [
+            "Ids", 
+            "Assign", 
+            "Fundef", 
+            "Arg", 
+            "Vardec", 
+            "Block", 
+            "Let", 
+            "Id", 
+            "Ap", 
+            "Cond", 
+            "Return", 
+            "With", 
+            "Withid", 
+            "Exprs", 
+            "Module"
+        ]
+    }, 
+    "DLIRMOV": {
+        "default": "sons", 
+        "include": "loop_invariant_removal.h", 
+        "name": "Loop Invariants Move Traversal", 
+        "travuser": [
+            "Id", 
+            "Withid", 
+            "Assign", 
+            "Block", 
+            "Let", 
+            "Ids"
+        ]
+    }, 
+    "DMUI": {
+        "default": "sons", 
+        "include": "dynamic_memory_usage_inference.h", 
+        "name": "Dynamic memory usage inference", 
+        "travuser": [
+            "Fundef", 
+            "Prf"
+        ]
+    }, 
+    "DST": {
+        "default": "sons", 
+        "include": "distribute_threads.h", 
+        "name": "Distribute threads", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "With3", 
+            "Range"
+        ]
+    }, 
+    "DUP": {
+        "default": "user", 
+        "include": "DupTree.h", 
+        "name": "Tree duplication", 
+        "travsons": [
+            "Idag", 
+            "IdagVFam", 
+            "IdagEFam", 
+            "IdagEFams", 
+            "IdagVertices"
+        ]
+    }, 
+    "DVR": {
+        "default": "sons", 
+        "include": "dead_vardec_removal.h", 
+        "name": "Dead vardec removal", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Id", 
+            "Ids", 
+            "Vardec"
+        ]
+    }, 
+    "EA": {
+        "default": "sons", 
+        "include": "ExplicitAccumulate.h", 
+        "name": "Explicit Accumulate", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Propagate", 
+            "Fold", 
+            "Code"
+        ]
+    }, 
+    "EAT": {
+        "default": "sons", 
+        "include": "elim_alpha_types.h", 
+        "name": "Eliminate type variables and do some cleanup", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "Avis", 
+            "Array", 
+            "Block", 
+            "Let", 
+            "Part", 
+            "Withid", 
+            "With"
+        ]
+    }, 
+    "EBT": {
+        "default": "sons", 
+        "include": "elim_bottom_types.h", 
+        "name": "Eliminate bottom types", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "Block", 
+            "Ids", 
+            "Vardec", 
+            "Let", 
+            "Assign", 
+            "Cond", 
+            "Funcond"
+        ]
+    }, 
+    "EDFA": {
+        "default": "sons", 
+        "include": "eliminate_duplicate_fundef_args.h", 
+        "name": "Eliminate Duplicate Fundef Args", 
+        "travuser": [
+            "Fundef", 
+            "Ap"
+        ]
+    }, 
+    "ELF": {
+        "default": "sons", 
+        "include": "extend_lac_funs.h", 
+        "name": "Extend LaC funs", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Ap"
+        ]
+    }, 
+    "EMAA": {
+        "default": "none", 
+        "include": "aliasanalysis.h", 
+        "name": "Alias analysis", 
+        "travsons": [
+            "Module", 
+            "Block", 
+            "Exprs", 
+            "Range"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Assign", 
+            "Code", 
+            "Cond", 
+            "Fold", 
+            "Funcond", 
+            "Fundef", 
+            "Genarray", 
+            "Id", 
+            "Let", 
+            "Modarray", 
+            "Prf", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Vardec"
+        ]
+    }, 
+    "EMAL": {
+        "default": "none", 
+        "include": "alloc.h", 
+        "name": "Allocation", 
+        "travsons": [
+            "Module", 
+            "Cond", 
+            "Block"
+        ], 
+        "travuser": [
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Char", 
+            "Bool", 
+            "Float", 
+            "Floatvec", 
+            "Double", 
+            "Ap", 
+            "Array", 
+            "Assign", 
+            "Break", 
+            "Code", 
+            "Fold", 
+            "Funcond", 
+            "Fundef", 
+            "Genarray", 
+            "Id", 
+            "Let", 
+            "Modarray", 
+            "Prf", 
+            "Propagate", 
+            "With", 
+            "With2", 
+            "Withid", 
+            "Withs", 
+            "With3", 
+            "Range"
+        ]
+    }, 
+    "EMDR": {
+        "default": "none", 
+        "include": "datareuse.h", 
+        "name": "Data reuse", 
+        "travsons": [
+            "Module", 
+            "With", 
+            "With2", 
+            "Block"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Withid", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Range", 
+            "Code", 
+            "Cond", 
+            "Fundef", 
+            "Let", 
+            "Prf", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "EMEC": {
+        "default": "none", 
+        "include": "explicitcopy.h", 
+        "name": "Explicit Copy", 
+        "travsons": [
+            "Module", 
+            "Let", 
+            "With", 
+            "With2", 
+            "Cond", 
+            "Code", 
+            "Block"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Ap", 
+            "Prf"
+        ]
+    }, 
+    "EMIA": {
+        "default": "none", 
+        "include": "interfaceanalysis.h", 
+        "name": "Interface Analysis", 
+        "travsons": [
+            "Module", 
+            "Exprs"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Assign", 
+            "Block", 
+            "Cond", 
+            "Fold", 
+            "Funcond", 
+            "Fundef", 
+            "Genarray", 
+            "Id", 
+            "Let", 
+            "Modarray", 
+            "Ret", 
+            "Return", 
+            "Vardec", 
+            "With", 
+            "With2"
+        ]
+    }, 
+    "EMIP": {
+        "default": "sons", 
+        "include": "inplacecomp.h", 
+        "name": "Inplace Computation", 
+        "travnone": [
+            "Objdef"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Code", 
+            "Cond", 
+            "Fundef", 
+            "Let", 
+            "Prf", 
+            "Range"
+        ]
+    }, 
+    "EMIPH": {
+        "default": "sons", 
+        "include": "inplacecomp.h", 
+        "name": "Inplace Computation helper", 
+        "travnone": [
+            "Objdef"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Id"
+        ]
+    }, 
+    "EMLAO": {
+        "default": "sons", 
+        "include": "loopallocopt.h", 
+        "name": "Loop allocation optimization", 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef", 
+            "Arg", 
+            "Modarray", 
+            "Prf", 
+            "With", 
+            "With2"
+        ]
+    }, 
+    "EMLR": {
+        "default": "none", 
+        "include": "loopreuseopt.h", 
+        "name": "Loop reuse", 
+        "travsons": [
+            "Module", 
+            "Let", 
+            "With", 
+            "With2", 
+            "Cond", 
+            "Code", 
+            "Block"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef"
+        ]
+    }, 
+    "EMLRO": {
+        "default": "none", 
+        "include": "loopreuseopt.h", 
+        "name": "Loop reuse optimization", 
+        "travsons": [
+            "Exprs", 
+            "Module", 
+            "Let", 
+            "Assign", 
+            "With", 
+            "With2", 
+            "Cond", 
+            "Code", 
+            "Block"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Fundef", 
+            "Id", 
+            "Prf"
+        ]
+    }, 
+    "EMRACC": {
+        "default": "sons", 
+        "include": "rm_alias_results_cc.h", 
+        "name": "Remove Alias Results from Conformity Checks", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Block", 
+            "Vardec", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Id"
+        ]
+    }, 
+    "EMRB": {
+        "default": "none", 
+        "include": "reusebranching.h", 
+        "name": "Reuse branching", 
+        "travsons": [
+            "Module", 
+            "Let", 
+            "Cond", 
+            "Block", 
+            "Fold"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Code", 
+            "Fundef", 
+            "Genarray", 
+            "Ids", 
+            "Modarray", 
+            "Prf", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Range", 
+            "Withid"
+        ]
+    }, 
+    "EMRCO": {
+        "default": "none", 
+        "include": "rcopt.h", 
+        "name": "Reference counting optimizations", 
+        "travsons": [
+            "Module", 
+            "Cond", 
+            "Withs", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Range", 
+            "Code"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Block", 
+            "Fold", 
+            "Fundef", 
+            "Genarray", 
+            "Let", 
+            "Modarray", 
+            "Prf"
+        ]
+    }, 
+    "EMRE": {
+        "default": "none", 
+        "include": "reuseelimination.h", 
+        "name": "Reuse elimination", 
+        "travsons": [
+            "Module", 
+            "Withs", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Range", 
+            "Fold", 
+            "Code"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Block", 
+            "Cond", 
+            "Fundef", 
+            "Genarray", 
+            "Let", 
+            "Modarray", 
+            "Prf", 
+            "Vardec"
+        ]
+    }, 
+    "EMRI": {
+        "default": "sons", 
+        "include": "reuse.h", 
+        "name": "Reuse inference", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "EMSR": {
+        "default": "none", 
+        "include": "staticreuse.h", 
+        "name": "Static Reuse", 
+        "travsons": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Withs", 
+            "With", 
+            "With2", 
+            "Code", 
+            "Block", 
+            "Cond"
+        ], 
+        "travuser": [
+            "Prf"
+        ]
+    }, 
+    "ESBL": {
+        "default": "sons", 
+        "include": "expand_shmem_boundary_load.h", 
+        "name": "CUDA Expand shared memory boundary load", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "ESD": {
+        "default": "sons", 
+        "include": "ElimSubDiv.h", 
+        "name": "ElimSubDiv", 
+        "travuser": [
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "ESP": {
+        "default": "sons", 
+        "include": "enforce_specialization.h", 
+        "name": "Enforce Specialization", 
+        "travuser": [
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "ESV": {
+        "default": "sons", 
+        "include": "elim_shapevars.h", 
+        "name": "Eliminate Shape Variables", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Avis", 
+            "Assign", 
+            "Let", 
+            "Id", 
+            "Prf"
+        ]
+    }, 
+    "ETC": {
+        "default": "sons", 
+        "include": "elimtypeconv.h", 
+        "name": "TypeConv Elimination", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Prf"
+        ]
+    }, 
+    "EWT": {
+        "default": "sons", 
+        "include": "extend_wrapper_types.h", 
+        "name": "Extend Wrapper Types", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "EXP": {
+        "default": "sons", 
+        "include": "export.h", 
+        "name": "Export Symbols", 
+        "travuser": [
+            "Use", 
+            "Import", 
+            "Provide", 
+            "Export", 
+            "Symbol", 
+            "Fundef", 
+            "Typedef", 
+            "Objdef", 
+            "Module"
+        ]
+    }, 
+    "F2L": {
+        "default": "sons", 
+        "include": "fun2lac.h", 
+        "name": "Fun2Lac Traversal", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Cond", 
+            "Arg"
+        ]
+    }, 
+    "FDI": {
+        "default": "sons", 
+        "include": "free_dispatch_information.h", 
+        "name": "Free Dispatch Information", 
+        "travuser": [
+            "Ap", 
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "FLAS": {
+        "default": "sons", 
+        "include": "free_lhs_avis_sons.h", 
+        "name": "Free Lhs Avis Sons", 
+        "travuser": [
+            "Ids"
+        ]
+    }, 
+    "FLAT": {
+        "default": "sons", 
+        "include": "flatten.h", 
+        "name": "Flatten", 
+        "travuser": [
+            "Assign", 
+            "Module", 
+            "Fundef", 
+            "Cast", 
+            "Exprs", 
+            "SPAp", 
+            "Block", 
+            "Cond", 
+            "Do", 
+            "Array", 
+            "Return", 
+            "Prf", 
+            "With", 
+            "Withid", 
+            "Part", 
+            "Generator", 
+            "Genarray", 
+            "Modarray", 
+            "Propagate", 
+            "SPFold", 
+            "Code"
+        ]
+    }, 
+    "FLATG": {
+        "default": "sons", 
+        "include": "flattengenerators.h", 
+        "name": "Flattengenerators", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "With", 
+            "Part", 
+            "Generator", 
+            "Assign", 
+            "Cond", 
+            "Do", 
+            "While", 
+            "Funcond", 
+            "Prf", 
+            "Let", 
+            "Exprs"
+        ]
+    }, 
+    "FPC": {
+        "default": "sons", 
+        "include": "functionprecompile.h", 
+        "name": "Function Precompilation", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Let", 
+            "Ret", 
+            "Arg", 
+            "Ap", 
+            "Range"
+        ]
+    }, 
+    "FPRC": {
+        "default": "sons", 
+        "include": "filter_partial_reuse_candidates.h", 
+        "name": "Filter Partial Reuse Candidates", 
+        "traverror": [
+            "With2"
+        ], 
+        "travuser": [
+            "Block", 
+            "Avis", 
+            "Assign", 
+            "With", 
+            "Genarray", 
+            "Id", 
+            "Prf"
+        ]
+    }, 
+    "FRC": {
+        "default": "sons", 
+        "include": "filterrc.h", 
+        "name": "Filter Reuse Candidates", 
+        "travnone": [
+            "Objdef"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Assign", 
+            "Break", 
+            "Code", 
+            "Cond", 
+            "Fold", 
+            "Funcond", 
+            "Fundef", 
+            "Genarray", 
+            "Id", 
+            "Modarray", 
+            "Prf", 
+            "Range", 
+            "With", 
+            "With2", 
+            "With3"
+        ]
+    }, 
+    "FREE": {
+        "default": "user", 
+        "include": "free_node.h", 
+        "name": "Free Tree"
+    }, 
+    "FSFS": {
+        "default": "sons", 
+        "include": "spmdfun_fix.h", 
+        "name": "SPMD Function Signature Fix", 
+        "travuser": [
+            "Ap", 
+            "Fundef", 
+            "Let", 
+            "Return", 
+            "With2"
+        ]
+    }, 
+    "GCF": {
+        "default": "sons", 
+        "include": "generate_copy_and_free.h", 
+        "name": "Generate Copy And Free", 
+        "travuser": [
+            "Typedef", 
+            "Module"
+        ]
+    }, 
+    "GDP": {
+        "default": "sons", 
+        "include": "gatherdependencies.h", 
+        "name": "Gather Dependencies", 
+        "travuser": [
+            "Use", 
+            "Import", 
+            "Typedef", 
+            "Objdef", 
+            "Avis", 
+            "Ret", 
+            "SPId", 
+            "SPFold", 
+            "Cast", 
+            "Module"
+        ]
+    }, 
+    "GGS": {
+        "default": "sons", 
+        "include": "generate_guard_solvers.h", 
+        "name": "Generate Guard Solvers", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "GGTC": {
+        "default": "sons", 
+        "include": "generate_generic_type_conversions.h", 
+        "name": "Generate Generic Type Conversions", 
+        "travuser": [
+            "Module", 
+            "Typedef", 
+            "Export", 
+            "Provide", 
+            "Symbol"
+        ]
+    }, 
+    "GLF": {
+        "default": "sons", 
+        "include": "group_local_funs.h", 
+        "name": "Group Local functions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap"
+        ]
+    }, 
+    "GNTC": {
+        "default": "sons", 
+        "include": "generate_nested_type_conversions.h", 
+        "name": "Generate Nested Type Conversions", 
+        "travuser": [
+            "Module", 
+            "Typedef"
+        ]
+    }, 
+    "GOI": {
+        "default": "sons", 
+        "include": "generate_object_initialiser.h", 
+        "name": "Generating Object Initialiser", 
+        "travuser": [
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "HCE": {
+        "default": "sons", 
+        "include": "handle_condexpr.h", 
+        "name": "Handle conditional expressions", 
+        "travuser": [
+            "Assign", 
+            "Code", 
+            "Cond", 
+            "Do", 
+            "Funcond", 
+            "With"
+        ]
+    }, 
+    "HD": {
+        "default": "sons", 
+        "include": "handle_dots.h", 
+        "name": "Handle Dots", 
+        "travuser": [
+            "SPId", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Part", 
+            "Generator", 
+            "Dot", 
+            "SPAp", 
+            "Prf", 
+            "Assign", 
+            "SetWL", 
+            "SPId"
+        ]
+    }, 
+    "HM": {
+        "default": "sons", 
+        "include": "handle_mops.h", 
+        "name": "Handle Mops", 
+        "travuser": [
+            "SPMop"
+        ]
+    }, 
+    "HS": {
+        "default": "sons", 
+        "include": "hidestructs.h", 
+        "name": "Hide Structs", 
+        "travuser": [
+            "Module", 
+            "Structdef", 
+            "Structelem"
+        ]
+    }, 
+    "HWLG": {
+        "default": "sons", 
+        "include": "handle_with_loop_generators.h", 
+        "name": "Handle multi-generator with-loops", 
+        "travuser": [
+            "Let", 
+            "Assign", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "SPFold", 
+            "Propagate"
+        ]
+    }, 
+    "HWLO": {
+        "default": "sons", 
+        "include": "handle_with_loop_operators.h", 
+        "name": "Handle multi-operator with-loops", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "SPFold", 
+            "Propagate"
+        ]
+    }, 
+    "HZGWL": {
+        "default": "sons", 
+        "include": "handle_zero_generator_with_loops.h", 
+        "name": "Handle zero-generator withloops", 
+        "travuser": [
+            "With", 
+            "Modarray", 
+            "Genarray", 
+            "SPFold", 
+            "Propagate", 
+            "Let", 
+            "Assign", 
+            "Return"
+        ]
+    }, 
+    "IAL": {
+        "default": "sons", 
+        "include": "introduce_availability_loop.h", 
+        "name": "Introduce Availability Loops", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf", 
+            "With", 
+            "Part", 
+            "Generator", 
+            "Exprs", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "ICC": {
+        "default": "sons", 
+        "include": "insert_conformity_checks.h", 
+        "name": "Insert Conformity Checks", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf", 
+            "Let", 
+            "With", 
+            "Generator", 
+            "Code", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Propagate", 
+            "Block"
+        ]
+    }, 
+    "ICSMEM": {
+        "default": "sons", 
+        "include": "insert_cudast_memtran.h", 
+        "name": "Insert CUDA memory transfer primitives for cudasts", 
+        "travnone": [
+            "Return"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Id", 
+            "Ids", 
+            "Fundef", 
+            "Ap", 
+            "Cudast", 
+            "Let", 
+            "Funcond"
+        ]
+    }, 
+    "IDC": {
+        "default": "sons", 
+        "include": "insert_domain_constraints.h", 
+        "name": "Insert Domain Constraints", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Cond", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Id", 
+            "Avis"
+        ]
+    }, 
+    "IIPI": {
+        "default": "sons", 
+        "include": "iteration_invariant_parameter_inference.h", 
+        "name": "Iteration Invariant Parameter Inference", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Ap"
+        ]
+    }, 
+    "IMA": {
+        "default": "sons", 
+        "include": "infer_memory_accesses.h", 
+        "name": "Infer memory accesses", 
+        "travuser": [
+            "Fundef", 
+            "Let", 
+            "With", 
+            "With2", 
+            "Genarray", 
+            "Modarray", 
+            "Prf"
+        ]
+    }, 
+    "IMEMDIST": {
+        "default": "sons", 
+        "include": "insert_memtrans_dist.h", 
+        "name": "Insert memory transfer primitives for distributed variables", 
+        "travuser": [
+            "Let", 
+            "Ap", 
+            "Block", 
+            "Assign", 
+            "With", 
+            "With2", 
+            "Id", 
+            "Ids", 
+            "Fundef", 
+            "Prf", 
+            "Return"
+        ]
+    }, 
+    "IMP": {
+        "default": "sons", 
+        "include": "importsymbols.h", 
+        "name": "Import Symbols", 
+        "travuser": [
+            "Module", 
+            "Import", 
+            "Export", 
+            "Use", 
+            "Provide", 
+            "Symbol"
+        ]
+    }, 
+    "INB": {
+        "default": "sons", 
+        "include": "identify_noop_branch.h", 
+        "name": "Identify noop conditional branch", 
+        "travuser": [
+            "Code", 
+            "Part", 
+            "Assign", 
+            "Funcond", 
+            "Ap", 
+            "Cond", 
+            "Fundef"
+        ]
+    }, 
+    "INFDFMS": {
+        "default": "sons", 
+        "include": "infer_dfms.h", 
+        "name": "Infer DataFlowMask Traversal", 
+        "traverror": [
+            "Icm"
+        ], 
+        "travuser": [
+            "Assign", 
+            "Do", 
+            "Fundef", 
+            "Let", 
+            "Arg", 
+            "Code", 
+            "Range", 
+            "Ap", 
+            "Id", 
+            "Ids", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Cond", 
+            "Block"
+        ]
+    }, 
+    "INFNC": {
+        "default": "sons", 
+        "include": "inferneedcounters.h", 
+        "name": "NeedCounter Inference", 
+        "travuser": [
+            "Block", 
+            "Fundef", 
+            "Prf", 
+            "Avis", 
+            "Id"
+        ]
+    }, 
+    "INL": {
+        "default": "sons", 
+        "include": "inlining.h", 
+        "name": "Inline Traversal", 
+        "travuser": [
+            "Module", 
+            "Assign", 
+            "Fundef", 
+            "Let", 
+            "Ap"
+        ]
+    }, 
+    "INSTC": {
+        "default": "sons", 
+        "include": "insert_type_conv.h", 
+        "name": "Insert Type Conversions", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Avis", 
+            "Assign", 
+            "Ids", 
+            "Id", 
+            "With", 
+            "Return"
+        ]
+    }, 
+    "INSVD": {
+        "default": "sons", 
+        "include": "insert_vardec.h", 
+        "name": "Insert Vardecs", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "SPAp", 
+            "SPFold", 
+            "SPId", 
+            "SPIds", 
+            "With", 
+            "Let", 
+            "Part", 
+            "Code", 
+            "Do"
+        ]
+    }, 
+    "IRA": {
+        "default": "sons", 
+        "include": "infer_reusable_arrays.h", 
+        "name": "CUDA Infer reusable arrays in withloops", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Prf"
+        ]
+    }, 
+    "ISAA": {
+        "default": "sons", 
+        "include": "insert_symb_arrayattr.h", 
+        "name": "Insert Symbolic Array Attributes", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Avis", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Id", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Cond", 
+            "Funcond", 
+            "Ap"
+        ]
+    }, 
+    "IUCFB": {
+        "default": "sons", 
+        "include": "insert_udc_funbody.h", 
+        "name": "Insert user-defined constraint to function body", 
+        "travuser": [
+            "Fundef", 
+            "Udcs"
+        ]
+    }, 
+    "IUTC": {
+        "default": "sons", 
+        "include": "introduce_user_tracing_calls.h", 
+        "name": "Introduce User Trace Calls", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "SPIds", 
+            "Assign", 
+            "Return", 
+            "Block"
+        ]
+    }, 
+    "IVERAS": {
+        "default": "sons", 
+        "include": "ive_reusewl_and_scalarize.h", 
+        "name": "Index Vector Elimination (Reuse WL-offsets and Scalarize)", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "With", 
+            "Part", 
+            "Code"
+        ]
+    }, 
+    "IVESLI": {
+        "default": "sons", 
+        "include": "ive_split_loop_invariants.h", 
+        "name": "Index Vector Elimination (Split Loop Invariants)", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf", 
+            "With", 
+            "With2"
+        ]
+    }, 
+    "IVESPLIT": {
+        "default": "sons", 
+        "include": "ive_split_selections.h", 
+        "name": "Index Vector Elimination (Split Selections)", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "IVEXC": {
+        "default": "sons", 
+        "include": "ivexcleanup.h", 
+        "name": "Index Vector Extrema Cleanup", 
+        "travuser": [
+            "Part", 
+            "Code", 
+            "Let", 
+            "Avis", 
+            "Prf", 
+            "Id", 
+            "Ids"
+        ]
+    }, 
+    "IVEXI": {
+        "default": "sons", 
+        "include": "ivextrema.h", 
+        "name": "Index Variable Extrema Insertion", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Funcond", 
+            "Cond", 
+            "While", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "With", 
+            "Part", 
+            "Ap"
+        ]
+    }, 
+    "IVEXP": {
+        "default": "sons", 
+        "include": "ivexpropagation.h", 
+        "name": "Index Variable Extrema Propagation", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Part", 
+            "Cond", 
+            "Funcond", 
+            "While"
+        ]
+    }, 
+    "IWLMEM": {
+        "default": "sons", 
+        "include": "insert_withloop_memtran.h", 
+        "name": "Insert CUDA memory transfer primitives for withloops", 
+        "travuser": [
+            "Let", 
+            "Assign", 
+            "With", 
+            "Id", 
+            "Ids", 
+            "Fundef", 
+            "Ap", 
+            "Genarray", 
+            "Modarray", 
+            "Code", 
+            "Funcond"
+        ]
+    }, 
+    "KPP": {
+        "default": "sons", 
+        "include": "kernel_post_processing.h", 
+        "name": "Kernel post processing", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Id", 
+            "Let", 
+            "Prf", 
+            "With3", 
+            "Range", 
+            "Genarray"
+        ]
+    }, 
+    "L2F": {
+        "default": "sons", 
+        "include": "lac2fun.h", 
+        "name": "Lac2Fun Traversal", 
+        "travuser": [
+            "Assign", 
+            "Do", 
+            "Fundef", 
+            "Cond"
+        ]
+    }, 
+    "LACSI": {
+        "default": "sons", 
+        "include": "loop_and_cond_scalarization_in.h", 
+        "name": "Lacfun Argument Scalarization", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Exprs", 
+            "Assign", 
+            "Ap", 
+            "Id"
+        ]
+    }, 
+    "LACSO": {
+        "default": "sons", 
+        "include": "loop_and_cond_scalarization_out.h", 
+        "name": "Lacfun Result Scalarization", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Ap", 
+            "Id", 
+            "Return", 
+            "Cond", 
+            "Funcond"
+        ]
+    }, 
+    "LINL": {
+        "default": "sons", 
+        "include": "lacinlining.h", 
+        "name": "LAC Inline Traversal", 
+        "travuser": [
+            "Module", 
+            "Assign", 
+            "Fundef", 
+            "Let", 
+            "Ap"
+        ]
+    }, 
+    "LOF": {
+        "default": "sons", 
+        "include": "liftoptflags.h", 
+        "name": "Lift OptFlags", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "LS": {
+        "default": "sons", 
+        "include": "loop_scalarization.h", 
+        "name": "Loop Scalarization", 
+        "travnone": [
+            "Withid"
+        ], 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg", 
+            "Assign", 
+            "Ap", 
+            "Prf", 
+            "Id"
+        ]
+    }, 
+    "LUR": {
+        "default": "sons", 
+        "include": "SSALUR.h", 
+        "name": "Loop Unrolling Traversal", 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef"
+        ]
+    }, 
+    "LVA": {
+        "default": "sons", 
+        "include": "live_variable_analysis.h", 
+        "name": "Live Variable Analysis", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Id"
+        ]
+    }, 
+    "LW3": {
+        "default": "sons", 
+        "include": "lift_with3_bodies.h", 
+        "name": "Lift with3s into functions", 
+        "travuser": [
+            "Module", 
+            "Range", 
+            "With3", 
+            "Fundef"
+        ]
+    }, 
+    "MA": {
+        "default": "sons", 
+        "include": "move_assigns.h", 
+        "name": "MUTC move assigns", 
+        "travuser": [
+            "Let", 
+            "Assign"
+        ]
+    }, 
+    "MAT": {
+        "default": "sons", 
+        "include": "map_avis_trav.h", 
+        "name": "Map Traversal on Avis nodes", 
+        "travuser": [
+            "Fundef", 
+            "Avis", 
+            "Block"
+        ]
+    }, 
+    "MBTRAN2": {
+        "default": "sons", 
+        "include": "minimize_block_transfers2.h", 
+        "name": "Minimise the number of device-host data transfers in code blocks", 
+        "travuser": [
+            "Block", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "MC": {
+        "default": "sons", 
+        "include": "move_const.h", 
+        "name": "Move Const", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let"
+        ]
+    }, 
+    "MCG": {
+        "default": "sons", 
+        "include": "map_call_graph.h", 
+        "name": "Map Call Graph", 
+        "travuser": [
+            "Fundef", 
+            "Ap"
+        ]
+    }, 
+    "MCSTRAN": {
+        "default": "sons", 
+        "include": "minimize_cudast_transfers.h", 
+        "name": "Minimise the number of device-host data transfers in a Cudast", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Cudast"
+        ]
+    }, 
+    "MCTRAN": {
+        "default": "sons", 
+        "include": "minimize_cond_transfers.h", 
+        "name": "Minimise the number of device-host data transfers in a cond-fun", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "Fundef", 
+            "Prf", 
+            "Ap", 
+            "Id", 
+            "Arg", 
+            "Funcond", 
+            "Return", 
+            "Cudast"
+        ]
+    }, 
+    "MDE": {
+        "default": "error", 
+        "include": "makedimexpr.h", 
+        "name": "Make Dim Expression", 
+        "travuser": [
+            "Id", 
+            "Funcond", 
+            "Ap", 
+            "Array", 
+            "Prf", 
+            "With", 
+            "Bool", 
+            "Char", 
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Float", 
+            "Floatvec", 
+            "Double"
+        ]
+    }, 
+    "MFT": {
+        "default": "sons", 
+        "include": "map_fun_trav.h", 
+        "name": "Map Traversal on Fundefs", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "MLTRAN": {
+        "default": "sons", 
+        "include": "minimize_loop_transfers.h", 
+        "name": "Minimise the number of device-host data transfers in a loop", 
+        "travuser": [
+            "Assign", 
+            "Let", 
+            "Fundef", 
+            "Prf", 
+            "Ap", 
+            "Id", 
+            "Arg", 
+            "Funcond", 
+            "Return"
+        ]
+    }, 
+    "MMV": {
+        "default": "sons", 
+        "include": "markmemvals.h", 
+        "name": "MarkMemVals", 
+        "travuser": [
+            "Block", 
+            "Break", 
+            "Code", 
+            "Do", 
+            "Fold", 
+            "Fundef", 
+            "Module", 
+            "Genarray", 
+            "Propagate", 
+            "Id", 
+            "Ids", 
+            "Ap", 
+            "Let", 
+            "Modarray", 
+            "Prf", 
+            "With", 
+            "With2", 
+            "With3", 
+            "WLseg", 
+            "Return", 
+            "Ret"
+        ]
+    }, 
+    "MNG": {
+        "default": "sons", 
+        "include": "mark_noop_grids.h", 
+        "name": "Mark NoOp Grids", 
+        "travuser": [
+            "WLgrid", 
+            "WLstride", 
+            "WLblock", 
+            "WLublock", 
+            "Code", 
+            "Let"
+        ]
+    }, 
+    "MOI": {
+        "default": "sons", 
+        "include": "manage_object_initialisers.h", 
+        "name": "Manage object initialisers", 
+        "travuser": [
+            "Assign", 
+            "Id", 
+            "Fundef"
+        ]
+    }, 
+    "MS": {
+        "default": "sons", 
+        "include": "move_syncs.h", 
+        "name": "MUTC move syncs"
+    }, 
+    "MSA": {
+        "default": "sons", 
+        "include": "marksuballoc.h", 
+        "name": "MarkSubAlloc", 
+        "travuser": [
+            "Prf", 
+            "Let", 
+            "Ids"
+        ]
+    }, 
+    "MSC": {
+        "default": "sons", 
+        "include": "make_slow_clones.h", 
+        "name": "Make Slow Clones", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "MSE": {
+        "default": "error", 
+        "include": "makeshapeexpr.h", 
+        "name": "Make Shape Expression", 
+        "travuser": [
+            "Id", 
+            "Funcond", 
+            "Ap", 
+            "Array", 
+            "Prf", 
+            "With", 
+            "Bool", 
+            "Char", 
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Float", 
+            "Floatvec", 
+            "Double"
+        ]
+    }, 
+    "MSS": {
+        "default": "sons", 
+        "include": "move_sync_statement.h", 
+        "name": "Moving Sync Statements", 
+        "travuser": []
+    }, 
+    "MTAS": {
+        "default": "sons", 
+        "include": "annotate_scheduling.h", 
+        "name": "Annotate scheduling", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "With2", 
+            "Withs", 
+            "WLseg"
+        ]
+    }, 
+    "MTCM": {
+        "default": "sons", 
+        "include": "cost_model.h", 
+        "name": "Multithreading cost model", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "With2", 
+            "With", 
+            "Withs", 
+            "Fold", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "MTDCR": {
+        "default": "sons", 
+        "include": "mtdcr.h", 
+        "name": "MT dead code removal", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Id", 
+            "Prf"
+        ]
+    }, 
+    "MTRAN": {
+        "default": "sons", 
+        "include": "minimize_transfers.h", 
+        "name": "Minimise the number of device-host data transfers", 
+        "travuser": []
+    }, 
+    "MTRMI": {
+        "default": "sons", 
+        "include": "restore_mem_instr.h", 
+        "name": "Restore memory instructions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Withs", 
+            "With", 
+            "With2", 
+            "Id", 
+            "Withid"
+        ]
+    }, 
+    "MTSPMDF": {
+        "default": "sons", 
+        "include": "create_spmd_funs.h", 
+        "name": "Create SPMD functions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Do", 
+            "Withs", 
+            "With2", 
+            "With", 
+            "Let", 
+            "Id", 
+            "Ids", 
+            "Withid"
+        ]
+    }, 
+    "MTSTF": {
+        "default": "sons", 
+        "include": "create_mtst_funs.h", 
+        "name": "Create MT/ST functions (programs)", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Cond", 
+            "With2", 
+            "Ap", 
+            "Fold"
+        ]
+    }, 
+    "MTSTFMOD": {
+        "default": "sons", 
+        "include": "create_mtst_funs_module.h", 
+        "name": "Create MT/ST functions (modules)", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Cond", 
+            "With2", 
+            "Ap", 
+            "Fold"
+        ]
+    }, 
+    "MVSMI": {
+        "default": "sons", 
+        "include": "movesharedmeminstr.h", 
+        "name": "Move shared memory management instructions", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Ap"
+        ]
+    }, 
+    "NTC": {
+        "default": "sons", 
+        "include": "new_typecheck.h", 
+        "name": "New Type Inference", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Vardec", 
+            "Assign", 
+            "Cond", 
+            "Funcond", 
+            "Let", 
+            "Return", 
+            "Ap", 
+            "Prf", 
+            "Array", 
+            "Cast", 
+            "Exprs", 
+            "Id", 
+            "Globobj", 
+            "Type", 
+            "Num", 
+            "NumByte", 
+            "NumShort", 
+            "NumInt", 
+            "NumLong", 
+            "NumLonglong", 
+            "NumUbyte", 
+            "NumUshort", 
+            "NumUint", 
+            "NumUlong", 
+            "NumUlonglong", 
+            "Bool", 
+            "Nested_init", 
+            "Char", 
+            "Double", 
+            "Float", 
+            "Floatvec", 
+            "With", 
+            "Generator", 
+            "Part", 
+            "Withid", 
+            "Code", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Break", 
+            "Propagate", 
+            "Str"
+        ]
+    }, 
+    "OAN": {
+        "default": "sons", 
+        "include": "object_analysis.h", 
+        "name": "Object Analysis", 
+        "travuser": [
+            "Module", 
+            "Globobj", 
+            "Fundef", 
+            "Ap", 
+            "Objdef"
+        ]
+    }, 
+    "OFP": {
+        "default": "sons", 
+        "include": "omp_find_private.h", 
+        "name": "OpenMP Find Private", 
+        "travuser": [
+            "Module", 
+            "With", 
+            "With2", 
+            "Fundef", 
+            "Let", 
+            "Ids", 
+            "Id", 
+            "Withid"
+        ]
+    }, 
+    "OI": {
+        "default": "sons", 
+        "include": "object_init.h", 
+        "name": "Object Initializer", 
+        "travuser": [
+            "Module", 
+            "Objdef"
+        ]
+    }, 
+    "PDS": {
+        "default": "sons", 
+        "include": "prepare_dist_scheduler.h", 
+        "name": "Prepare distributed with-loop schedulers", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Cond"
+        ]
+    }, 
+    "PEM": {
+        "default": "sons", 
+        "include": "propagate_executionmode.h", 
+        "name": "Propagate Executionmode", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Cond", 
+            "Fundef", 
+            "With2"
+        ]
+    }, 
+    "PETL": {
+        "default": "sons", 
+        "include": "propagate_extrema_thru_lacfuns.h", 
+        "name": "Propagate Extrema Thru Lacfuns", 
+        "travuser": [
+            "Fundef", 
+            "Ap", 
+            "Block", 
+            "Cond"
+        ]
+    }, 
+    "PEW3": {
+        "default": "sons", 
+        "include": "prune_empty_with3.h", 
+        "name": "Prune Empty With3", 
+        "travuser": [
+            "With3", 
+            "Range", 
+            "Id", 
+            "Assign", 
+            "Let"
+        ]
+    }, 
+    "PF": {
+        "default": "sons", 
+        "include": "annotate_fun_calls.h", 
+        "name": "Annotate Function Calls ", 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef"
+        ]
+    }, 
+    "PFD": {
+        "default": "sons", 
+        "include": "partial_fold.h", 
+        "name": "CUDA Partial folding", 
+        "travuser": [
+            "With", 
+            "Withid", 
+            "Part", 
+            "Generator", 
+            "Fold", 
+            "Let", 
+            "Fundef", 
+            "Assign", 
+            "Code", 
+            "Prf", 
+            "Module"
+        ]
+    }, 
+    "PFG": {
+        "default": "sons", 
+        "include": "prepare_forloop_generation.h", 
+        "name": "Prepare for loop generation", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Do", 
+            "Id", 
+            "Prf"
+        ]
+    }, 
+    "PINL": {
+        "default": "sons", 
+        "include": "prepare_inlining.h", 
+        "name": "Prepare inlining", 
+        "travuser": [
+            "Fundef", 
+            "Vardec", 
+            "Avis", 
+            "Block", 
+            "Assign", 
+            "Arg", 
+            "Id", 
+            "Ids"
+        ]
+    }, 
+    "PKNLG": {
+        "default": "sons", 
+        "include": "prepare_kernel_generation.h", 
+        "name": "Prepare cuda kernel generation", 
+        "travuser": [
+            "Fundef", 
+            "With", 
+            "With2", 
+            "Genarray", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Cond"
+        ]
+    }, 
+    "PMBL": {
+        "default": "sons", 
+        "include": "pattern_match_build_lut.h", 
+        "name": "Pattern Matching Build Lut", 
+        "travuser": [
+            "Fundef", 
+            "Ap", 
+            "Arg"
+        ]
+    }, 
+    "POGO": {
+        "default": "sons", 
+        "include": "polyhedral_guard_optimization.h", 
+        "name": "Polyhedral Guard Optimization", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "PPI": {
+        "default": "sons", 
+        "include": "prepareinline.h", 
+        "name": "Prepare Inline", 
+        "travuser": [
+            "Fundef", 
+            "Module", 
+            "Ap", 
+            "Fold"
+        ]
+    }, 
+    "PRA": {
+        "default": "sons", 
+        "include": "polyhedral_reuse_analysis.h", 
+        "name": "Reuse With-loop arrays based on polyhedral model", 
+        "travuser": [
+            "Prf", 
+            "Part", 
+            "Assign", 
+            "With", 
+            "Ap", 
+            "Cond", 
+            "Fundef"
+        ]
+    }, 
+    "PRT": {
+        "default": "user", 
+        "include": "print.h", 
+        "name": "Print Syntax Tree", 
+        "travsons": [
+            "SSAstack", 
+            "Nums", 
+            "Idag", 
+            "IdagVFam", 
+            "IdagEFam", 
+            "IdagEFams", 
+            "IdagVertices"
+        ]
+    }, 
+    "RC": {
+        "default": "sons", 
+        "include": "rmcasts.h", 
+        "name": "Remove Cast", 
+        "travuser": [
+            "Let", 
+            "Cast", 
+            "Avis", 
+            "Array", 
+            "Ret", 
+            "Objdef", 
+            "Type"
+        ]
+    }, 
+    "RCI": {
+        "default": "sons", 
+        "include": "referencecounting.h", 
+        "name": "Reference Counting Inference", 
+        "travnone": [
+            "Objdef", 
+            "Arg", 
+            "Vardec"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Array", 
+            "Assign", 
+            "Code", 
+            "Cond", 
+            "Fold", 
+            "Funcond", 
+            "Fundef", 
+            "Genarray", 
+            "Id", 
+            "Ids", 
+            "Let", 
+            "Modarray", 
+            "Prf", 
+            "Propagate", 
+            "Range", 
+            "Return", 
+            "Withs", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Withid"
+        ]
+    }, 
+    "RCM": {
+        "default": "sons", 
+        "include": "rcminimize.h", 
+        "name": "Reference counting minimization", 
+        "travnone": [
+            "Objdef", 
+            "Withid"
+        ], 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Assign", 
+            "Code", 
+            "Cond", 
+            "Funcond", 
+            "Fundef", 
+            "Id", 
+            "Ids", 
+            "Let", 
+            "Prf", 
+            "Range", 
+            "Return"
+        ]
+    }, 
+    "RCS": {
+        "default": "sons", 
+        "include": "resolve_code_sharing.h", 
+        "name": "Resolve Code Sharing", 
+        "travuser": [
+            "With", 
+            "With2", 
+            "Code", 
+            "Part", 
+            "WLgrid"
+        ]
+    }, 
+    "RDEPEND": {
+        "default": "sons", 
+        "include": "resolvedependencies.h", 
+        "name": "Resolve Dependencies", 
+        "travuser": [
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "RDFMS": {
+        "default": "sons", 
+        "include": "remove_dfms.h", 
+        "name": "Remove DataFlowMask Traversal", 
+        "travuser": [
+            "Do", 
+            "Fundef", 
+            "With", 
+            "With2", 
+            "With3", 
+            "Cond", 
+            "Block"
+        ]
+    }, 
+    "REA": {
+        "default": "sons", 
+        "include": "reorder_equalityprf_arguments.h", 
+        "name": "Reorder EqualityOperator arguments", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "REC": {
+        "default": "sons", 
+        "include": "remove_external_code.h", 
+        "name": "Remove External Code", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "REN": {
+        "default": "sons", 
+        "include": "rename.h", 
+        "name": "Rename identifiers", 
+        "travuser": [
+            "Arg", 
+            "Vardec", 
+            "Id", 
+            "Ids"
+        ]
+    }, 
+    "REPFUN": {
+        "default": "sons", 
+        "include": "replicate_functions.h", 
+        "name": "Replicate Functions", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "EX", 
+            "Fundef", 
+            "Module", 
+            "MT", 
+            "ST"
+        ]
+    }, 
+    "RERA": {
+        "default": "sons", 
+        "include": "restore_reference_args.h", 
+        "name": "Restore Reference Args", 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Let", 
+            "Return", 
+            "Fundef", 
+            "Prf", 
+            "Id", 
+            "Ids", 
+            "Module", 
+            "With", 
+            "With2", 
+            "Block"
+        ]
+    }, 
+    "RESO": {
+        "default": "sons", 
+        "include": "restore_objects.h", 
+        "name": "Restore Global Objects", 
+        "travuser": [
+            "Ap", 
+            "Prf", 
+            "Id", 
+            "Assign", 
+            "Let", 
+            "Block", 
+            "Fundef", 
+            "Module", 
+            "Propagate"
+        ]
+    }, 
+    "REUSE": {
+        "default": "sons", 
+        "include": "ReuseWithArrays.h", 
+        "name": "Reuse With Arrays", 
+        "travuser": [
+            "Let", 
+            "Prf", 
+            "Id", 
+            "Ids", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "With", 
+            "Part"
+        ]
+    }, 
+    "RID": {
+        "default": "sons", 
+        "include": "renameidentifiers.h", 
+        "name": "Rename Identifiers", 
+        "travuser": [
+            "Module", 
+            "Typedef", 
+            "Objdef", 
+            "Fundef", 
+            "Arg", 
+            "Return", 
+            "Ap", 
+            "Icm", 
+            "WLseg", 
+            "Avis"
+        ]
+    }, 
+    "RLAC": {
+        "default": "sons", 
+        "include": "remove_unused_lac.h", 
+        "name": "CUDA Remove unused lac functions", 
+        "travuser": [
+            "Fundef", 
+            "Module", 
+            "Ap"
+        ]
+    }, 
+    "RMPR": {
+        "default": "sons", 
+        "include": "remove_propagates.h", 
+        "name": "Remove propagates", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "With2", 
+            "Prf"
+        ]
+    }, 
+    "RMTSTF": {
+        "default": "sons", 
+        "include": "restore_mtst_funs.h", 
+        "name": "Restore ST/MT/XT functions (modules)", 
+        "travuser": [
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "RMV": {
+        "default": "sons", 
+        "include": "remove_vardecs.h", 
+        "name": "Remove Vardecs", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Vardec", 
+            "Ids"
+        ]
+    }, 
+    "RNB": {
+        "default": "sons", 
+        "include": "remove_noop_branch.h", 
+        "name": "Remove noop conditional branch", 
+        "travuser": [
+            "Code", 
+            "Let", 
+            "Assign", 
+            "With", 
+            "With2", 
+            "Cond"
+        ]
+    }, 
+    "RRA": {
+        "default": "sons", 
+        "include": "resolve_reference_args.h", 
+        "name": "Resolve Reference Args", 
+        "travuser": [
+            "Fundef", 
+            "Return", 
+            "Let", 
+            "Ap", 
+            "Module"
+        ]
+    }, 
+    "RSA": {
+        "default": "sons", 
+        "include": "resolveall.h", 
+        "name": "Resolve All Flags", 
+        "travuser": [
+            "Use", 
+            "Import", 
+            "Provide", 
+            "Export", 
+            "Module"
+        ]
+    }, 
+    "RSO": {
+        "default": "sons", 
+        "include": "resolve_objects.h", 
+        "name": "Resolve Objects", 
+        "travuser": [
+            "Ap", 
+            "Fundef", 
+            "Globobj", 
+            "Let", 
+            "Module", 
+            "Propagate", 
+            "With"
+        ]
+    }, 
+    "RSP": {
+        "default": "sons", 
+        "include": "resolvepragma.h", 
+        "name": "Resolve pragmas", 
+        "travuser": [
+            "Typedef", 
+            "Objdef", 
+            "Fundef", 
+            "Module", 
+            "Ret", 
+            "Arg"
+        ]
+    }, 
+    "RST": {
+        "default": "sons", 
+        "include": "resolvesymboltypes.h", 
+        "name": "Resolve Symbol Types", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg", 
+            "Ret", 
+            "Avis", 
+            "Array", 
+            "Typedef", 
+            "Objdef", 
+            "Type", 
+            "Cast"
+        ]
+    }, 
+    "RTFILTER": {
+        "default": "sons", 
+        "include": "runtime_filtering.h", 
+        "name": "Filtering of unneeded functions for runtime optimization", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg"
+        ]
+    }, 
+    "RTSPEC": {
+        "default": "sons", 
+        "include": "runtime_specialization.h", 
+        "name": "Runtime Specialization", 
+        "travuser": [
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "RW3": {
+        "default": "sons", 
+        "include": "remove_with3.h", 
+        "name": "Remove With3s", 
+        "travuser": [
+            "Assign", 
+            "With3", 
+            "Range"
+        ]
+    }, 
+    "RWO": {
+        "default": "sons", 
+        "include": "reusewithoffset.h", 
+        "name": "Reuse With-loop arrays with offsets", 
+        "travuser": [
+            "Prf", 
+            "Id", 
+            "Ids"
+        ]
+    }, 
+    "SAFA": {
+        "default": "sons", 
+        "include": "sortassociativefunctionarguments.h", 
+        "name": "SortAssociativeFunctionArguments", 
+        "travuser": [
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "SBT": {
+        "default": "user", 
+        "include": "serialize_buildstack.h", 
+        "name": "Serialize Build Stack"
+    }, 
+    "SCC": {
+        "default": "sons", 
+        "include": "strip_conformity_checks.h", 
+        "name": "Strip Conformity Checks", 
+        "travuser": [
+            "Block", 
+            "Assign", 
+            "Prf", 
+            "Let", 
+            "Id", 
+            "Vardec"
+        ]
+    }, 
+    "SCUF": {
+        "default": "sons", 
+        "include": "split_cuda_fold.h", 
+        "name": "CUDA Split CUDA fold withloops", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Part", 
+            "Generator", 
+            "Fold", 
+            "Code", 
+            "Prf", 
+            "Withid"
+        ]
+    }, 
+    "SCUWL": {
+        "default": "sons", 
+        "include": "split_cuda_withloop.h", 
+        "name": "Split Cudarizable withloop", 
+        "travuser": [
+            "Fundef", 
+            "Let", 
+            "Assign", 
+            "With", 
+            "Modarray", 
+            "Genarray"
+        ]
+    }, 
+    "SEL": {
+        "default": "user", 
+        "include": "serialize_link.h", 
+        "name": "Serialize Link Traversal"
+    }, 
+    "SER": {
+        "default": "sons", 
+        "include": "serialize.h", 
+        "name": "Serialize Module", 
+        "travuser": [
+            "Fundef", 
+            "Typedef", 
+            "Objdef"
+        ]
+    }, 
+    "SET": {
+        "default": "user", 
+        "include": "serialize_node.h", 
+        "name": "Serialize Node Traversal"
+    }, 
+    "SFWO": {
+        "default": "sons", 
+        "include": "setfundefwasoptimized.h", 
+        "name": "Set Fundef Was Optimized", 
+        "travuser": [
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "SHMEM": {
+        "default": "sons", 
+        "include": "shared_memory_reuse.h", 
+        "name": "CUDA Exploiting data reuse with shared memory", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Prf"
+        ]
+    }, 
+    "SISI": {
+        "default": "sons", 
+        "include": "signature_simplification.h", 
+        "name": "Signature Simplification", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Block", 
+            "Let", 
+            "Return", 
+            "Ret", 
+            "Ap", 
+            "Ids", 
+            "Id", 
+            "Exprs", 
+            "Arg", 
+            "Module"
+        ]
+    }, 
+    "SLS": {
+        "default": "sons", 
+        "include": "setlinksign.h", 
+        "name": "Set Linksign", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg", 
+            "Ret"
+        ]
+    }, 
+    "SOSSK": {
+        "default": "sons", 
+        "include": "specialization_oracle_static_shape_knowledge.h", 
+        "name": "Specialization Oracle for Static Shape Knowledge", 
+        "travuser": [
+            "Ap", 
+            "Arg", 
+            "Assign", 
+            "Cond", 
+            "Exprs", 
+            "Fold", 
+            "Genarray", 
+            "Modarray", 
+            "Generator", 
+            "Id", 
+            "Ids", 
+            "Ret", 
+            "Return", 
+            "Prf", 
+            "Fundef", 
+            "Let", 
+            "Code", 
+            "Part", 
+            "Withid", 
+            "With"
+        ]
+    }, 
+    "SPTN": {
+        "default": "sons", 
+        "include": "split_partitions.h", 
+        "name": "Split partitions", 
+        "travuser": [
+            "With", 
+            "Part", 
+            "Generator"
+        ]
+    }, 
+    "SRCE": {
+        "default": "sons", 
+        "include": "scoperce.h", 
+        "name": "Scope-based reuse-candidate elimination", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Ap", 
+            "Code", 
+            "Prf", 
+            "Exprs"
+        ]
+    }, 
+    "SSAT": {
+        "default": "sons", 
+        "include": "SSATransform.h", 
+        "name": "SSA Transform Traversal", 
+        "travuser": [
+            "Assign", 
+            "Ap", 
+            "Fundef", 
+            "Cond", 
+            "Block", 
+            "Code", 
+            "Let", 
+            "Arg", 
+            "Vardec", 
+            "Id", 
+            "With", 
+            "With2", 
+            "Part", 
+            "Withid", 
+            "Funcond", 
+            "Return", 
+            "Ids"
+        ]
+    }, 
+    "SSPMDLS": {
+        "default": "sons", 
+        "include": "set_spmd_linksign.h", 
+        "name": "Set SPMD linksign", 
+        "travuser": [
+            "Arg", 
+            "Id", 
+            "Exprs", 
+            "Return", 
+            "Propagate", 
+            "Genarray", 
+            "Modarray", 
+            "Break", 
+            "With2", 
+            "Withs", 
+            "Let", 
+            "Ret", 
+            "Fundef", 
+            "Module"
+        ]
+    }, 
+    "STKNL": {
+        "default": "sons", 
+        "include": "single_thread_kernels.h", 
+        "name": "CUDA Create single threaded CUDA kerenls", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Cudast"
+        ]
+    }, 
+    "SWLD": {
+        "default": "sons", 
+        "include": "set_withloop_depth.h", 
+        "name": "Set Withloop Depth", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Withid", 
+            "Ids", 
+            "Vardec", 
+            "Arg"
+        ]
+    }, 
+    "SWR": {
+        "default": "sons", 
+        "include": "split_wrappers.h", 
+        "name": "Split Wrappers", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Ap", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Propagate"
+        ]
+    }, 
+    "SYN": {
+        "default": "sons", 
+        "include": "add_sync.h", 
+        "name": "Adding Sync Statements", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let"
+        ]
+    }, 
+    "TCP": {
+        "default": "sons", 
+        "include": "typeconv_precompile.h", 
+        "name": "Type Conversions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Ap", 
+            "Range"
+        ]
+    }, 
+    "TDEPEND": {
+        "default": "sons", 
+        "include": "tagdependencies.h", 
+        "name": "Tag Dependencies", 
+        "travuser": [
+            "Assign", 
+            "Id", 
+            "With"
+        ]
+    }, 
+    "TEM": {
+        "default": "sons", 
+        "include": "tag_executionmode.h", 
+        "name": "Tag Executionmode", 
+        "traverror": [], 
+        "travnone": [], 
+        "travsons": [], 
+        "travuser": [
+            "Ap", 
+            "Array", 
+            "Assign", 
+            "Let", 
+            "Prf", 
+            "With2"
+        ]
+    }, 
+    "TFA": {
+        "default": "sons", 
+        "include": "tag_fp_aps.h", 
+        "name": "Tag Ap Nodes", 
+        "travuser": [
+            "Ap"
+        ]
+    }, 
+    "TFCTR": {
+        "default": "sons", 
+        "include": "ctransitive.h", 
+        "name": "Classify edges and build cross-edge based reachability information", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TFDFW": {
+        "default": "sons", 
+        "include": "dfwalk.h", 
+        "name": "Do a depth first walk of the subtyping hierarchy", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TFF": {
+        "default": "sons", 
+        "include": "tag_fp_fundefs.h", 
+        "name": "Tag Fundef Nodes", 
+        "travuser": [
+            "Fundef", 
+            "Ap"
+        ]
+    }, 
+    "TFMIN": {
+        "default": "sons", 
+        "include": "mineq.h", 
+        "name": "Computing the minimum equivalent graph", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TFPLB": {
+        "default": "sons", 
+        "include": "lub.h", 
+        "name": "Preprocess subtyping graph for LUB queries", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TFRCH": {
+        "default": "sons", 
+        "include": "reachlabel.h", 
+        "name": "Build link count matrix and label vertices for reachability analysis", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TFT": {
+        "default": "sons", 
+        "include": "tag_fun_thread.h", 
+        "name": "Tag functions as thread functions when needed", 
+        "travuser": [
+            "Fundef", 
+            "Ap", 
+            "With3"
+        ]
+    }, 
+    "TFTOP": {
+        "default": "sons", 
+        "include": "topo.h", 
+        "name": "Do a topological sort of the subtyping hierarchy", 
+        "travuser": [
+            "Tfdag", 
+            "Tfvertex"
+        ]
+    }, 
+    "TGTL": {
+        "default": "sons", 
+        "include": "transform_gtge_to_ltle.h", 
+        "name": "Transform all gt and ge operators to lt and le operators ", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "TMFT": {
+        "default": "sons", 
+        "include": "tag_main_fun_thread.h", 
+        "name": "Tag main function as thread function", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "TP": {
+        "default": "sons", 
+        "include": "tag_preparation.h", 
+        "name": "Tag Preparation", 
+        "travuser": [
+            "Arg", 
+            "Fundef"
+        ]
+    }, 
+    "TS": {
+        "default": "sons", 
+        "include": "type_statistics.h", 
+        "name": "Print Type Statistics", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Vardec"
+        ]
+    }, 
+    "UCZC": {
+        "default": "sons", 
+        "include": "UndoCondZeroCmp.h", 
+        "name": "UndoCondZeroCmp", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Prf", 
+            "Let", 
+            "Assign"
+        ]
+    }, 
+    "UESD": {
+        "default": "sons", 
+        "include": "UndoElimSubDiv.h", 
+        "name": "UndoElimSubDiv", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Block", 
+            "Let", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "UFIV": {
+        "default": "sons", 
+        "include": "unshare_fold_iv.h", 
+        "name": "Unshare index vectors in WL-folds", 
+        "travuser": [
+            "Code", 
+            "Fundef", 
+            "Module", 
+            "With", 
+            "With2", 
+            "Part", 
+            "Exprs"
+        ]
+    }, 
+    "UGLF": {
+        "default": "sons", 
+        "include": "ungroup_local_funs.h", 
+        "name": "Ungroup Local functions", 
+        "travuser": [
+            "Module", 
+            "Fundef"
+        ]
+    }, 
+    "UPRF": {
+        "default": "sons", 
+        "include": "prfunroll.h", 
+        "name": "Unroll PRFs", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "USS": {
+        "default": "sons", 
+        "include": "usesymbols.h", 
+        "name": "Use Symbols", 
+        "travuser": [
+            "Typedef", 
+            "Objdef", 
+            "SPFold", 
+            "Avis", 
+            "Cast", 
+            "Array", 
+            "Ret", 
+            "SPAp", 
+            "SPId", 
+            "SPMop", 
+            "Module"
+        ]
+    }, 
+    "USSAI": {
+        "default": "sons", 
+        "include": "undossaivtransform.h", 
+        "name": "Undo SSAIV Transform", 
+        "travuser": [
+            "Fundef", 
+            "With", 
+            "Withid", 
+            "Block", 
+            "Vardec", 
+            "Part", 
+            "Id"
+        ]
+    }, 
+    "USSAT": {
+        "default": "sons", 
+        "include": "UndoSSATransform.h", 
+        "name": "UndoSSATransform Traversal", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Let", 
+            "Block", 
+            "Vardec", 
+            "Avis", 
+            "Id", 
+            "Ids", 
+            "Cond", 
+            "Funcond"
+        ]
+    }, 
+    "UW3": {
+        "default": "sons", 
+        "include": "unroll_with3.h", 
+        "name": "Unroll With3s", 
+        "travuser": [
+            "Assign", 
+            "With3", 
+            "Range", 
+            "Fundef"
+        ]
+    }, 
+    "UWT": {
+        "default": "sons", 
+        "include": "update_wrapper_type.h", 
+        "name": "Update Wrapper Types", 
+        "travuser": [
+            "Fundef"
+        ]
+    }, 
+    "VISUAL": {
+        "default": "user", 
+        "include": "visualize.h", 
+        "name": "Visualize Syntax Tree", 
+        "travsons": [
+            "SSAstack", 
+            "Nums", 
+            "Idag", 
+            "IdagVFam", 
+            "IdagEFam", 
+            "IdagEFams", 
+            "IdagVertices"
+        ]
+    }, 
+    "VP": {
+        "default": "sons", 
+        "include": "variable_propagation.h", 
+        "name": "Variable Propagation", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Id", 
+            "Avis"
+        ]
+    }, 
+    "W2D": {
+        "default": "sons", 
+        "include": "while2do.h", 
+        "name": "While2do", 
+        "travuser": [
+            "While"
+        ]
+    }, 
+    "WLA": {
+        "default": "sons", 
+        "include": "wlanalysis.h", 
+        "name": "With-Loop Analysis", 
+        "travuser": [
+            "With", 
+            "Part", 
+            "Generator", 
+            "Genarray"
+        ]
+    }, 
+    "WLBSC": {
+        "default": "sons", 
+        "include": "wlbounds2structconsts.h", 
+        "name": "With-Loop Bounds 2 Structure Constants", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Generator", 
+            "Genarray"
+        ]
+    }, 
+    "WLCC": {
+        "default": "sons", 
+        "include": "wl_cost_check.h", 
+        "name": "With-Loop Cost Check", 
+        "travuser": [
+            "With", 
+            "Code", 
+            "Prf", 
+            "Ap"
+        ]
+    }, 
+    "WLDP": {
+        "default": "sons", 
+        "include": "wldefaultpartition.h", 
+        "name": "With-Loop Default Partition", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "With", 
+            "Part", 
+            "Genarray", 
+            "Modarray", 
+            "Propagate"
+        ]
+    }, 
+    "WLF": {
+        "default": "sons", 
+        "include": "SSAWLF.h", 
+        "name": "With-Loop-Folding", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Id", 
+            "Let", 
+            "With", 
+            "Code"
+        ]
+    }, 
+    "WLFLT": {
+        "default": "sons", 
+        "include": "withloop_flattening.h", 
+        "name": "Flattening multi-dimensional withloops", 
+        "travuser": [
+            "Id", 
+            "Avis", 
+            "With", 
+            "Genarray", 
+            "Assign", 
+            "Let", 
+            "Block", 
+            "Fundef", 
+            "Withid", 
+            "Generator", 
+            "Ids"
+        ]
+    }, 
+    "WLFS": {
+        "default": "sons", 
+        "include": "WithloopFusion.h", 
+        "name": "With-Loop-Fusion", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Id", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Part", 
+            "Generator"
+        ]
+    }, 
+    "WLI": {
+        "default": "sons", 
+        "include": "SSAWLI.h", 
+        "name": "With-Loop-Interference", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Id", 
+            "Let", 
+            "Cond", 
+            "With", 
+            "Modarray", 
+            "Part", 
+            "Generator", 
+            "Code"
+        ]
+    }, 
+    "WLIDX": {
+        "default": "sons", 
+        "include": "wlidxs.h", 
+        "name": "Annotate withloop idxs", 
+        "travuser": [
+            "Fundef", 
+            "Let", 
+            "With", 
+            "Withid"
+        ]
+    }, 
+    "WLIR": {
+        "default": "sons", 
+        "include": "withloop_invariant_removal.h", 
+        "name": "Loop Invariants Traversal", 
+        "travuser": [
+            "Ids", 
+            "Assign", 
+            "Fundef", 
+            "Arg", 
+            "Vardec", 
+            "Block", 
+            "Let", 
+            "Module", 
+            "Id", 
+            "With", 
+            "Withid"
+        ]
+    }, 
+    "WLLOM": {
+        "default": "sons", 
+        "include": "wl_lock_optimization_marking.h", 
+        "name": "Withloop lock optimization marking", 
+        "travuser": [
+            "With", 
+            "Code", 
+            "Assign", 
+            "Let", 
+            "Ids", 
+            "Id", 
+            "Prf", 
+            "Fundef"
+        ]
+    }, 
+    "WLLOS": {
+        "default": "sons", 
+        "include": "wl_lock_optimization_shifting.h", 
+        "name": "Withloop lock optimization shifting", 
+        "travuser": [
+            "With", 
+            "Block", 
+            "Assign", 
+            "Prf"
+        ]
+    }, 
+    "WLNC": {
+        "default": "sons", 
+        "include": "wl_needcount.h", 
+        "name": "With-Loop NeedCount Check", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Avis", 
+            "With", 
+            "Part", 
+            "Code", 
+            "Prf", 
+            "Ap", 
+            "Id"
+        ]
+    }, 
+    "WLPG": {
+        "default": "sons", 
+        "include": "WLPartitionGeneration.h", 
+        "name": "With-Loop Partition Generation", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "With"
+        ]
+    }, 
+    "WLPROP": {
+        "default": "sons", 
+        "include": "wlpropagation.h", 
+        "name": "With-Loop Propagation", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Ap", 
+            "Exprs", 
+            "Id"
+        ]
+    }, 
+    "WLS": {
+        "default": "sons", 
+        "include": "wls.h", 
+        "name": "With-Loop Scalarization", 
+        "travuser": [
+            "Assign", 
+            "Fundef", 
+            "Module", 
+            "With"
+        ]
+    }, 
+    "WLSB": {
+        "default": "sons", 
+        "include": "wls.h", 
+        "name": "With-Loop Scalarization Build traversal", 
+        "travuser": [
+            "Code", 
+            "Generator", 
+            "Part", 
+            "With", 
+            "Withid", 
+            "Genarray", 
+            "Modarray"
+        ]
+    }, 
+    "WLSC": {
+        "default": "sons", 
+        "include": "wls.h", 
+        "name": "With-Loop Scalarization Check traversal", 
+        "travuser": [
+            "Block", 
+            "Code", 
+            "Default", 
+            "Id", 
+            "Part", 
+            "With", 
+            "Withid", 
+            "Generator", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Propagate"
+        ]
+    }, 
+    "WLSD": {
+        "default": "sons", 
+        "include": "wl_split_dimensions.h", 
+        "name": "With-Loop Split Dimensions", 
+        "traverror": [
+            "WLblock", 
+            "WLublock"
+        ], 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "Block", 
+            "With", 
+            "With2", 
+            "Withid", 
+            "WLseg", 
+            "WLstride", 
+            "WLgrid", 
+            "WLblock"
+        ]
+    }, 
+    "WLSELC": {
+        "default": "sons", 
+        "include": "wlselcount.h", 
+        "name": "With-Loop Selections Counter", 
+        "travuser": [
+            "With", 
+            "Fundef", 
+            "Code", 
+            "Ap", 
+            "Prf"
+        ]
+    }, 
+    "WLSIMP": {
+        "default": "sons", 
+        "include": "wlsimplification.h", 
+        "name": "With-Loop Simplification", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Break", 
+            "Propagate", 
+            "Code", 
+            "Part", 
+            "Generator"
+        ]
+    }, 
+    "WLSW": {
+        "default": "sons", 
+        "include": "wls.h", 
+        "name": "With-Loop Scalarization Withloopification traversal", 
+        "travuser": [
+            "Code", 
+            "Id", 
+            "Let", 
+            "Part", 
+            "With", 
+            "Withid"
+        ]
+    }, 
+    "WLTRA": {
+        "default": "sons", 
+        "include": "wltransform.h", 
+        "name": "With-Loop Transformation traversal", 
+        "travuser": [
+            "Code", 
+            "Let", 
+            "With"
+        ]
+    }, 
+    "WLUR": {
+        "default": "sons", 
+        "include": "SSAWLUnroll.h", 
+        "name": "With-Loop Unrolling Traversal", 
+        "travuser": [
+            "Ap", 
+            "Assign", 
+            "Fundef", 
+            "With"
+        ]
+    }, 
+    "WRCI": {
+        "default": "sons", 
+        "include": "wrci.h", 
+        "name": "With-loop reuse candidate inference", 
+        "travuser": [
+            "Fundef", 
+            "Assign", 
+            "Let", 
+            "With", 
+            "Genarray", 
+            "Modarray", 
+            "Fold", 
+            "Generator"
+        ]
+    }
+}

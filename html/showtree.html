@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SaC AST and viewver</title>
+        <meta name="description" content="An HTML representation of the internal AST format of SaC">
+
+        <!-- Define a viewport to mobile devices to use - telling the browser to assume that the page is
+             as wide as the device (width=device-width) and setting the initial page zoom level to be 1
+             (initial-scale=1.0) -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="./css/style.css" />
+        <style>
+            * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                font-family: 'PT Serif', serif;
+            }
+
+            body{
+                overflow: hidden;
+                padding-top: 100px;
+            }
+
+            html, body {
+                margin: 0;
+                padding: 0;
+                top: 0;
+                bottom: 0;
+            }
+
+            h1,h2,h3,h4,h5,h6,span.item-name{
+                color:#000;
+                font-weight:400;
+                -webkit-font-feature-settings:"liga","dlig";
+                -moz-font-feature-settings:"liga=1, dlig=1";
+                -ms-font-feature-settings:"liga","dlig";
+                -o-font-feature-settings:"liga","dlig";
+                font-feature-settings:"liga","dlig"
+            }
+
+            #ast-desc .node-container {
+            }
+            
+            #header {
+                position: absolute;
+                height: 100px;
+                width: 100%;
+                top: 0;
+                left: 0;
+                border-bottom: 1px #888 dotted;
+            }
+
+            #ast-tree {
+                padding-left: 20px;
+                padding-top: 20px;
+                top: 100px;
+                bottom: 0;
+                width: 25%;
+                float:left;
+                position: absolute;
+                overflow: auto;
+            }
+
+            #ast-desc {
+                position: fixed;
+                top: 100px;
+                bottom: 0;
+                left: 25%;
+                width: 75%;
+                overflow: auto;
+                padding-left: 20px;
+            }
+
+            .item-description {
+                padding-left: 50px;
+                width: 600px;
+                font-size: 90%;
+            }
+
+            .item-targets {
+                padding-left: 50px;
+            }
+
+            .node-flags, .node-attributes, .node-sons {
+                list-style-type: none;
+            }
+
+            #ast-desc li {
+                margin-bottom: 8px;
+            }
+
+            span.item-default {
+                color: #777;
+                font-size: 1.17em;
+            }
+
+            span.attribute-type {
+                color: #336699;
+                font-size: 1.17em;
+            }
+
+            span.target-type {
+                color: #336699;
+            }
+
+            span.target-contains {
+                font-style: italic;
+                color: #777;
+            }
+
+            span.item-name {
+                font-size: 1.17em;
+            }
+
+            .target-list {
+                list-style-type: none;
+                margin: 0;
+                margin-left: 50px;
+                padding: 0;
+                width: 600px
+            }
+            
+            .target-phase {
+                color: #339966;
+            }
+
+            .target-phases {
+                margin-left: 30px;
+            }
+        </style>
+
+        <script src="./js/jquery-1.11.2.js"></script>
+        <script src="./js/jstree.js"></script>
+        <script src="./ast.js"></script>
+        <script>
+            var ast_json = [];
+            $.each (syntaxtree_json['syntaxtree'], function(i, val) {
+                ast_json.push ({"id": "node_" + i, "text": val['name']});
+            });
+            
+            function gen_name (obj) {
+                return "<span class='item-name'>" + obj['name'] + "</span>";
+            }
+
+            function gen_default (obj) {
+                if (obj.hasOwnProperty ('default'))
+                    return "<span class='item-default'> = " + obj['default'] + "</span>";
+                return "";
+            }
+
+            function gen_description (obj) {
+                if (obj.hasOwnProperty ('description'))
+                    return "<div class='item-description'>" + obj['description'] + "</div>";
+
+                return "";
+            }
+
+            function gen_phase (ph) {
+                if (typeof ph == 'string' || ph instanceof String) {
+                    return "<span class='target-phase'>" + ph + "</span>";
+                } else {
+                    return "<span class='target-phase'>" + ph['from'] + "</span>"
+                         + " &rarr; " 
+                         + "<span class='target-phase'>" + ph['to'] + "</span>"
+                         + "</span>";
+                }
+            }
+
+            function gen_target (tgt) {
+                var contains = tgt['contains'];
+                var phases = tgt['phases'];
+
+                // FIXME we want to make this field boolean!
+                var t = "<li> " +  (tgt['mandatory'] == "yes" ? "&#x2714;" : "&#x2717;");
+
+                if (contains === "any")
+                    t += "<span class='target-contains'>Any</span>";
+                else if (contains instanceof Array)
+                    // FIXME  we want to insert links to types here
+                    t += $.map (contains, function (val) {
+                             return "<span class='target-type'>" + val + "</span>";
+                         }).join (", ");
+                else
+                    t += "<span class='target-type'>" + contains + "</span>";
+
+                t += "<span class='target-phases'>";
+                if (phases === "all")
+                    t += "<span class='target-phase'>Any phase</span>";
+                else if (phases instanceof  Array)
+                    // FIXME  we want to insert links to types here
+                    t += $.map (phases, function (val) {
+                             return gen_phase (val);
+                         }).join (", ");
+                else
+                    t += gen_phase (phases);
+
+                t += "</span>";
+                
+                return t;
+            }
+
+            function gen_targets (tgts) {
+                var t = "<ol class='target-list'> ";
+                
+                if (tgts instanceof  Array)
+                    $.each (tgts, function (i, tgt) {
+                        t += gen_target (tgt);
+                    });
+                else if (tgts instanceof Object)
+                    t += gen_target (tgts);
+                t += "</ol>";
+                return t;   
+            }
+
+            function gen_node (node) {
+                var t = "<div class='node-container'>";
+                
+                t += "<h1>" + node['name'] + "</h1>"
+                if (node.hasOwnProperty ('description')) 
+                    t += "<div class='node-description'>" + node['description'] + "</div>";
+
+                //t += "<ul class='node-ul'>";
+
+                // Then we have sons
+                if (node.hasOwnProperty ('sons')) {
+                    t += "<h2>Sons</h2><ol class='node-sons'>"
+                    $.each (node['sons'], function (i, val) {
+                        t += "<li><div class='node-son'>";
+                        
+                        t += gen_name (val);
+                        t += gen_default (val);
+                        t += gen_description (val);
+
+                        t += gen_targets (val['targets']);
+                        
+                        t += "</div>";
+                    });
+                    t += "</ol>"
+                }
+                
+                // Then we have attributes
+                if (node.hasOwnProperty ('attributes')) {
+                    t += "<h2>Attributes</h2><ol class='node-attributes'>"
+                    $.each (node['attributes'], function (i, val) {
+                        t += "<li><div class='node-attribute'>";
+
+                        t += gen_name (val);
+                        t += " :: <span class='attribute-type'>" + val['type'] + "</span> ";
+                        t += gen_default (val);
+                        t += gen_description (val);
+                        t += gen_targets (val['targets']);
+
+                        t += "</div>";
+                    });
+                    t += "</ol>"
+                }
+
+                // Then we have attributes
+                if (node.hasOwnProperty ('flags')) {
+                    t += "<h2>Flags</h2><ol class='node-flags'>"
+                    $.each (node['flags'], function (i, val) {
+                        t += "<li><div class='node-flag'>";
+
+                        t += gen_name (val);
+                        t += gen_default (val);
+
+                        /* FIXME this is bollocks, this field should be called DESCRIPTION
+                           in json, as everywhere else, not DESC!  */
+                        if (val.hasOwnProperty ('desc'))
+                            t += "<div class='item-description'>" + val['desc'] + "</div>"
+                        
+                        t += "</div>";
+                    });
+                    t += "</ol>"
+                }
+
+                
+                t += "</div>";
+                return t;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <h1>SaC Abstract Syntax Tree</h1>
+        </div>
+        <div id="ast-tree"></div>
+        <div id="ast-desc"></div>
+
+        <script>
+            $('#ast-tree').jstree({
+                'core': {
+                    'data': ast_json,
+                    "check_callback" : true
+                }
+            });
+
+            $('#ast-tree').on("changed.jstree", function (e, data) {
+                $('#ast-desc').html ("");
+
+                $.each (data.selected, function (i, val) {
+                    var id = parseInt (val.replace(/node_([0-9]*)/, "$1"));
+                    var txt = gen_node (syntaxtree_json['syntaxtree'][id]);
+                    $('#ast-desc').append (txt + "<br/>");
+                });
+            });
+        </script>
+    </body>
+</html>
