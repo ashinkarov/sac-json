@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <err.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -74,7 +77,7 @@ parse_json (const char *txt, yajl_val *t)
 {
   char errbuf[BUFSIZ];
 
-  *t = yajl_tree_parse((const char *)txt, errbuf, sizeof (errbuf));
+  *t = yajl_tree_parse ((const char *)txt, errbuf, sizeof (errbuf));
 
   if (*t == NULL)
     {
@@ -99,8 +102,12 @@ get_file_content (const char *fname)
   int fd;
 
   /* Open the file.  */
-  if (-1 == (fd = open (fname, O_RDONLY)))
-    err_func (open);
+  if (-1 == (fd = open (fname, O_RDONLY))) 
+    {
+      warn ("failed to open `%s'", fname);
+      return NULL;
+    }
+
 
   /* Get FD status information.  */
   if (0 != fstat (fd, &st))

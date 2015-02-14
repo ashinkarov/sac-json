@@ -4,6 +4,10 @@
 #define err_func(name)                          \
     err (EXIT_FAILURE, "system call `" #name "' failed")
 
+#define YAJL_OBJECT_LENGTH(v) ((v)->u.object.len)
+#define YAJL_OBJECT_KEYS(v) ((v)->u.object.keys)
+#define YAJL_OBJECT_VALUES(v) ((v)->u.object.values)
+
 
 enum tree_regexps
 {
@@ -15,11 +19,11 @@ enum tree_regexps
 /* A list of the regular expressions we might ever want to use
    during the validation.  We keep it in a list to avoid potential
    recompilation of the regular expression at every match.  */
-extern const char **regexp_txt;
+extern const char *regexp_txt[];
 
 
 /* This is a list where we keep compiler regular expressions.  */
-extern regex_t *regexps;
+extern regex_t regexps[];
 
 
 /* Checks whether TXT matches the regular expression R from 
@@ -32,7 +36,7 @@ void init_regexps ();
 
 
 /* Free regular expressions from REXPS.  */
-void free_regexps ()
+void free_regexps ();
 
 
 /* Wrapper for printing errors on STDERR.  */
