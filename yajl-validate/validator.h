@@ -1,18 +1,53 @@
 #ifndef __VALIDATOR_H__
 #define __VALIDATOR_H__
 
+#include "uthash.h"
+
+
+#ifdef __GNUC__
+#   define PRINTF_FORMAT(x, y)  __attribute__ ((format (printf, x, y)))
+#else
+#   define PRINTF_FORMAT(x, y)
+#endif
+
 #define err_func(name)                          \
     err (EXIT_FAILURE, "system call `" #name "' failed")
 
 #define YAJL_OBJECT_LENGTH(v) ((v)->u.object.len)
 #define YAJL_OBJECT_KEYS(v) ((v)->u.object.keys)
 #define YAJL_OBJECT_VALUES(v) ((v)->u.object.values)
+#define YAJL_ARRAY_LENGTH(v) ((v)->u.array.len)
+#define YAJL_ARRAY_VALUES(v) ((v)->u.array.values)
+#define YAJL_STRING_VALUE(v) ((v)->u.string)
 
 
 enum tree_regexps
 {
   rxp_node_name,
+  rxp_attrtype_name,
   rxp_max
+};
+
+
+enum ast_node_name_type
+{
+  nnt_node,
+  nnt_nodeset
+};
+
+/* A structure for the hash table to store the ast node names.  */
+struct ast_node_name
+{
+  char *  name;
+  enum ast_node_name_type name_type;
+  UT_hash_handle hh;
+};
+
+/* A structure for the hash table to store the attribute type names.  */
+struct attrtype_name
+{
+  char *  name;
+  UT_hash_handle hh;
 };
 
 
@@ -40,7 +75,7 @@ void free_regexps ();
 
 
 /* Wrapper for printing errors on STDERR.  */
-void json_err (const char *format, ...);
+void json_err (const char *format, ...) PRINTF_FORMAT (1, 2);
 
 
 /* Parse json file TXT or print an error and return FALSE.  */
