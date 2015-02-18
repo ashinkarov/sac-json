@@ -8,10 +8,17 @@ LDFLAGS       := $(YAJL_LDFLAGS)
 
 all: validator
 
-validator: validator-common.o validator.o
+validator: validator-common.o validator.o validate-nodes.o validate-attrtypes.o \
+           validate-nodesets.o gen-types_trav.h.o
 
-validator.o: validator.h uthash.h
+validator.o: validator.h validate-nodes.h uthash.h validate-nodes.h \
+             validate-attrtypes.h validate-nodesets.h gen.h
+
 validator-common.o: validator.h
+validate-nodes.o: validator.h validate-nodes.h
+validate-attrtypes.o: validator.h validate-attrtypes.h
+validate-nodesets.o: validator.h validate-nodesets.h
+gen-types_trav.h.o: validator.h gen.h
 
 clean:
 	$(RM) *.o validator

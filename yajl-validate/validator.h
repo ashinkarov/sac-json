@@ -25,6 +25,7 @@ enum tree_regexps
 {
   rxp_node_name,
   rxp_attrtype_name,
+  rxp_traversal_name,
   rxp_max
 };
 
@@ -36,7 +37,7 @@ enum ast_node_name_type
 };
 
 /* A structure for the hash table to store the ast node names.  */
-struct ast_node_name
+struct node_name
 {
   char *  name;
   enum ast_node_name_type name_type;
@@ -49,6 +50,18 @@ struct attrtype_name
   char *  name;
   UT_hash_handle hh;
 };
+
+
+/* A structure for the hash table to store the names of traversals.  */
+struct traversal_name
+{
+  char *  name;
+  UT_hash_handle hh;
+};
+
+extern struct node_name *  node_names;
+extern struct attrtype_name *  attrtype_names;
+extern struct traversal_name *  traveral_names;
 
 
 /* A list of the regular expressions we might ever want to use
