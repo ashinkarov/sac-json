@@ -27,7 +27,7 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
       if (!match_regexp (rxp_node_name, name))
         {
           json_err ("the attribute type name `%s' doesn't match the regexp `%s'",
-                      name, regexp_txt[rxp_attrtype_name]);
+                    name, regexp_txt[rxp_attrtype_name]);
           return false;
         }
 

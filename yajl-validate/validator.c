@@ -13,6 +13,7 @@
 #include "validate-nodes.h"
 #include "validate-attrtypes.h"
 #include "validate-nodesets.h"
+#include "validate-traversals.h"
 
 #include "gen.h"
 
@@ -56,83 +57,7 @@ get_yajl_tree_from_file (const char *  fname)
   return node;
 }
 
-
-/* ret
-       1. The top-level json in the traversals is object
-       2. The name of each traversal matches the RXP_TRAVERSAL_NAME regexp
-       3. */
-static bool
-load_and_validate_traversals (yajl_val traversals, const char *  fname)
-{
-  /* The top-level AST has to be an object.  */
-  if (!YAJL_IS_OBJECT (traversals))
-    {
-      json_err ("top-level node of `%s' must be an object", fname);
-      return false;
-    }
-
-  /* Traverse all the nodes.  */
-  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (traversals); i++)
-    {
-      //struct traversal_name *  tn;
-      const char *  name = YAJL_OBJECT_KEYS (traversals)[i];
-
-      /* Check that the node name of the AST matcehs the RXP_NODE_NAME
-         regular expression.  */
-      if (!match_regexp (rxp_traversal_name, name))
-        {
-          json_err ("the traversal name `%s' doesn't match the regexp `%s'",
-                     name, regexp_txt[rxp_traversal_name]);
-          return false;
-        }
-
-       
-      yajl_val traversal = YAJL_OBJECT_VALUES (traversals)[i];
-      if (!YAJL_IS_OBJECT (traversal))
-        {
-          json_err ("traversal `%s' must be of json type object", name);
-          return false;
-        }
-
-      /* Check that `default' of the traversal is valid.  */
-      yajl_val xdefault = yajl_tree_get (traversal, (const char *[]){"default", 0}, yajl_t_string);
-      if (!xdefault)
-        {
-          json_err ("traversal `%s' does not specify `default'", name);
-          return false;
-        }
-      
-      /* TODO Check that the include file exists.  */
-
-      /* TODO Traverror, Travuser, Travnone, Travsons 
-              contain nodes, and warn empty arrays.*/ 
-      //printf ("%s\n", YAJL_GET_STRING (xdefault));
-    }
-
-  return true;
-}
-
-
-/* Free the ast node name  hash-table.  */
-void
-traversal_names_free ()
-{
-  struct traversal_name *  tn;
-  struct traversal_name *  tmp;
-
-  HASH_ITER (hh, traversal_names, tn, tmp)
-    {
-      HASH_DEL (traversal_names, tn);
-      free (tn->name);
-      free (tn);
-    }
-}
-
-
-
-
-
-#define GET_OUT_IF(__expr)     \
+#define GET_OUT_IF(__expr)    \
 do {                          \
   if (__expr)                 \
     {                         \

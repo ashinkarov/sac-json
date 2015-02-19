@@ -4,7 +4,10 @@
 #include <stdarg.h>
 #include <err.h>
 #include <fcntl.h>
+#include <dirent.h>  
 #include <unistd.h>
+#include <limits.h>
+#include <errno.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -64,6 +67,19 @@ json_err (const char *format, ...)
   va_list args;
 
   fprintf (stderr, "json-error: ");
+  va_start (args, format);
+  vfprintf (stderr, format, args);
+  va_end (args);
+  fprintf (stderr, "\n");
+  fflush (stderr);
+}
+
+void
+json_warn (const char *format, ...)
+{
+  va_list args;
+
+  fprintf (stderr, "json-warning: ");
   va_start (args, format);
   vfprintf (stderr, format, args);
   va_end (args);
@@ -134,3 +150,86 @@ get_file_content (const char *fname)
   return buf;
 }
 
+
+static char *
+xgetcwd ()
+{
+  size_t size = PATH_MAX;
+
+  while (true)
+    {
+      char *buffer = malloc (size);
+      
+      if (getcwd (buffer, size) == buffer)
+        return buffer;
+      
+      free (buffer);
+      
+      if (errno != ERANGE)
+        return 0;
+      
+      size *= 2;
+    }
+} 
+
+
+static bool
+_find_file (const char *  fname)
+{
+  DIR *  dir;
+  struct dirent* entry;
+  struct stat dir_stat;
+  bool ret = false;
+
+  if (!(dir = opendir (".")))
+    err_func (opendir);
+
+  while ((entry = readdir (dir)))
+    {
+      if (-1 == stat (entry->d_name, &dir_stat))
+        err_func (stat);
+
+      if (!strcmp (entry->d_name, ".") || !strcmp (entry->d_name, ".."))
+        continue;
+      
+      if (!S_ISDIR (dir_stat.st_mode))
+        {
+          if (!strcmp (entry->d_name, fname))
+            {
+              ret = true;
+              goto out;
+            }
+        }
+      else
+        {
+          bool found;
+
+          chdir (entry->d_name);
+          found = _find_file (fname);
+          chdir ("..");
+          
+          if (found)
+            {
+              ret = true;
+              goto out;
+            }
+        }
+    }
+
+out:
+  closedir (dir);
+  return ret;
+}
+
+bool
+find_file (const char *  dirname, const char *  fname)
+{
+  char *  cwd = xgetcwd ();
+  bool res;
+
+  chdir (dirname);
+  res = _find_file (fname);
+  chdir (cwd);
+  free (cwd);
+  return res;
+}
