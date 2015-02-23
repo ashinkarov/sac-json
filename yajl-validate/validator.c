@@ -98,13 +98,13 @@ main (void)
      [x] ./types/types_trav.h.xsl
      [x] ./types/types_nodetype.h.xsl
      [x] ./tree/traverse_tables.h.xsl
-         ./tree/traverse_tables.c.xsl
-         ./tree/traverse_helper.c.xsl
-         ./tree/sons.h.xsl
-         ./tree/node_basic.h.xsl
+     [x] ./tree/traverse_tables.c.xsl
+     [x] ./tree/traverse_helper.c.xsl
+     [x] ./tree/sons.h.xsl
+     [x] ./tree/node_basic.h.xsl
          ./tree/node_basic.c.xsl
-         ./tree/node_alloc.h.xsl
-         ./tree/free_node.h.xsl
+     [x] ./tree/node_alloc.h.xsl
+     [x] ./tree/free_node.h.xsl
          ./tree/free_node.c.xsl
          ./tree/free_attribs.h.xsl
          ./tree/check_reset.h.xsl
@@ -113,20 +113,29 @@ main (void)
          ./tree/check_node.c.xsl
          ./tree/check.h.xsl
          ./tree/check.c.xsl
-         ./tree/attribs.h.xsl
-         ./serialize/serialize_node.h.xsl
-         ./serialize/serialize_node.c.xsl
-         ./serialize/serialize_link.h.xsl
-         ./serialize/serialize_link.c.xsl
-         ./serialize/serialize_helper.c.xsl
-         ./serialize/serialize_buildstack.h.xsl
-         ./serialize/serialize_buildstack.c.xsl
-         ./serialize/serialize_attribs.h.xsl
-         ./global/node_info.mac.xsl  */
+     [x] ./tree/attribs.h.xsl
+     [-] ./serialize/serialize_node.h.xsl
+     [-] ./serialize/serialize_node.c.xsl
+     [-] ./serialize/serialize_link.h.xsl
+     [-] ./serialize/serialize_link.c.xsl
+     [-] ./serialize/serialize_helper.c.xsl
+     [-] ./serialize/serialize_buildstack.h.xsl
+     [-] ./serialize/serialize_buildstack.c.xsl
+     [-] ./serialize/serialize_attribs.h.xsl
+     [x] ./global/node_info.mac.xsl  */
 
   gen_types_trav_h (traversal_node, "gen/types_trav.h");
   gen_types_nodetype_h (ast_node, "gen/types_nodetype.h");
   gen_traverse_tables_h (ast_node, traversal_node, "gen/traverse_tables.h");
+  gen_traverse_tables_c (ast_node, traversal_node, "gen/traverse_tables.c");
+  gen_traverse_helper_c (ast_node, "gen/traverse_helper.c");
+  gen_sons_h (ast_node, "gen/sons.h");
+  gen_node_info_mac (ast_node, "gen/node_info.mac");
+  gen_node_info_mac (ast_node, "gen/node_info.mac");
+  gen_free_node_h (ast_node, "gen/free_node.h");
+  gen_attribs_h (ast_node, "gen/attribs.h");
+  gen_node_alloc_h (ast_node, "gen/node_alloc.h");
+  gen_node_basic_h (ast_node, "gen/node_basic.h");
 
   /*struct node_name *  an;
   struct node_name *  tmp;

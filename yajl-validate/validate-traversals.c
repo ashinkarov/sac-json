@@ -52,7 +52,8 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
   return true;
 }
 
-/* ret
+/* FIXME write WHAT we are validating.
+
        1. The top-level json in the traversals is object
        2. The name of each traversal matches the RXP_TRAVERSAL_NAME regexp
        3. */
@@ -121,7 +122,7 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
         {
           json_err ("file `%s' included in the traversal `%s' not found",
                     YAJL_GET_STRING (include), name);
-          
+
           /* FIXME exclude auto-generated files and turn this check on.  */
           //return false;
         }

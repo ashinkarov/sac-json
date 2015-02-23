@@ -64,6 +64,24 @@ trav_node_type_name (enum trav_node_type n)
     }
 }
 
+static inline const char *
+trav_node_type_fun_name (enum trav_node_type n)
+{
+  switch (n)
+    {
+    case tnt_user:
+      return "TRAVuser";
+    case tnt_sons:
+      return "TRAVsons";
+    case tnt_error:
+      return "TRAVerror";
+    case tnt_none:
+      return "TRAVnone";
+    default:
+      assert (false);
+    }
+}
+
 
 /* A structure for the hash table to store the ast node names.  */
 struct node_name
@@ -73,10 +91,21 @@ struct node_name
   UT_hash_handle hh;
 };
 
+
+enum attrtype_copy_type
+{
+  act_literal,
+  act_function,
+  act_hash
+};
+
 /* A structure for the hash table to store the attribute type names.  */
 struct attrtype_name
 {
   char *  name;
+  enum attrtype_copy_type copy_type;
+  char *  ctype;
+  char *  init;
   UT_hash_handle hh;
 };
 
