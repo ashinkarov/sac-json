@@ -1,4 +1,5 @@
 import json
+import collections
 
 
 def change_yes_no (item, field):
@@ -40,15 +41,15 @@ def update_desc (s):
     return r
 
 
-t = json.load (open ('ast.json'))
+t = json.load (open ('ast.json'), object_pairs_hook=collections.OrderedDict)
 
-ast = {}
+ast = collections.OrderedDict ()
 for node in t['syntaxtree']:
     node_name = node['name']
     node.pop ('name', None)
 
     if 'attributes' in node:
-        new_attrs = {}
+        new_attrs = collections.OrderedDict ()
         for attr in node['attributes']:
             attr_name = attr['name']
             attr.pop ('name')
@@ -71,7 +72,7 @@ for node in t['syntaxtree']:
         node['attributes'] = new_attrs
 
     if 'sons' in node:
-        new_sons = {}
+        new_sons = collections.OrderedDict ()
         for son in node['sons']:
             son_name = son['name']
             son.pop ('name', None)
@@ -91,7 +92,7 @@ for node in t['syntaxtree']:
         node['sons'] = new_sons
 
     if 'flags' in node:
-        new_flags = {}
+        new_flags = collections.OrderedDict ()
         for flag in node['flags']:
             flag_name = flag['name']
             flag.pop ('name', None)
