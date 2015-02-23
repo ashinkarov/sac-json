@@ -647,7 +647,8 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
   for (size_t i = 0; i < param_length; i++)
     fprintf (f, "%s %s%s", params[i].arg_type, params[i].arg_name, i < param_length - 1 ? ", " : "");
 
-  fprintf (f, "%sconst char *  filename, const size_t line)%s",
+  /* FIXME those should become const-qualified.  */
+  fprintf (f, "%schar *  file, size_t line)%s",
            param_length > 0 ? ", " : "",
            declaration_and_macro_p ? ";\n" : "\n");
 
@@ -865,12 +866,12 @@ gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
 
       gen_make_function_header (f, node_name_lower, attribs, sons, false);
       fprintf (f, "{\n"
-                  "  struct NODE_ALLOC_N_%s nodealloc;\n"
+                  "  struct NODE_ALLOC_N_%s *  nodealloc;\n"
                   "  node *  xthis;\n"
                   "\n"
                   "  DBUG_ENTER ();\n"
                   "  DBUG_PRINT (\"allocating N_%s node\");\n"
-                  "  nodealloc = (struct NODE_ALLOC_N_%s *) MEMmallocAt (sizeof nodealloc, file, line);\n"
+                  "  nodealloc = (struct NODE_ALLOC_N_%s *) MEMmallocAt (sizeof *nodealloc, file, line);\n"
                   "  xthis = (node *) &(nodealloc->nodestructure);\n"
                   "  DBUG_PRINT (\"address: \" F_PTR, xthis);\n\n",
                node_name_upper, node_name_lower, node_name_upper);
@@ -879,12 +880,12 @@ gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
       fprintf (f, "#ifndef DBUG_OFF\n"
                   "  CHKMisNode (xthis, N_%s);\n"
                   "#endif\n\n",
-               node_name_upper);
+               node_name_lower);
 
       fprintf (f, "  DBUG_PRINT (\"setting node type, filename `%%s', line: %%zu, col: %%zu\",\n"
                   "              global.filename, global.linenum, global.colnum);\n"
                   "  NODE_TYPE (xthis) = N_%s;\n"
-                  "  NODE_FILENAME (xthis) = globlal.filename;\n"
+                  "  NODE_FILE (xthis) = global.filename;\n"
                   "  NODE_LINE (xthis) = global.linenum;\n"
                   "  NODE_COL (xthis) = global.colnum;\n"
                   "  NODE_ERROR (xthis) = NULL;\n\n",
@@ -908,8 +909,8 @@ gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
           else
             value = son_name;
 
-          fprintf (f, "  DBUG_ASSERT (\"assigning inital value "
-                                    "`\" F_PTR \"' to the son `%%s'\", %s, \"%s\");\n"
+          fprintf (f, "  DBUG_PRINT (\"assigning inital value "
+                                   "`\" F_PTR \"' to the son `%%s'\", %s, \"%s\");\n"
                       "  %s_%s (xthis) = %s;\n\n",
                    value, son_name, node_name_upper, son_name_upper, value);
 
@@ -1007,7 +1008,7 @@ gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
             gen_node_son_check_from_targets (f, nodesets, targets, node_name_upper, son_name_upper);
 
           fprintf (f, ")\n"
-                      "    CTIwarn (\"Field `%s' of node N_%s has non-allowed target node: %%s\"\n"
+                      "    CTIwarn (\"Field `%s' of node N_%s has non-allowed target node: %%s\",\n"
                       "             NODE_TEXT (%s_%s (xthis)));\n\n",
                    son_name, node_name_lower, node_name_upper, son_name_upper);
 
