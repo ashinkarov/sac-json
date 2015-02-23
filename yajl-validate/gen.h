@@ -84,6 +84,12 @@ bool gen_free_node_h (yajl_val nodes, const char *  fname);
 bool gen_attribs_h (yajl_val nodes, const char *  fname);
 bool gen_node_alloc_h (yajl_val nodes, const char *  fname);
 bool gen_node_basic_h (yajl_val nodes, const char *  fname);
+bool gen_free_attribs_h (const char *  fname);
+bool gen_check_reset_h (const char *  fname);
+bool gen_check_node_h (const char *  fname);
+bool gen_check_h (const char *  fname);
+bool gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname);
+
 
 
 #endif // __GEN_H__

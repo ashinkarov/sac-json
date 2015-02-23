@@ -102,16 +102,16 @@ main (void)
      [x] ./tree/traverse_helper.c.xsl
      [x] ./tree/sons.h.xsl
      [x] ./tree/node_basic.h.xsl
-         ./tree/node_basic.c.xsl
+     [x] ./tree/node_basic.c.xsl
      [x] ./tree/node_alloc.h.xsl
      [x] ./tree/free_node.h.xsl
          ./tree/free_node.c.xsl
-         ./tree/free_attribs.h.xsl
-         ./tree/check_reset.h.xsl
+     [x] ./tree/free_attribs.h.xsl
+     [x] ./tree/check_reset.h.xsl
          ./tree/check_reset.c.xsl
-         ./tree/check_node.h.xsl
+     [x] ./tree/check_node.h.xsl
          ./tree/check_node.c.xsl
-         ./tree/check.h.xsl
+     [x] ./tree/check.h.xsl
          ./tree/check.c.xsl
      [x] ./tree/attribs.h.xsl
      [-] ./serialize/serialize_node.h.xsl
@@ -131,16 +131,15 @@ main (void)
   gen_traverse_helper_c (ast_node, "gen/traverse_helper.c");
   gen_sons_h (ast_node, "gen/sons.h");
   gen_node_info_mac (ast_node, "gen/node_info.mac");
-  gen_node_info_mac (ast_node, "gen/node_info.mac");
   gen_free_node_h (ast_node, "gen/free_node.h");
   gen_attribs_h (ast_node, "gen/attribs.h");
   gen_node_alloc_h (ast_node, "gen/node_alloc.h");
   gen_node_basic_h (ast_node, "gen/node_basic.h");
-
-  /*struct node_name *  an;
-  struct node_name *  tmp;
-  HASH_ITER (hh, node_names, an, tmp)
-    printf ("-- %s [%s]\n", an->name, an->name_type == nnt_node ? "node" : "nodeset"); */
+  gen_free_attribs_h ("gen/free_attribs.h");
+  gen_check_reset_h ("gen/check_reset.h");
+  gen_check_node_h ("gen/check_node.h");
+  gen_check_h ("gen/check.h");
+  gen_node_basic_c (ast_node, nodeset_node, "gen/node_basic.c");
 
 
 out:

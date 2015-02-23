@@ -55,9 +55,14 @@ for node in t['syntaxtree']:
 
             attr = change_yes_no (attr, 'mandatory')
             attr = change_yes_no (attr, 'inconstructor')
-            
+
             if 'targets' in attr:
-                attr['targets'] = change_yes_no (attr['targets'], 'mandatory')
+                if isinstance (attr['targets'], dict):
+                    attr['targets'] = change_yes_no (attr['targets'], 'mandatory')
+                elif isinstance (attr['targets'], list):
+                    for target in attr['targets']:
+                        # XXX Check that it actually works.
+                        target = change_yes_no (target, 'mandatory')
 
             if 'description' in attr:
                 attr['description'] = update_desc (attr['description'])
@@ -70,10 +75,15 @@ for node in t['syntaxtree']:
         for son in node['sons']:
             son_name = son['name']
             son.pop ('name', None)
-
-            if 'targets' in son:
-                son['targets'] = change_yes_no (son['targets'], 'mandatory')
             
+            if 'targets' in son:
+                if isinstance (son['targets'], dict):
+                    son['targets'] = change_yes_no (son['targets'], 'mandatory')
+                elif isinstance (son['targets'], list):
+                    for target in son['targets']:
+                        # XXX Check that it actually works.
+                        target = change_yes_no (target, 'mandatory')
+
             if 'description' in son:
                 son['description'] = update_desc (son['description'])
 
@@ -96,4 +106,4 @@ for node in t['syntaxtree']:
 
     ast[node_name] = node
 
-print json.dumps (ast, indent=4, sort_keys=True)
+print json.dumps (ast, indent=4)

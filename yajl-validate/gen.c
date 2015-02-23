@@ -571,7 +571,7 @@ gen_access_macros (FILE *  f, yajl_val items, const char *  node_name_upper,
       const char *  item_name = YAJL_OBJECT_KEYS (items)[i];
       char *  item_name_upper = string_toupper (item_name);
       fprintf (f, format_string_check,
-               node_name_upper, item_name_upper, node_name_lower, 
+               node_name_upper, item_name_upper, node_name_lower,
                node_name_lower, item_name);
       free (item_name_upper);
     }
@@ -591,7 +591,8 @@ gen_access_macros (FILE *  f, yajl_val items, const char *  node_name_upper,
 
 static inline bool
 gen_make_function_header (FILE *  f, const char *  node_name_lower,
-                          yajl_val attributes, yajl_val sons)
+                          yajl_val attributes, yajl_val sons,
+                          bool declaration_and_macro_p)
 {
   /* Keep a constant array of function arguments.
      It cannot be longer than sons and arguments put together, so
@@ -611,7 +612,7 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
       const yajl_val attr = YAJL_OBJECT_VALUES (attributes)[i];
       const yajl_val incons = yajl_tree_get (attr, (const char *[]){"inconstructor", 0}, yajl_t_any);
       const yajl_val type = yajl_tree_get (attr, (const char *[]){"type", 0}, yajl_t_string);
-      
+
       if (incons && YAJL_IS_TRUE (incons))
         {
           struct attrtype_name *  atn;
@@ -630,7 +631,7 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
       const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
       const yajl_val son = YAJL_OBJECT_VALUES (sons)[i];
       const yajl_val def = yajl_tree_get (son, (const char *[]){"default", 0}, yajl_t_string);
-      
+
       if (!def)
         {
           params[param_length].arg_name = son_name;
@@ -638,13 +639,20 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
           param_length++;
         }
     }
- 
+
   /* Generate function declaration with At.  */
-  fprintf (f, "node *  TBmake%c%sAt (", toupper (node_name_lower[0]), &node_name_lower[1]);
+  fprintf (f, "node *%sTBmake%c%sAt (",
+           declaration_and_macro_p ? "  " : "\n",
+           toupper (node_name_lower[0]), &node_name_lower[1]);
   for (size_t i = 0; i < param_length; i++)
     fprintf (f, "%s %s%s", params[i].arg_type, params[i].arg_name, i < param_length - 1 ? ", " : "");
- 
-  fprintf (f, ", const char *  filename, const size_t line);\n");
+
+  fprintf (f, "%sconst char *  filename, const size_t line)%s",
+           param_length > 0 ? ", " : "",
+           declaration_and_macro_p ? ";\n" : "\n");
+
+  if (!declaration_and_macro_p)
+    return true;
 
   /* Generate a macro that puts __FILE__ and __LINE__ as last two parameters.  */
   fprintf (f, "#define TBmake%c%s(", toupper (node_name_lower[0]), &node_name_lower[1]);
@@ -655,7 +663,7 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
   for (size_t i = 0; i < param_length; i++)
     fprintf (f, "__%s%s", params[i].arg_name, i < param_length - 1 ? ", " : "");
 
-  fprintf (f, ", __FILE__, __LINE__)\n\n");
+  fprintf (f, "%s__FILE__, __LINE__)\n\n", param_length > 0 ? ", " : "");
   return true;
 }
 
@@ -669,8 +677,8 @@ gen_node_basic_h (yajl_val nodes, const char *  fname)
                 "   Functions to allocate node structures and macros\n"
                 "   to access node memebers");
 
-  fprintf (f, "#include <signal.h>;\n"
-              "#include <unistd.h>;\n"
+  fprintf (f, "#include <signal.h>\n"
+              "#include <unistd.h>\n"
               "\n"
               "#ifndef _SAC_TREE_BASIC_H_\n"
               "#  error node_basic.h should only be included as part of tree_basic.h!\n"
@@ -686,7 +694,7 @@ gen_node_basic_h (yajl_val nodes, const char *  fname)
               "extern global_t global;\n"
               "\n"
 
-              /* FIXME This is a bit crazy function.  Fix it!.  */
+              /* FIXME This can be simplified significantly.  Fix it!.  */
               "static inline\n"
               "node *NBMacroMatchesType (node *node, nodetype type)\n"
               "{\n"
@@ -718,7 +726,7 @@ gen_node_basic_h (yajl_val nodes, const char *  fname)
       const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
       const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
       const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_object);
-      
+
       fprintf (f, "/* Macros and functions for `%s'.  */\n\n", YAJL_OBJECT_KEYS (nodes)[i]);
 
       if (sons && YAJL_OBJECT_LENGTH (sons) != 0)
@@ -735,7 +743,7 @@ gen_node_basic_h (yajl_val nodes, const char *  fname)
           gen_access_macros (f, flags, node_name_upper, node_name_lower, m_flags);
         }
 
-      gen_make_function_header (f, node_name_lower, attribs, sons);
+      gen_make_function_header (f, node_name_lower, attribs, sons, true);
 
       free (node_name_upper);
       free (node_name_lower);
@@ -746,4 +754,396 @@ gen_node_basic_h (yajl_val nodes, const char *  fname)
   return true;
 }
 
+
+
+static inline bool
+gen_node_son_check (FILE *  f, yajl_val nodesets, const char *  node_name_upper,
+                    const char *  son_name_upper, const char *  x)
+{
+  const char *  nchk_pattern = "\n      && NODE_TYPE (%s_%s (xthis)) != N_%s";
+  struct node_name *  nn;
+
+  if (!strcmp (x, "any"))
+    json_err ("the son `%s' of the node `%s' has target that contains \"any\"",
+              son_name_upper, node_name_upper);
+
+  HASH_FIND_STR (node_names, x, nn);
+  if (NULL == nn)
+    json_warn ("the target %s of the son %s of node %s is not found",
+              x, son_name_upper, node_name_upper);
+
+  if (!nn || nn->name_type == nnt_node)
+    {
+      char *  n_lower = string_tolower (x);
+      fprintf (f, nchk_pattern, node_name_upper, son_name_upper, n_lower);
+      free (n_lower);
+    }
+  else
+    {
+      assert (nn->name_type == nnt_nodeset);
+      const yajl_val ns = yajl_tree_get (nodesets, (const char *[]){x, 0}, yajl_t_array);
+
+      for (size_t i = 0; i < YAJL_ARRAY_LENGTH (ns); i++)
+        {
+          const char *  n = YAJL_GET_STRING (YAJL_ARRAY_VALUES (ns)[i]);
+          char *  n_lower = string_tolower (n);
+          fprintf (f, nchk_pattern, node_name_upper, son_name_upper, n_lower);
+          free (n_lower);
+        }
+    }
+
+  return true;
+}
+
+
+static inline bool
+gen_node_son_check_from_target (FILE *  f, const yajl_val nodesets, const yajl_val targets,
+                                const char *  node_name_upper, const char *  son_name_upper)
+{
+  assert (YAJL_IS_OBJECT (targets));
+
+  const yajl_val contains = yajl_tree_get (targets, (const char *[]){"contains", 0}, yajl_t_any);
+
+  if (YAJL_IS_STRING (contains))
+    gen_node_son_check (f, nodesets, node_name_upper, son_name_upper, YAJL_GET_STRING (contains));
+  else if (YAJL_IS_ARRAY (contains))
+    for (size_t i = 0; i < YAJL_ARRAY_LENGTH (contains); i++)
+      {
+        assert (YAJL_IS_STRING (YAJL_ARRAY_VALUES (contains)[i]));
+        gen_node_son_check (f, nodesets, node_name_upper, son_name_upper,
+                            YAJL_GET_STRING (YAJL_ARRAY_VALUES (contains)[i]));
+      }
+
+  return true;
+}
+
+static inline bool
+gen_node_son_check_from_targets (FILE *  f, const yajl_val nodesets, const yajl_val targets,
+                                 const char *  node_name_upper, const char *  son_name_upper)
+{
+  assert (YAJL_IS_ARRAY (targets));
+
+  for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
+    {
+      const yajl_val target = YAJL_ARRAY_VALUES (targets)[i];
+      gen_node_son_check_from_target (f, nodesets, target, node_name_upper, son_name_upper);
+    }
+
+  return true;
+}
+
+
+
+
+bool
+gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
+{
+  FILE *  f;
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER (f, "   Functions to allocate node structures");
+
+
+  fprintf (f, "#include \"node_alloc.h\"\n"
+              "#include \"tree_basic.h\"\n"
+              "#define DBUG_PREFIX \"NDBASIC\"\n"
+              "#include \"debug.h\"\n"
+              "#include \"check_mem.h\"\n"
+              "#include \"str.h\"\n"
+              "#include \"globals.h\"\n"
+              "#include \"memory.h\"\n"
+              "#include \"ctinfo.h\"\n\n");
+
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      char *  node_name_lower = string_tolower (YAJL_OBJECT_KEYS (nodes)[i]);
+      char *  node_name_upper = string_toupper (YAJL_OBJECT_KEYS (nodes)[i]);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
+      const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_object);
+
+      gen_make_function_header (f, node_name_lower, attribs, sons, false);
+      fprintf (f, "{\n"
+                  "  struct NODE_ALLOC_N_%s nodealloc;\n"
+                  "  node *  xthis;\n"
+                  "\n"
+                  "  DBUG_ENTER ();\n"
+                  "  DBUG_PRINT (\"allocating N_%s node\");\n"
+                  "  nodealloc = (struct NODE_ALLOC_N_%s *) MEMmallocAt (sizeof nodealloc, file, line);\n"
+                  "  xthis = (node *) &(nodealloc->nodestructure);\n"
+                  "  DBUG_PRINT (\"address: \" F_PTR, xthis);\n\n",
+               node_name_upper, node_name_lower, node_name_upper);
+
+
+      fprintf (f, "#ifndef DBUG_OFF\n"
+                  "  CHKMisNode (xthis, N_%s);\n"
+                  "#endif\n\n",
+               node_name_upper);
+
+      fprintf (f, "  DBUG_PRINT (\"setting node type, filename `%%s', line: %%zu, col: %%zu\",\n"
+                  "              global.filename, global.linenum, global.colnum);\n"
+                  "  NODE_TYPE (xthis) = N_%s;\n"
+                  "  NODE_FILENAME (xthis) = globlal.filename;\n"
+                  "  NODE_LINE (xthis) = global.linenum;\n"
+                  "  NODE_COL (xthis) = global.colnum;\n"
+                  "  NODE_ERROR (xthis) = NULL;\n\n",
+               node_name_lower);
+
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+          char *  son_name_upper = string_toupper (son_name);
+          const yajl_val son = YAJL_OBJECT_VALUES (sons)[i];
+          const yajl_val def = yajl_tree_get (son, (const char *[]){"default", 0}, yajl_t_string);
+          const char *  value;
+
+          if (i == 0)
+            fprintf (f, "  /* Setting sons.  */\n"
+                        "  xthis->sons.N_%s = (struct SONS_N_%s *) &(nodealloc->sonstructure);\n",
+                     node_name_lower, node_name_upper);
+
+          if (def)
+            value = YAJL_GET_STRING (def);
+          else
+            value = son_name;
+
+          fprintf (f, "  DBUG_ASSERT (\"assigning inital value "
+                                    "`\" F_PTR \"' to the son `%%s'\", %s, \"%s\");\n"
+                      "  %s_%s (xthis) = %s;\n\n",
+                   value, son_name, node_name_upper, son_name_upper, value);
+
+          /* If the current son is an avis, add the backref.  */
+          if (!strcmp (son_name, "Avis"))
+            fprintf (f, "  if (%s_AVIS (xthis) != NULL)\n"
+                        "    AVIS_DECL (%s_AVIS (xthis)) = xthis;\n\n",
+                     node_name_upper, node_name_upper);
+
+          free (son_name_upper);
+        }
+
+      if ((attribs && YAJL_OBJECT_LENGTH (attribs) != 0)
+          || (flags && YAJL_OBJECT_LENGTH (flags) != 0))
+        fprintf (f, "  xthis->attribs.N_%s = (struct ATTRIBS_N_%s *) &(nodealloc->attributestructure);\n\n",
+                 node_name_lower, node_name_upper);
+
+      for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val def = yajl_tree_get (attrib, (const char *[]){"default", 0}, yajl_t_string);
+          const yajl_val incons = yajl_tree_get (attrib, (const char *[]){"inconstructor", 0}, yajl_t_any);
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+          const char *  value;
+
+          if (i == 0)
+            fprintf (f, "  /* Setting attributes.  */\n");
+
+          if (def)
+            value = YAJL_GET_STRING (def);
+          else if (incons && YAJL_IS_TRUE (incons))
+            value = attrib_name;
+          else
+            {
+              char *  type_name = YAJL_GET_STRING (type);
+              struct attrtype_name *  atn;
+              HASH_FIND_STR (attrtype_names, type_name, atn);
+              assert (atn);
+              value = atn->init;
+            }
+
+          fprintf (f, "  %s_%s (xthis) = %s;\n",
+                   node_name_upper, attrib_name_upper, value);
+
+          free (attrib_name_upper);
+        }
+
+
+      for (size_t i = 0; flags && i < YAJL_OBJECT_LENGTH (flags); i++)
+        {
+          const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
+          char *  flag_name_upper = string_toupper (flag_name);
+          const yajl_val flag = YAJL_OBJECT_VALUES (flags)[i];
+          const yajl_val def = yajl_tree_get (flag, (const char *[]){"default", 0}, yajl_t_string);
+          const char *  value = "FALSE";
+
+          if (i == 0)
+            fprintf (f, "\n"
+                        "  /* Setting flags.  */\n");
+
+          /* FIXME make `default' of type boolean.  */
+          if (def)
+            value = YAJL_GET_STRING (def);
+
+          fprintf (f, "  %s_%s (xthis) = %s;\n",
+                   node_name_upper, flag_name_upper, value);
+
+          free (flag_name_upper);
+        }
+
+
+      /* If DBUG enabled, check for valid arguments.  */
+      fprintf (f, "\n"
+                  "#ifndef DBUG_OFF\n"
+                  "  DBUG_PRINT (\"doing son target checks\");\n\n");
+
+      /* For sons without default value defined.  */
+      for (size_t i = 0; i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+          char *  son_name_upper = string_toupper (son_name);
+          const yajl_val son = YAJL_OBJECT_VALUES (sons)[i];
+          const yajl_val targets = yajl_tree_get (son, (const char *[]){"targets", 0}, yajl_t_any);
+          const yajl_val def = yajl_tree_get (son, (const char *[]){"default", 0}, yajl_t_string);
+
+          if (def)
+            continue;
+
+          fprintf (f, "  if (%s_%s (xthis) != NULL", node_name_upper, son_name_upper);
+          if (YAJL_IS_OBJECT (targets))
+            gen_node_son_check_from_target (f, nodesets, targets, node_name_upper, son_name_upper);
+          else if (YAJL_IS_ARRAY (targets))
+            gen_node_son_check_from_targets (f, nodesets, targets, node_name_upper, son_name_upper);
+
+          fprintf (f, ")\n"
+                      "    CTIwarn (\"Field `%s' of node N_%s has non-allowed target node: %%s\"\n"
+                      "             NODE_TEXT (%s_%s (xthis)));\n\n",
+                   son_name, node_name_lower, node_name_upper, son_name_upper);
+
+          free (son_name_upper);
+        }
+
+      fprintf (f, "#endif // DBUG_OFF\n"
+                  "\n"
+                  "  DBUG_RETURN (xthis);\n"
+                  "}\n\n");
+      free (node_name_lower);
+      free (node_name_upper);
+    }
+
+
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+
+
+
+bool
+gen_free_attribs_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__FREE_ATTRIBS_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to free the attributes of node structures");
+
+  fprintf (f, "#include \"types.h\"\n\n");
+
+  struct attrtype_name *  atn;
+  struct attrtype_name *  tmp;
+
+  HASH_ITER (hh, attrtype_names, atn, tmp)
+    {
+      if (atn->copy_type == act_literal)
+        continue;
+
+      fprintf (f, "%s FREEattrib%s (%s attr, node *  parent);\n",
+               atn->ctype, atn->name, atn->ctype);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+bool
+gen_check_reset_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__CHECK_RESET_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to CheckTest node structures");
+
+  fprintf (f, "#include \"types.h\"\n\n"
+              "node *  CHKRSTdoTreeCheckReset (node *  syntax_tree);\n\n");
+
+  struct node_name *  nn;
+  struct node_name *  tmp;
+
+  HASH_ITER (hh, node_names, nn, tmp)
+    {
+      char *  name_lower = string_tolower (nn->name);
+      fprintf (f, "node *  CHKRST%s (node *  arg_node, info *  arg_info);\n", name_lower);
+      free (name_lower);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+bool
+gen_check_node_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__CHECK_NODE_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to check node structures");
+
+  fprintf (f, "#include \"types.h\"\n"
+              "#include \"memory.h\"\n\n");
+
+  struct node_name *  nn;
+  struct node_name *  tmp;
+
+  HASH_ITER (hh, node_names, nn, tmp)
+    {
+      if (nn->name_type != nnt_node)
+        continue;
+
+      char *  name_lower = string_tolower (nn->name);
+      fprintf (f, "node *  CHKM%s (node *  arg_node, info *  arg_info);\n", name_lower);
+      free (name_lower);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+
+bool
+gen_check_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__CHECK_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to check node structures");
+
+  fprintf (f, "#include \"types.h\"\n\n"
+              "node *  CHKdoTreeCheck (node *  syntax_tree);\n\n");
+
+  struct node_name *  nn;
+  struct node_name *  tmp;
+
+  HASH_ITER (hh, node_names, nn, tmp)
+    {
+      char *  name_lower = string_tolower (nn->name);
+      fprintf (f, "node *  CHK%s (node *  arg_node, info *  arg_info);\n", name_lower);
+      free (name_lower);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
 
