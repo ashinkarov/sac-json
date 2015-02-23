@@ -7,6 +7,45 @@
 #include "gen.h"
 
 
+
+/* Generate data structures for traverse tables.  */
+bool
+gen_traverse_tables_h (yajl_val nodes, yajl_val traversals, const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__TRAVERSE_TABLES_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   This file defines the nodetype node enumeration");
+
+  /* FIXME This is insane that we use counts instead of values from the enum
+           list.  A proper fix requires adding TR__max and N__max to both enums
+           and use those values.  */
+  fprintf (f, "#include \"types.h\"\n"
+              "\n"
+              "typedef travfun_p travfunarray_t[%zu];\n"
+              "typedef travfunarray_t travtables_t[%zu];\n"
+              "typedef travfun_p preposttable_t[%zu];\n"
+              "\n"
+              "extern travtables_t travtables;\n"
+              "extern preposttable_t pretable;\n"
+              "extern preposttable_t posttable;\n"
+              "extern const char *travnames[%zu];\n"
+              "\n\n",
+           YAJL_OBJECT_LENGTH (nodes) + 1,
+           YAJL_OBJECT_LENGTH (traversals) + 2,
+           YAJL_OBJECT_LENGTH (traversals) + 2,
+           YAJL_OBJECT_LENGTH (traversals) + 2);
+
+
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+
+  return true;
+}
+
+
+
 /* A enum to differentiate pre-table from posttable while generating
    tables for traversal pre and post functions.  */
 enum pre_or_post
@@ -14,6 +53,8 @@ enum pre_or_post
   pp_pre_table,
   pp_post_table
 };
+
+
 
 /* Generate a travtable where all the functions are TRAVerror.
    This is used for phantom traversals like TR_undefined and in the
@@ -31,6 +72,8 @@ gen_error_travtable (FILE *  f, yajl_val nodes)
     }
   fprintf (f, "  },\n\n");
 }
+
+
 
 /* Generate a travtable for the TRAVNAME traversal, where the default value
    is specidied by TRAVDEFUALT.  */
@@ -93,6 +136,7 @@ gen_travtable (FILE *  f, yajl_val nodes, const char *  travname, const char *  
 }
 
 
+
 /* Generate pre- or post- table for traversals.  */
 static inline void
 gen_prepost_table (FILE *  f, yajl_val traversals, enum pre_or_post prepost)
@@ -136,6 +180,8 @@ gen_prepost_table (FILE *  f, yajl_val traversals, enum pre_or_post prepost)
               "};\n\n");
 
 }
+
+
 
 /* Main function to generate includes, traversal table, pretable, posttable and
    the table of traversal names.  */
