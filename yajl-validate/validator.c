@@ -105,12 +105,12 @@ main (void)
      [x] ./tree/node_basic.c.xsl
      [x] ./tree/node_alloc.h.xsl
      [x] ./tree/free_node.h.xsl
-         ./tree/free_node.c.xsl
+     [x] ./tree/free_node.c.xsl
      [x] ./tree/free_attribs.h.xsl
      [x] ./tree/check_reset.h.xsl
-         ./tree/check_reset.c.xsl
+     [x] ./tree/check_reset.c.xsl
      [x] ./tree/check_node.h.xsl
-         ./tree/check_node.c.xsl
+     [x] ./tree/check_node.c.xsl
      [x] ./tree/check.h.xsl
          ./tree/check.c.xsl
      [x] ./tree/attribs.h.xsl
@@ -140,6 +140,9 @@ main (void)
   gen_check_node_h ("gen/check_node.h");
   gen_check_h ("gen/check.h");
   gen_node_basic_c (ast_node, nodeset_node, "gen/node_basic.c");
+  gen_free_node_c (ast_node, "gen/free_node.c");
+  gen_check_reset_c (ast_node, "gen/check_reset.c");
+  gen_check_nodes_c (ast_node, "gen/check_node.c");
 
 
 out:
