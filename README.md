@@ -39,34 +39,34 @@ The migration plan includes:
   - [ ] Documenting the structure of `*.json' files
   - [ ] Porting the HTML page (partially done)
   - [ ] Porting the existing XSLT files
-    - [x] ./types/types_trav.h.xsl
-    - [x] ./types/types_nodetype.h.xsl
-    - [x] ./tree/traverse_tables.h.xsl
-    - [x] ./tree/traverse_tables.c.xsl
-    - [x] ./tree/traverse_helper.c.xsl
-    - [x] ./tree/sons.h.xsl
-    - [x] ./tree/node_basic.h.xsl
-    - [x] ./tree/node_basic.c.xsl
-    - [x] ./tree/node_alloc.h.xsl
-    - [x] ./tree/free_node.h.xsl
-    - [x] ./tree/free_node.c.xsl
-    - [x] ./tree/free_attribs.h.xsl
-    - [x] ./tree/check_reset.h.xsl
-    - [x] ./tree/check_reset.c.xsl
-    - [x] ./tree/check_node.h.xsl
-    - [x] ./tree/check_node.c.xsl
-    - [x] ./tree/check.h.xsl
-    - [ ] ./tree/check.c.xsl
-    - [x] ./tree/attribs.h.xsl
-    - [ ] ./serialize/serialize_node.h.xsl
-    - [ ] ./serialize/serialize_node.c.xsl
-    - [ ] ./serialize/serialize_link.h.xsl
-    - [ ] ./serialize/serialize_link.c.xsl
-    - [ ] ./serialize/serialize_helper.c.xsl
-    - [ ] ./serialize/serialize_buildstack.h.xsl
-    - [ ] ./serialize/serialize_buildstack.c.xsl
-    - [ ] ./serialize/serialize_attribs.h.xsl
-    - [x] ./global/node_info.mac.xsl
+   - [x] ./types/types_trav.h.xsl
+   - [x] ./types/types_nodetype.h.xsl
+   - [x] ./tree/traverse_tables.h.xsl
+   - [x] ./tree/traverse_tables.c.xsl
+   - [x] ./tree/traverse_helper.c.xsl
+   - [x] ./tree/sons.h.xsl
+   - [x] ./tree/node_basic.h.xsl
+   - [x] ./tree/node_basic.c.xsl
+   - [x] ./tree/node_alloc.h.xsl
+   - [x] ./tree/free_node.h.xsl
+   - [x] ./tree/free_node.c.xsl
+   - [x] ./tree/free_attribs.h.xsl
+   - [x] ./tree/check_reset.h.xsl
+   - [x] ./tree/check_reset.c.xsl
+   - [x] ./tree/check_node.h.xsl
+   - [x] ./tree/check_node.c.xsl
+   - [x] ./tree/check.h.xsl
+   - [ ] ./tree/check.c.xsl
+   - [x] ./tree/attribs.h.xsl
+   - [ ] ./serialize/serialize_node.h.xsl
+   - [ ] ./serialize/serialize_node.c.xsl
+   - [ ] ./serialize/serialize_link.h.xsl
+   - [ ] ./serialize/serialize_link.c.xsl
+   - [ ] ./serialize/serialize_helper.c.xsl
+   - [ ] ./serialize/serialize_buildstack.h.xsl
+   - [ ] ./serialize/serialize_buildstack.c.xsl
+   - [ ] ./serialize/serialize_attribs.h.xsl
+   - [x] ./global/node_info.mac.xsl
   - [ ] Replacing serialisation with json-based conversions
   - [ ] Introducing dump/restore at every phase.
 
@@ -83,8 +83,8 @@ Structure of the code
 Performance
 ===========
 
-Currently the validation with large number of checks takes `0.2' seconds
-versus `28.4' taken by the XML/XSLT.
+Currently the validation with large number of checks takes `0.2` seconds
+versus `28.4` taken by the XML/XSLT.
 
 ```bash
 time (for f in $(find src/libsac2c -name '*.c.xsl' -or -name '*.h.xsl' -or -name '*.mac.xsl'); do \
