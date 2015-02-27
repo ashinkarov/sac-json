@@ -17,7 +17,7 @@ The purpose of this project is to:
   
 
 If the project will be successful, then we will get a verified and fast source file generation
-in a more compact and simpler format, without dependencies on `xsltproc' and `indent'.
+in a more compact and simpler format, without dependencies on `xsltproc` and `indent`.
 This might enable us to:
   * add more JSON-based configuration files, for example:
     * replacing `prf_info.mac` as it got too complex for a header file
