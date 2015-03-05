@@ -694,10 +694,16 @@
                 "type": "Namespace", 
                 "targets": [
                     {
-                        "phases": {
-                            "to": "final", 
-                            "from": "pc_rid"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "mod_ans", 
+                                "from": "initial"
+                            }, 
+                            {
+                                "to": "final", 
+                                "from": "pc_rid"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": false
                     }, 
@@ -861,10 +867,16 @@
                 "type": "Namespace", 
                 "targets": [
                     {
-                        "phases": {
-                            "to": "final", 
-                            "from": "pc_rid"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "mod_ans", 
+                                "from": "initial"
+                            }, 
+                            {
+                                "to": "final", 
+                                "from": "pc_rid"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": false
                     }, 
@@ -916,9 +928,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "ptc_rso"
-                    ], 
+                    "phases": "ptc_rso", 
                     "contains": "Id", 
                     "mandatory": true
                 }
@@ -1015,10 +1025,16 @@
                 "type": "Namespace", 
                 "targets": [
                     {
-                        "phases": {
-                            "to": "final", 
-                            "from": "pc_rid"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "mod_ans", 
+                                "from": "initial"
+                            }, 
+                            {
+                                "to": "final", 
+                                "from": "pc_rid"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": false
                     }, 
@@ -1256,9 +1272,7 @@
                 "inconstructor": false, 
                 "type": "TypeCheckingStatus", 
                 "targets": {
-                    "phases": [
-                        "tc"
-                    ], 
+                    "phases": "tc", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -1286,9 +1300,7 @@
             }, 
             "Companion": {
                 "targets": {
-                    "phases": [
-                        "mt_mtstf"
-                    ], 
+                    "phases": "mt_mtstf", 
                     "contains": "Fundef", 
                     "mandatory": false
                 }, 
@@ -1303,9 +1315,7 @@
             }, 
             "XTCompanion": {
                 "targets": {
-                    "phases": [
-                        "mt_mtstf"
-                    ], 
+                    "phases": "mt_mtstf", 
                     "contains": "Fundef", 
                     "mandatory": false
                 }, 
@@ -1318,9 +1328,7 @@
             }, 
             "MTCompanion": {
                 "targets": {
-                    "phases": [
-                        "mt_mtstf"
-                    ], 
+                    "phases": "mt_mtstf", 
                     "contains": "Fundef", 
                     "mandatory": false
                 }, 
@@ -1359,9 +1367,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "opt_cyc_linl"
-                    ], 
+                    "phases": "opt_cyc_linl", 
                     "contains": "any", 
                     "mandatory": true
                 }, 
@@ -1535,7 +1541,10 @@
             }, 
             "Livevars": {
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "fp_lva"
+                    }, 
                     "contains": "Livevars", 
                     "mandatory": false
                 }, 
@@ -1581,10 +1590,16 @@
             "Rets": {
                 "targets": [
                     {
-                        "phases": {
-                            "to": "final", 
-                            "from": "ussa_rera"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "ptc_rrp", 
+                                "from": "initial"
+                            }, 
+                            {
+                                "to": "final", 
+                                "from": "ussa_rera"
+                            }
+                        ], 
                         "contains": "Ret", 
                         "mandatory": false
                     }, 
@@ -2024,9 +2039,7 @@
                 "inconstructor": false, 
                 "type": "String", 
                 "targets": {
-                    "phases": [
-                        "rid"
-                    ], 
+                    "phases": "rid", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -2097,9 +2110,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "comp"
-                    ], 
+                    "phases": "comp", 
                     "contains": "Fundef", 
                     "mandatory": true
                 }
@@ -2187,9 +2198,7 @@
             "Shareds": {
                 "default": "NULL", 
                 "targets": {
-                    "phases": [
-                        "lw3"
-                    ], 
+                    "phases": "lw3", 
                     "contains": "Arg", 
                     "mandatory": false
                 }
@@ -2404,9 +2413,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "daa"
-                    ], 
+                    "phases": "daa", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -2415,9 +2422,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "wlf"
-                    ], 
+                    "phases": "wlf", 
                     "contains": "With", 
                     "mandatory": false
                 }
@@ -2426,9 +2431,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "wlf"
-                    ], 
+                    "phases": "wlf", 
                     "contains": "With", 
                     "mandatory": false
                 }
@@ -2461,9 +2464,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "imem"
-                    ], 
+                    "phases": "imem", 
                     "contains": "Block", 
                     "mandatory": false
                 }
@@ -2492,16 +2493,17 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "lir"
-                    ], 
+                    "phases": "lir", 
                     "contains": "any", 
                     "mandatory": true
                 }
             }, 
             "MatchingSpawnSync": {
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "fp_syn"
+                    }, 
                     "contains": "Let", 
                     "mandatory": false
                 }, 
@@ -2514,7 +2516,10 @@
             }, 
             "Livevars": {
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "fp_lva"
+                    }, 
                     "contains": "Livevars", 
                     "mandatory": false
                 }, 
@@ -2527,7 +2532,10 @@
             }, 
             "SpawnSyncIndex": {
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "fp_css"
+                    }, 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -3170,9 +3178,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "wlf"
-                    ], 
+                    "phases": "wlf", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -4467,9 +4473,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "idc"
-                    ], 
+                    "phases": "idc", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -4545,9 +4549,7 @@
             }, 
             "NeedCount": {
                 "targets": {
-                    "phases": [
-                        "opt_lir"
-                    ], 
+                    "phases": "opt_lir", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4611,9 +4613,7 @@
                 "inconstructor": false, 
                 "type": "NewType", 
                 "targets": {
-                    "phases": [
-                        "tc_ebt"
-                    ], 
+                    "phases": "tc_ebt", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4639,9 +4639,7 @@
                         "mandatory": false
                     }, 
                     {
-                        "phases": [
-                            "pc_reso"
-                        ], 
+                        "phases": "pc_reso", 
                         "contains": "Objdef", 
                         "mandatory": false
                     }
@@ -4675,9 +4673,7 @@
                 "inconstructor": false, 
                 "type": "BitField", 
                 "targets": {
-                    "phases": [
-                        "lir"
-                    ], 
+                    "phases": "lir", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -4686,18 +4682,14 @@
                 "inconstructor": false, 
                 "type": "Bool", 
                 "targets": {
-                    "phases": [
-                        "lir"
-                    ], 
+                    "phases": "lir", 
                     "contains": "any", 
                     "mandatory": false
                 }
             }, 
             "AliasMask": {
                 "targets": {
-                    "phases": [
-                        "ia"
-                    ], 
+                    "phases": "ia", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4709,9 +4701,7 @@
             }, 
             "UniqueRef": {
                 "targets": {
-                    "phases": [
-                        "cu"
-                    ], 
+                    "phases": "cu", 
                     "contains": "Id", 
                     "mandatory": true
                 }, 
@@ -4726,9 +4716,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "popt_unq"
-                    ], 
+                    "phases": "popt_unq", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -4762,9 +4750,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "daa"
-                    ], 
+                    "phases": "daa", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -4774,9 +4760,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "pc_mc"
-                    ], 
+                    "phases": "pc_mc", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4789,10 +4773,16 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": {
-                        "to": "opt_saacyc_lacso", 
-                        "from": "opt_saacyc_lacso"
-                    }, 
+                    "phases": [
+                        {
+                            "to": "opt_cyc_lacso", 
+                            "from": "opt_cyc_lacso"
+                        }, 
+                        {
+                            "to": "opt_saacyc_lacso", 
+                            "from": "opt_saacyc_lacso"
+                        }
+                    ], 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4804,9 +4794,7 @@
             "PolylibColumnIndex": {
                 "default": "-1", 
                 "targets": {
-                    "phases": [
-                        "opt_saacyc_pogo"
-                    ], 
+                    "phases": "opt_saacyc_pogo", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -4970,10 +4958,16 @@
             }, 
             "Referenced": {
                 "targets": {
-                    "phases": {
-                        "to": "opt_saacyc_awlf", 
-                        "from": "opt_saacyc_awlfi"
-                    }, 
+                    "phases": [
+                        {
+                            "to": "opt_cyc_wlf", 
+                            "from": "opt_cyc_wlf"
+                        }, 
+                        {
+                            "to": "opt_saacyc_awlf", 
+                            "from": "opt_saacyc_awlfi"
+                        }
+                    ], 
                     "contains": "any", 
                     "mandatory": true
                 }, 
@@ -4986,10 +4980,16 @@
             "Referenced_Fold": {
                 "default": "0", 
                 "targets": {
-                    "phases": {
-                        "to": "opt_saacyc_awlf", 
-                        "from": "opt_saacyc_awlfi"
-                    }, 
+                    "phases": [
+                        {
+                            "to": "opt_cyc_wlf", 
+                            "from": "opt_cyc_wlf"
+                        }, 
+                        {
+                            "to": "opt_saacyc_awlf", 
+                            "from": "opt_saacyc_awlfi"
+                        }
+                    ], 
                     "contains": "any", 
                     "mandatory": true
                 }, 
@@ -5021,9 +5021,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "opt_cyc_wlf"
-                    ], 
+                    "phases": "opt_cyc_wlf", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -5048,9 +5046,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "opt_cyc_awlf"
-                    ], 
+                    "phases": "opt_cyc_awlf", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -5066,9 +5062,7 @@
             }, 
             "Access": {
                 "targets": {
-                    "phases": [
-                        "pc_ima"
-                    ], 
+                    "phases": "pc_ima", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -5462,9 +5456,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "final"
-                    ], 
+                    "phases": "final", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -5474,9 +5466,7 @@
                 "inconstructor": false, 
                 "type": "AccessInfo", 
                 "targets": {
-                    "phases": [
-                        "initial"
-                    ], 
+                    "phases": "initial", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -5618,9 +5608,7 @@
                 "inconstructor": false, 
                 "type": "DFMask", 
                 "targets": {
-                    "phases": [
-                        "rci"
-                    ], 
+                    "phases": "rci", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -5636,9 +5624,7 @@
             }, 
             "Access": {
                 "targets": {
-                    "phases": [
-                        "pc_ima"
-                    ], 
+                    "phases": "pc_ima", 
                     "contains": "any", 
                     "mandatory": false
                 }, 
@@ -5701,9 +5687,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "sp"
-                    ], 
+                    "phases": "sp", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -5839,9 +5823,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": [
-                        "sp"
-                    ], 
+                    "phases": "sp", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -5928,9 +5910,7 @@
         "attributes": {
             "SPEXPR": {
                 "targets": {
-                    "phases": [
-                        "sp"
-                    ], 
+                    "phases": "sp", 
                     "contains": "any", 
                     "mandatory": true
                 }, 
@@ -6212,9 +6192,7 @@
                 "inconstructor": false, 
                 "type": "TaskSel", 
                 "targets": {
-                    "phases": [
-                        "pc_mmv"
-                    ], 
+                    "phases": "pc_mmv", 
                     "contains": "any", 
                     "mandatory": true
                 }
@@ -6787,9 +6765,7 @@
                 "inconstructor": false, 
                 "type": "Integer", 
                 "targets": {
-                    "phases": [
-                        "AssignmentsRearrange"
-                    ], 
+                    "phases": "AssignmentsRearrange", 
                     "contains": "any", 
                     "mandatory": true
                 }

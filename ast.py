@@ -50,7 +50,6 @@ def parse_phases (ph):
     # attribs: none
     ph_all = False
     phases = []
-    ph_range = None
 
     for p in ph:
         if p.tag == "all" or p.tag == "unknown":
@@ -59,7 +58,7 @@ def parse_phases (ph):
             if "name" not in p.attrib:
                 warn ("phase without the name!")
                 dump_stderr (p)
-                phase_range = {"from": p.attrib["from"], "to": p.attrib["to"]}
+                phases.append ({"from": p.attrib["from"], "to": p.attrib["to"]})
             else:
                 phases.append (p.attrib["name"])
         elif p.tag == "range":
@@ -68,12 +67,12 @@ def parse_phases (ph):
                 dump_stderr (p);
                 phases.append (p.attrib["name"])
             else:
-                ph_range = {"from": p.attrib["from"], "to": p.attrib["to"]}
+                phases.append ({"from": p.attrib["from"], "to": p.attrib["to"]})
         else:
             die ("unknown tag `%s' found in phases" % p.tag)
 
     if ph_all:
-        if not (len (phases) == 0 and ph_range is None):
+        if not (len (phases) == 0):
             warn ("phase %s has <all/> and range or phase specification" % ph)
             dump_stderr (ph)
             pass
@@ -81,14 +80,11 @@ def parse_phases (ph):
         return "all"
 
     elif phases != []:
-        if ph_range is not None:
-            phases.append (ph_range)
-        
-        return phases
+        if len (phases) == 1:
+            return phases[0]
+        else:
+            return phases
 
-    elif ph_range is not None:
-        assert not ph_all and len (phases) == 0
-        return ph_range
     else:
         warn ("empty phase found")
         dump_stderr (ph)

@@ -750,10 +750,16 @@
                     "name": "Ns", 
                     "targets": [
                         {
-                            "phases": {
-                                "to": "final", 
-                                "from": "pc_rid"
-                            }, 
+                            "phases": [
+                                {
+                                    "to": "mod_ans", 
+                                    "from": "initial"
+                                }, 
+                                {
+                                    "to": "final", 
+                                    "from": "pc_rid"
+                                }
+                            ], 
                             "contains": "any", 
                             "mandatory": "no"
                         }, 
@@ -944,10 +950,16 @@
                     "name": "Ns", 
                     "targets": [
                         {
-                            "phases": {
-                                "to": "final", 
-                                "from": "pc_rid"
-                            }, 
+                            "phases": [
+                                {
+                                    "to": "mod_ans", 
+                                    "from": "initial"
+                                }, 
+                                {
+                                    "to": "final", 
+                                    "from": "pc_rid"
+                                }
+                            ], 
                             "contains": "any", 
                             "mandatory": "no"
                         }, 
@@ -1003,9 +1015,7 @@
                     "type": "Link", 
                     "name": "ArgAvis", 
                     "targets": {
-                        "phases": [
-                            "ptc_rso"
-                        ], 
+                        "phases": "ptc_rso", 
                         "contains": "Id", 
                         "mandatory": "yes"
                     }
@@ -1121,10 +1131,16 @@
                     "name": "Ns", 
                     "targets": [
                         {
-                            "phases": {
-                                "to": "final", 
-                                "from": "pc_rid"
-                            }, 
+                            "phases": [
+                                {
+                                    "to": "mod_ans", 
+                                    "from": "initial"
+                                }, 
+                                {
+                                    "to": "final", 
+                                    "from": "pc_rid"
+                                }
+                            ], 
                             "contains": "any", 
                             "mandatory": "no"
                         }, 
@@ -1363,9 +1379,7 @@
                     "type": "TypeCheckingStatus", 
                     "name": "TCStat", 
                     "targets": {
-                        "phases": [
-                            "tc"
-                        ], 
+                        "phases": "tc", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -1395,9 +1409,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "mt_mtstf"
-                        ], 
+                        "phases": "mt_mtstf", 
                         "contains": "Fundef", 
                         "mandatory": "no"
                     }, 
@@ -1408,9 +1420,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "mt_mtstf"
-                        ], 
+                        "phases": "mt_mtstf", 
                         "contains": "Fundef", 
                         "mandatory": "no"
                     }, 
@@ -1421,9 +1431,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "mt_mtstf"
-                        ], 
+                        "phases": "mt_mtstf", 
                         "contains": "Fundef", 
                         "mandatory": "no"
                     }, 
@@ -1460,9 +1468,7 @@
                     "inconstructor": "no", 
                     "type": "Integer", 
                     "targets": {
-                        "phases": [
-                            "opt_cyc_linl"
-                        ], 
+                        "phases": "opt_cyc_linl", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }, 
@@ -1620,7 +1626,10 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "all", 
+                        "phases": {
+                            "to": "final", 
+                            "from": "fp_lva"
+                        }, 
                         "contains": "Livevars", 
                         "mandatory": "no"
                     }, 
@@ -1663,10 +1672,16 @@
                     "name": "Rets", 
                     "targets": [
                         {
-                            "phases": {
-                                "to": "final", 
-                                "from": "ussa_rera"
-                            }, 
+                            "phases": [
+                                {
+                                    "to": "ptc_rrp", 
+                                    "from": "initial"
+                                }, 
+                                {
+                                    "to": "final", 
+                                    "from": "ussa_rera"
+                                }
+                            ], 
                             "contains": "Ret", 
                             "mandatory": "no"
                         }, 
@@ -2074,9 +2089,7 @@
                     "type": "String", 
                     "name": "TypeString", 
                     "targets": {
-                        "phases": [
-                            "rid"
-                        ], 
+                        "phases": "rid", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -2152,9 +2165,7 @@
                     "type": "Link", 
                     "name": "SPMD_Prolog_ICMs", 
                     "targets": {
-                        "phases": [
-                            "comp"
-                        ], 
+                        "phases": "comp", 
                         "contains": "Fundef", 
                         "mandatory": "yes"
                     }
@@ -2250,9 +2261,7 @@
                     "default": "NULL", 
                     "name": "Shareds", 
                     "targets": {
-                        "phases": [
-                            "lw3"
-                        ], 
+                        "phases": "lw3", 
                         "contains": "Arg", 
                         "mandatory": "no"
                     }
@@ -2472,9 +2481,7 @@
                     "type": "Integer", 
                     "name": "Level", 
                     "targets": {
-                        "phases": [
-                            "daa"
-                        ], 
+                        "phases": "daa", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -2484,9 +2491,7 @@
                     "type": "Link", 
                     "name": "Visited_With", 
                     "targets": {
-                        "phases": [
-                            "wlf"
-                        ], 
+                        "phases": "wlf", 
                         "contains": "With", 
                         "mandatory": "no"
                     }
@@ -2496,9 +2501,7 @@
                     "type": "Link", 
                     "name": "Tag", 
                     "targets": {
-                        "phases": [
-                            "wlf"
-                        ], 
+                        "phases": "wlf", 
                         "contains": "With", 
                         "mandatory": "no"
                     }
@@ -2534,9 +2537,7 @@
                     "type": "Link", 
                     "name": "Containing_Block", 
                     "targets": {
-                        "phases": [
-                            "imem"
-                        ], 
+                        "phases": "imem", 
                         "contains": "Block", 
                         "mandatory": "no"
                     }
@@ -2565,16 +2566,17 @@
                     "type": "Integer", 
                     "name": "LIRFlag", 
                     "targets": {
-                        "phases": [
-                            "lir"
-                        ], 
+                        "phases": "lir", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
                 }, 
                 {
                     "targets": {
-                        "phases": "all", 
+                        "phases": {
+                            "to": "final", 
+                            "from": "fp_syn"
+                        }, 
                         "contains": "Let", 
                         "mandatory": "no"
                     }, 
@@ -2585,7 +2587,10 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "all", 
+                        "phases": {
+                            "to": "final", 
+                            "from": "fp_lva"
+                        }, 
                         "contains": "Livevars", 
                         "mandatory": "no"
                     }, 
@@ -2596,7 +2601,10 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "all", 
+                        "phases": {
+                            "to": "final", 
+                            "from": "fp_css"
+                        }, 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -3282,9 +3290,7 @@
                     "type": "Link", 
                     "name": "WL", 
                     "targets": {
-                        "phases": [
-                            "wlf"
-                        ], 
+                        "phases": "wlf", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -4537,9 +4543,7 @@
                     "type": "Integer", 
                     "name": "Pos", 
                     "targets": {
-                        "phases": [
-                            "idc"
-                        ], 
+                        "phases": "idc", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -4616,9 +4620,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "opt_lir"
-                        ], 
+                        "phases": "opt_lir", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4677,9 +4679,7 @@
                     "inconstructor": "no", 
                     "type": "NewType", 
                     "targets": {
-                        "phases": [
-                            "tc_ebt"
-                        ], 
+                        "phases": "tc_ebt", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4704,9 +4704,7 @@
                             "mandatory": "no"
                         }, 
                         {
-                            "phases": [
-                                "pc_reso"
-                            ], 
+                            "phases": "pc_reso", 
                             "contains": "Objdef", 
                             "mandatory": "no"
                         }
@@ -4741,9 +4739,7 @@
                     "type": "BitField", 
                     "name": "LirMove", 
                     "targets": {
-                        "phases": [
-                            "lir"
-                        ], 
+                        "phases": "lir", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -4753,18 +4749,14 @@
                     "type": "Bool", 
                     "name": "ExpResult", 
                     "targets": {
-                        "phases": [
-                            "lir"
-                        ], 
+                        "phases": "lir", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "ia"
-                        ], 
+                        "phases": "ia", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4775,9 +4767,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "cu"
-                        ], 
+                        "phases": "cu", 
                         "contains": "Id", 
                         "mandatory": "yes"
                     }, 
@@ -4791,9 +4781,7 @@
                     "type": "Integer", 
                     "name": "WithLoopLevel", 
                     "targets": {
-                        "phases": [
-                            "popt_unq"
-                        ], 
+                        "phases": "popt_unq", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -4827,9 +4815,7 @@
                     "type": "Integer", 
                     "name": "BlockSize", 
                     "targets": {
-                        "phases": [
-                            "daa"
-                        ], 
+                        "phases": "daa", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -4840,9 +4826,7 @@
                     "inconstructor": "no", 
                     "type": "Integer", 
                     "targets": {
-                        "phases": [
-                            "pc_mc"
-                        ], 
+                        "phases": "pc_mc", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4854,10 +4838,16 @@
                     "inconstructor": "no", 
                     "type": "Link", 
                     "targets": {
-                        "phases": {
-                            "to": "opt_saacyc_lacso", 
-                            "from": "opt_saacyc_lacso"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "opt_cyc_lacso", 
+                                "from": "opt_cyc_lacso"
+                            }, 
+                            {
+                                "to": "opt_saacyc_lacso", 
+                                "from": "opt_saacyc_lacso"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4866,9 +4856,7 @@
                 {
                     "default": "-1", 
                     "targets": {
-                        "phases": [
-                            "opt_saacyc_pogo"
-                        ], 
+                        "phases": "opt_saacyc_pogo", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -5044,10 +5032,16 @@
                 }, 
                 {
                     "targets": {
-                        "phases": {
-                            "to": "opt_saacyc_awlf", 
-                            "from": "opt_saacyc_awlfi"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "opt_cyc_wlf", 
+                                "from": "opt_cyc_wlf"
+                            }, 
+                            {
+                                "to": "opt_saacyc_awlf", 
+                                "from": "opt_saacyc_awlfi"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": "yes"
                     }, 
@@ -5059,10 +5053,16 @@
                 {
                     "default": "0", 
                     "targets": {
-                        "phases": {
-                            "to": "opt_saacyc_awlf", 
-                            "from": "opt_saacyc_awlfi"
-                        }, 
+                        "phases": [
+                            {
+                                "to": "opt_cyc_wlf", 
+                                "from": "opt_cyc_wlf"
+                            }, 
+                            {
+                                "to": "opt_saacyc_awlf", 
+                                "from": "opt_saacyc_awlfi"
+                            }
+                        ], 
                         "contains": "any", 
                         "mandatory": "yes"
                     }, 
@@ -5089,9 +5089,7 @@
                     "type": "Integer", 
                     "name": "References_Folded", 
                     "targets": {
-                        "phases": [
-                            "opt_cyc_wlf"
-                        ], 
+                        "phases": "opt_cyc_wlf", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -5115,9 +5113,7 @@
                     "type": "Integer", 
                     "name": "Cost", 
                     "targets": {
-                        "phases": [
-                            "opt_cyc_awlf"
-                        ], 
+                        "phases": "opt_cyc_awlf", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -5134,9 +5130,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "pc_ima"
-                        ], 
+                        "phases": "pc_ima", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -5519,9 +5513,7 @@
                     "type": "Integer", 
                     "name": "Id", 
                     "targets": {
-                        "phases": [
-                            "final"
-                        ], 
+                        "phases": "final", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -5532,9 +5524,7 @@
                     "type": "AccessInfo", 
                     "name": "WLAA_Info", 
                     "targets": {
-                        "phases": [
-                            "initial"
-                        ], 
+                        "phases": "initial", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -5685,9 +5675,7 @@
                     "type": "DFMask", 
                     "name": "ReUse", 
                     "targets": {
-                        "phases": [
-                            "rci"
-                        ], 
+                        "phases": "rci", 
                         "contains": "any", 
                         "mandatory": "no"
                     }
@@ -5704,9 +5692,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": [
-                            "pc_ima"
-                        ], 
+                        "phases": "pc_ima", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -5776,9 +5762,7 @@
                     "type": "Link", 
                     "name": "SPEXPR", 
                     "targets": {
-                        "phases": [
-                            "sp"
-                        ], 
+                        "phases": "sp", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -5905,9 +5889,7 @@
                     "type": "Link", 
                     "name": "SPEXPR", 
                     "targets": {
-                        "phases": [
-                            "sp"
-                        ], 
+                        "phases": "sp", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -5995,9 +5977,7 @@
             "attributes": [
                 {
                     "targets": {
-                        "phases": [
-                            "sp"
-                        ], 
+                        "phases": "sp", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }, 
@@ -6287,9 +6267,7 @@
                     "type": "TaskSel", 
                     "name": "TaskSel", 
                     "targets": {
-                        "phases": [
-                            "pc_mmv"
-                        ], 
+                        "phases": "pc_mmv", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -6886,9 +6864,7 @@
                     "type": "Integer", 
                     "name": "RefLeft", 
                     "targets": {
-                        "phases": [
-                            "AssignmentsRearrange"
-                        ], 
+                        "phases": "AssignmentsRearrange", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
