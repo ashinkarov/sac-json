@@ -143,7 +143,7 @@ main (void)
   gen_free_node_c (ast_node, "gen/free_node.c");
   gen_check_reset_c (ast_node, "gen/check_reset.c");
   gen_check_nodes_c (ast_node, "gen/check_node.c");
-
+  gen_check_c (ast_node, nodeset_node, "gen/check.c");
 
 out:
   yajl_tree_free (ast_node);

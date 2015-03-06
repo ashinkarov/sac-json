@@ -9,7 +9,8 @@ all: validator
 
 validator: validator-common.o validator.o validate-nodes.o validate-attrtypes.o \
            validate-nodesets.o validate-traversals.o gen.o \
-           gen-traverse-tables.o gen-traverse-helper.o gen-node-basic.o
+           gen-traverse-tables.o gen-traverse-helper.o gen-node-basic.o \
+           gen-check.o
 
 validator.o: validator.h validate-nodes.h uthash.h validate-nodes.h \
              validate-attrtypes.h validate-nodesets.h validate-traversals.h \
@@ -24,6 +25,7 @@ gen.o: validator.h gen.h
 gen-traverse-tables.o: validator.h gen.h
 gen-traverse-helper.o: validator.h gen.h
 gen-node-basic.o: validator.h gen.h
+gen-check.o: validator.h gen.h
 
 
 clean:

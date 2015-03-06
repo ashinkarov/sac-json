@@ -113,7 +113,7 @@ struct attrtype_name
 struct traversal_node
 {
   char *  name;
-  enum trav_node_type node_type; 
+  enum trav_node_type node_type;
   UT_hash_handle hh;
 };
 

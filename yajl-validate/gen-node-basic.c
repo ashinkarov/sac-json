@@ -19,7 +19,7 @@ enum macro_type
 
 /* Traverse through ITEMS and generate macros depending on the TYPE
    for the case when the node access is being checked and for the case
-   when it isn't.  This is decided by a preprocessor flag 
+   when it isn't.  This is decided by a preprocessor flag
    CHECK_NODE_ACCESS.  */
 static inline bool
 gen_access_macros (FILE *  f, yajl_val items, const char *  node_name_upper,
@@ -88,7 +88,7 @@ gen_access_macros (FILE *  f, yajl_val items, const char *  node_name_upper,
    be used in the header file generation and in the C file generation.
    The mode is specified with DECLARATION_AND_MACRO_P parameter, which
    in case it is TRUE, the function declaration and the corresponding
-   macro will be genreated.  The function header will be generated 
+   macro will be genreated.  The function header will be generated
    otherwise.   */
 static inline bool
 gen_make_function_header (FILE *  f, const char *  node_name_lower,
@@ -173,7 +173,7 @@ gen_make_function_header (FILE *  f, const char *  node_name_lower,
 
 /* Generate accessor macros for every node and the TBmake<Node-name> function
    prototype.  */
-bool 
+bool
 gen_node_basic_h (yajl_val nodes, const char *  fname)
 {
   FILE *  f;
@@ -277,7 +277,7 @@ gen_node_son_check (FILE *  f, yajl_val nodesets, const char *  node_name_upper,
   /* FIXME this should become an assertion when the name is fixed in ast.json.  */
   if (NULL == nn)
     json_warn ("the target %s of the son %s of node %s is not found",
-              x, son_name_upper, node_name_upper);
+               x, son_name_upper, node_name_upper);
 
   if (!nn || nn->name_type == nnt_node)
     {
@@ -514,7 +514,7 @@ gen_node_basic_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
             continue;
 
           char *  son_name_upper = string_toupper (son_name);
-          
+
           fprintf (f, "  if (%s_%s (xthis) != NULL", node_name_upper, son_name_upper);
           if (YAJL_IS_OBJECT (targets))
             gen_node_son_check_from_target (f, nodesets, targets, node_name_upper, son_name_upper);

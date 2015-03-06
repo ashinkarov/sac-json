@@ -18,7 +18,7 @@ gen_types_trav_h (yajl_val traversals, const char *  fname)
   FILE *  f;
   const char *  protector = "__TYPES_TRAV_H__";
   GEN_OPEN_FILE (f, fname);
-  GEN_HEADER_H (f, protector, 
+  GEN_HEADER_H (f, protector,
                 "   This file defines the trav_t phase enumeration");
 
   fprintf (f, "typedef enum\n"
@@ -154,7 +154,7 @@ gen_sons_h (yajl_val nodes, const char *  fname)
 
 
 /* Generate a .mac file with the list of the nodes in the format:
-            
+
             NIF ("N_<nodename>"),
 
    This is used to define an array of node names.  */
@@ -218,7 +218,7 @@ gen_free_node_h (yajl_val nodes, const char *  fname)
 /* Generate data structures for node attributes and the overall union.
    Every node that has attributes or flags initiates a structure called
    ATTRIBS_N_<node-name> in upper case.  The union is called ATTRIBUNION.
-   Flags are stored in the anonymous structure called `flags' which is a 
+   Flags are stored in the anonymous structure called `flags' which is a
    part of the ATTRIB_N_<node> structure.  */
 bool
 gen_attribs_h (yajl_val nodes, const char *  fname)
@@ -319,7 +319,7 @@ gen_attribs_h (yajl_val nodes, const char *  fname)
 
 
 /* Generate NODE_ALLOC_<node-name> in uppercase structures that contain a common
-   node structure and the corresponding sons or attribute structure in case the 
+   node structure and the corresponding sons or attribute structure in case the
    node has them.  */
 bool
 gen_node_alloc_h (yajl_val nodes, const char *  fname)
@@ -495,17 +495,17 @@ gen_check_h (const char *  fname)
    unique free function is called.  This function has to decide whether to free an
    attribute or not.  This includes a test for non-null if the attribute is a
    pointer type!
-   
+
    The return value is the value of the NEXT son, or if no NEXT son is
    present the result of Free.  This way, depending on the TRAVCOND macro, the
    full chain of nodes or only one node can be freed.
-   
+
    There is an exception for FREEfundef.  Fundef nodes are never freed.
    Instead, they are zombiealised, thus their status is set to zombie and all
    attributes and sons are freed, except for:
-      
+
                 NAME, MOD, LINKMOD, TYPE and TYPES
-      
+
    Furthermore, the node structure itself is not freed. This has to be
    done by a cal of FreeAllZombies.  */
 bool
@@ -584,7 +584,7 @@ gen_free_node_c (yajl_val nodes, const char *  fname)
 
           if (atn->copy_type == act_literal)
             continue;
-          
+
           /* Skip exceptions in case of FREEfundef.  */
           if (!strcmp (node_name, "Fundef")
               && (!strcmp (attrib_name, "Name")
@@ -613,7 +613,7 @@ gen_free_node_c (yajl_val nodes, const char *  fname)
           char *  son_name_upper = string_toupper (son_name);
           fprintf (f, "  %s_%s (arg_node) = FREETRAV (%s_%s (arg_node), arg_info);\n",
                     node_name_upper, son_name_upper, node_name_upper, son_name_upper);
-          
+
           free (son_name_upper);
         }
 
@@ -647,7 +647,7 @@ gen_check_reset_c (yajl_val nodes, const char *  fname)
   FILE *  f;
   GEN_OPEN_FILE (f, fname);
   GEN_HEADER (f, "   Functions needed by test check environment");
-  
+
   fprintf (f, "#include \"check_reset.h\"\n"
               "#include \"globals.h\"\n"
               "#include \"tree_basic.h\"\n"
@@ -691,11 +691,11 @@ gen_check_reset_c (yajl_val nodes, const char *  fname)
               "    /* If this check is called function-based, we must restore the original\n"
               "       fundef chain here.  */\n"
               "    FUNDEF_NEXT (arg_node) = keep_next;\n"
-              "\n" 
+              "\n"
               "  DBUG_RETURN (arg_node);\n"
               "}\n\n");
-  
-  
+
+
   for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
     {
       char *  node_name_lower = string_tolower (YAJL_OBJECT_KEYS (nodes)[i]);
@@ -725,7 +725,7 @@ gen_check_reset_c (yajl_val nodes, const char *  fname)
         }
 
 
-      fprintf (f, "  DBUG_RETURN (arg_node);\n" 
+      fprintf (f, "  DBUG_RETURN (arg_node);\n"
                   "}\n\n");
       free (node_name_upper);
       free (node_name_lower);
@@ -740,7 +740,7 @@ gen_check_reset_c (yajl_val nodes, const char *  fname)
 /* The function generates a CHKM<node-name> functions for all the nodes
    where each function calls Touch for all attributes and traverses into
    all sons.
-   
+
    The return value is ARG_NODE.  */
 
 bool
@@ -766,7 +766,7 @@ gen_check_nodes_c (yajl_val nodes, const char *  fname)
       const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
       const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
       const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
-      
+
       fprintf (f, "node *\n"
                   "CHKM%s (node *  arg_node, info *  arg_info)\n"
                   "{\n"
@@ -789,20 +789,20 @@ gen_check_nodes_c (yajl_val nodes, const char *  fname)
         {
           const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
           const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
-          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);          
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
           struct attrtype_name *  atn;
           char *  type_name = YAJL_GET_STRING (type);
 
           HASH_FIND_STR (attrtype_names, type_name, atn);
           assert (atn);
-           
+
           if (atn->copy_type == act_literal || atn->copy_type == act_function)
             continue;
- 
+
           char *  attrib_name_upper = string_toupper (attrib_name);
           fprintf (f, "  CHKMtouch ((void *) %s_%s (arg_node), arg_info);\n",
                    node_name_upper, attrib_name_upper);
-          
+
           free (attrib_name_upper);
         }
 
@@ -821,7 +821,7 @@ gen_check_nodes_c (yajl_val nodes, const char *  fname)
             free (son_name_upper);
         }
 
-      fprintf (f, "  DBUG_RETURN (arg_node);\n" 
+      fprintf (f, "  DBUG_RETURN (arg_node);\n"
                   "}\n\n");
       free (node_name_upper);
       free (node_name_lower);

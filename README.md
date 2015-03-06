@@ -56,7 +56,7 @@ The migration plan includes:
    - [x] ./tree/check_node.h.xsl
    - [x] ./tree/check_node.c.xsl
    - [x] ./tree/check.h.xsl
-   - [ ] ./tree/check.c.xsl
+   - [x] ./tree/check.c.xsl
    - [x] ./tree/attribs.h.xsl
    - [ ] ./serialize/serialize_node.h.xsl
    - [ ] ./serialize/serialize_node.c.xsl
