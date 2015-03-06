@@ -60,10 +60,16 @@ for node in t['syntaxtree']:
             if 'targets' in attr:
                 if isinstance (attr['targets'], dict):
                     attr['targets'] = change_yes_no (attr['targets'], 'mandatory')
+                    if attr['targets']['phases'] == "":
+                        attr['targets']['phases'] = "all"
+
                 elif isinstance (attr['targets'], list):
                     for target in attr['targets']:
                         # XXX Check that it actually works.
                         target = change_yes_no (target, 'mandatory')
+                        
+                        if target['phases'] == "":
+                           target['phases'] = "all"
 
             if 'description' in attr:
                 attr['description'] = update_desc (attr['description'])
@@ -80,10 +86,17 @@ for node in t['syntaxtree']:
             if 'targets' in son:
                 if isinstance (son['targets'], dict):
                     son['targets'] = change_yes_no (son['targets'], 'mandatory')
+                    
+                    if son['targets']['phases'] == "":
+                        son['targets']['phases'] = "all"
+
                 elif isinstance (son['targets'], list):
                     for target in son['targets']:
                         # XXX Check that it actually works.
                         target = change_yes_no (target, 'mandatory')
+                        
+                        if target['phases'] == "":
+                           target['phases'] = "all"
 
             if 'description' in son:
                 son['description'] = update_desc (son['description'])

@@ -2474,7 +2474,7 @@
                 "inconstructor": false, 
                 "type": "CudaAccessInfo", 
                 "targets": {
-                    "phases": "", 
+                    "phases": "all", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -3918,7 +3918,7 @@
                 "inconstructor": false, 
                 "type": "String", 
                 "targets": {
-                    "phases": "", 
+                    "phases": "all", 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -5144,7 +5144,7 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": "", 
+                    "phases": "all", 
                     "contains": "Assign", 
                     "mandatory": false
                 }
@@ -5476,7 +5476,7 @@
                 "inconstructor": false, 
                 "type": "ReuseInfo", 
                 "targets": {
-                    "phases": "", 
+                    "phases": "all", 
                     "contains": "any", 
                     "mandatory": false
                 }
