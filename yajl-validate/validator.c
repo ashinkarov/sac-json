@@ -145,6 +145,8 @@ main (void)
   gen_check_nodes_c (ast_node, "gen/check_node.c");
   gen_check_c (ast_node, nodeset_node, "gen/check.c");
 
+  gen_serialize_attribs_h ("gen/serialize_attribs.h");
+
 out:
   yajl_tree_free (ast_node);
   yajl_tree_free (attrtype_node);

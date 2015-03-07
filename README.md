@@ -65,7 +65,7 @@ The migration plan includes:
    - [ ] ./serialize/serialize_helper.c.xsl
    - [ ] ./serialize/serialize_buildstack.h.xsl
    - [ ] ./serialize/serialize_buildstack.c.xsl
-   - [ ] ./serialize/serialize_attribs.h.xsl
+   - [x] ./serialize/serialize_attribs.h.xsl
    - [x] ./global/node_info.mac.xsl
   - [ ] Replacing serialisation with json-based conversions
   - [ ] Introducing dump/restore at every phase.

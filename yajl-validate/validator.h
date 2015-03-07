@@ -106,6 +106,7 @@ struct attrtype_name
   enum attrtype_copy_type copy_type;
   char *  ctype;
   char *  init;
+  bool persist;
   UT_hash_handle hh;
 };
 

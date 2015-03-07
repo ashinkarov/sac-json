@@ -833,4 +833,47 @@ gen_check_nodes_c (yajl_val nodes, const char *  fname)
   return true;
 }
 
+/* Generate a header file containings prototpes for functions that serialise
+   attributes of nodes.  Each attribute with `persist = true' (which is assumed
+   by default if `persist' is not present gets a function called
+   SATserialize<attribute-type-name>.  */
+bool
+gen_serialize_attribs_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__SERIALIZE_ATTRIBS_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to serialize the attributes of node structures");
+
+  fprintf (f, "#include \"types.h\"\n\n");
+
+  struct attrtype_name *  atn;
+  struct attrtype_name *  tmp;
+
+  HASH_ITER (hh, attrtype_names, atn, tmp)
+    {
+      const char *  const_qual = "";
+
+      if (!atn->persist)
+        continue;
+
+      /* This is a hack for C++ compilers, to resolve constant parameter
+         passing from SharedString to String.
+
+         FIXME: During the seriliazation all the parameters may become constant
+         as serialization should not change them.  */
+      if (!strcmp (atn->name, "String"))
+        const_qual = "char ";
+
+      fprintf (f, "void SATserialize%s (info *, %s%s, node *);\n",
+               atn->name, const_qual, atn->ctype);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
 

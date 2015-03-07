@@ -94,6 +94,6 @@ bool gen_check_reset_c (yajl_val nodes, const char *  fname);
 bool gen_check_nodes_c (yajl_val nodes, const char *  fname);
 bool gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname);
 
-
+bool gen_serialize_attribs_h (const char *  fname);
 
 #endif // __GEN_H__
