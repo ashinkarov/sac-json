@@ -478,6 +478,9 @@ gen_check_h (const char *  fname)
 
   HASH_ITER (hh, node_names, nn, tmp)
     {
+      if (nn->name_type == nnt_nodeset)
+        continue;
+
       char *  name_lower = string_tolower (nn->name);
       fprintf (f, "node *  CHK%s (node *  arg_node, info *  arg_info);\n", name_lower);
       free (name_lower);
