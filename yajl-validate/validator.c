@@ -119,7 +119,7 @@ main (void)
      [x] ./serialize/serialize_link.h.xsl
      [-] ./serialize/serialize_link.c.xsl
      [-] ./serialize/serialize_helper.c.xsl
-     [-] ./serialize/serialize_buildstack.h.xsl
+     [x] ./serialize/serialize_buildstack.h.xsl
      [-] ./serialize/serialize_buildstack.c.xsl
      [x] ./serialize/serialize_attribs.h.xsl
      [x] ./global/node_info.mac.xsl  */
@@ -148,6 +148,7 @@ main (void)
   gen_serialize_attribs_h ("gen/serialize_attribs.h");
   gen_serialize_node_h ("gen/serialize_node.h");
   gen_serialize_link_h ("gen/serialize_link.h");
+  gen_serialize_buildstack_h ("gen/serialize_buildstack.h");
 
 out:
   yajl_tree_free (ast_node);

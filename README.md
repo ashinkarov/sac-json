@@ -63,7 +63,7 @@ The migration plan includes:
    - [x] ./serialize/serialize_link.h.xsl
    - [ ] ./serialize/serialize_link.c.xsl
    - [ ] ./serialize/serialize_helper.c.xsl
-   - [ ] ./serialize/serialize_buildstack.h.xsl
+   - [x] ./serialize/serialize_buildstack.h.xsl
    - [ ] ./serialize/serialize_buildstack.c.xsl
    - [x] ./serialize/serialize_attribs.h.xsl
    - [x] ./global/node_info.mac.xsl

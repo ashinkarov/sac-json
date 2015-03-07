@@ -97,6 +97,8 @@ bool gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname);
 bool gen_serialize_attribs_h (const char *  fname);
 bool gen_serialize_node_h (const char *  fname);
 bool gen_serialize_link_h (const char *  fname);
+bool gen_serialize_buildstack_h (const char *  fname);
+
     
 
 #endif // __GEN_H__
