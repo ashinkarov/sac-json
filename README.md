@@ -60,7 +60,7 @@ The migration plan includes:
    - [x] ./tree/attribs.h.xsl
    - [x] ./serialize/serialize_node.h.xsl
    - [ ] ./serialize/serialize_node.c.xsl
-   - [ ] ./serialize/serialize_link.h.xsl
+   - [x] ./serialize/serialize_link.h.xsl
    - [ ] ./serialize/serialize_link.c.xsl
    - [ ] ./serialize/serialize_helper.c.xsl
    - [ ] ./serialize/serialize_buildstack.h.xsl

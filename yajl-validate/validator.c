@@ -114,14 +114,14 @@ main (void)
      [x] ./tree/check.h.xsl
          ./tree/check.c.xsl
      [x] ./tree/attribs.h.xsl
-     [-] ./serialize/serialize_node.h.xsl
+     [x] ./serialize/serialize_node.h.xsl
      [-] ./serialize/serialize_node.c.xsl
-     [-] ./serialize/serialize_link.h.xsl
+     [x] ./serialize/serialize_link.h.xsl
      [-] ./serialize/serialize_link.c.xsl
      [-] ./serialize/serialize_helper.c.xsl
      [-] ./serialize/serialize_buildstack.h.xsl
      [-] ./serialize/serialize_buildstack.c.xsl
-     [-] ./serialize/serialize_attribs.h.xsl
+     [x] ./serialize/serialize_attribs.h.xsl
      [x] ./global/node_info.mac.xsl  */
 
   gen_types_trav_h (traversal_node, "gen/types_trav.h");
@@ -147,6 +147,7 @@ main (void)
 
   gen_serialize_attribs_h ("gen/serialize_attribs.h");
   gen_serialize_node_h ("gen/serialize_node.h");
+  gen_serialize_link_h ("gen/serialize_link.h");
 
 out:
   yajl_tree_free (ast_node);

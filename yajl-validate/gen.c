@@ -879,7 +879,8 @@ gen_serialize_attribs_h (const char *  fname)
   return true;
 }
 
-
+/* Generate serialize_node.h, containing prototype to serialise each type of
+   nodes.  */
 bool
 gen_serialize_node_h (const char *  fname)
 {
@@ -909,3 +910,37 @@ gen_serialize_node_h (const char *  fname)
   GEN_FLUSH_AND_CLOSE (f);
   return true;
 }
+
+
+/* Generate serialize_link.h, containing prototype to serialise links to
+   every type of node.  */
+bool
+gen_serialize_link_h (const char *  fname)
+{
+  FILE *  f;
+  const char *  protector = "__SERIALIZE_LINK_H__";
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER_H (f, protector,
+                "   Functions to serialize links in node structures");
+
+  fprintf (f, "#include \"types.h\"\n\n");
+
+  struct node_name *  nn;
+  struct node_name *  tmp;
+
+  HASH_ITER (hh, node_names, nn, tmp)
+    {
+      if (nn->name_type == nnt_nodeset)
+        continue;
+
+      char *  name_lower = string_tolower (nn->name);
+      fprintf (f, "node *  SEL%s (node *  arg_node, info *  arg_info);\n", name_lower);
+      free (name_lower);
+    }
+
+  fprintf (f, "\n\n");
+  GEN_FOOTER_H (f, protector);
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
