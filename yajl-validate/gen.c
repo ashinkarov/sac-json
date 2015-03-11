@@ -1019,20 +1019,20 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
                   "           NODE_COL (arg_node));\n\n",
                node_name_lower,
                node_name,
-               node_name_lower); 
+               node_name_lower);
 
-      /* Traverse Attributes and generate a value if an attribute has 
-         `persist' = true (default).  All other attributes are ignored, as 
+      /* Traverse Attributes and generate a value if an attribute has
+         `persist' = true (default).  All other attributes are ignored, as
          they will be set to their default values lateron.  */
       for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
         {
           const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
           const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
           const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
-          
+
           const char *  type_name = YAJL_GET_STRING (type);
           struct attrtype_name *  atn;
-          
+
           HASH_FIND_STR (attrtype_names, type_name, atn);
           assert (atn);
 
@@ -1043,7 +1043,7 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
           fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", \");\n");
           fprintf (f, "  SATserialize%s (arg_info, %s_%s (arg_node), arg_node);\n",
                    atn->name, node_name_upper, attrib_name_upper);
-          
+
           free (attrib_name_upper);
         }
 
@@ -1052,17 +1052,17 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
         {
           const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
           char *  son_name_upper = string_toupper (son_name);
-          
+
           if (i == 0)
             fprintf (f, "\n");
-          
+
           /* FUNDEF_BODY := NULL;  */
           if (!strcmp (node_name, "Fundef") && !strcmp (son_name, "Body"))
             fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", NULL\");\n");
 
           /* {FUNDEF,OBJDEF,TYPEDEF}_NEXT := NULL;  */
-          else if (!strcmp (son_name, "Next") 
-                   && (!strcmp (node_name, "Fundef") 
+          else if (!strcmp (son_name, "Next")
+                   && (!strcmp (node_name, "Fundef")
                        || !strcmp (node_name, "Typedef")
                        || !strcmp (node_name, "Objdef")))
             fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", NULL\");\n");
@@ -1074,7 +1074,7 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
                         "    TRAVdo (%s_%s (arg_node), arg_info);\n",
                      node_name_upper, son_name_upper,
                      node_name_upper, son_name_upper);
-          
+
           fprintf (f, "\n");
           free (son_name_upper);
         }
@@ -1092,6 +1092,129 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
       /* Generate function footer.  */
       fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \")\");\n"
                   "  DBUG_RETURN (arg_nde);\n"
+                  "}\n\n");
+      free (node_name_lower);
+      free (node_name_upper);
+    }
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+
+/* Generate the serialisation function SET<node-name> for all nodes.  */
+bool
+gen_serialize_link_c (yajl_val nodes, const char *  fname)
+{
+  FILE *  f;
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER (f, "   Functions needed by serialize link traversal");
+
+  fprintf (f, "#include <stdio.h>\n"
+              "#include \"serialize_node.h\"\n"
+              "#include \"serialize_attribs.h\"\n"
+              "#include \"serialize_info.h\"\n"
+              "#include \"serialize_stack.h\"\n"
+              "#include \"tree_basic.h\"\n"
+              "#include \"traverse.h\"\n"
+              "#define DBUG_PREFIX \"SEL\"\n"
+              "#include \"debug.h\"\n\n");
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      const char *  node_name = YAJL_OBJECT_KEYS (nodes)[i];
+      char *  node_name_lower = string_tolower (node_name);
+      char *  node_name_upper = string_toupper (node_name);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
+
+      /* Generate a function header.  */
+      fprintf (f, "node *\n"
+                  "SEL%s (node *  arg_node, info *  arg_info)\n"
+                  "{\n"
+                  "  DBUG_ENTER ();\n\n",
+               node_name_lower);
+
+
+      /* Traverse Attributes   */
+      for (size_t i = 0, pos = 1; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+
+          const char *  type_name = YAJL_GET_STRING (type);
+          
+          /* Skip all attributes that are not of type Link or CodeLink.  */
+          if (strcmp (type_name, "Link") && strcmp (type_name, "CodeLink"))
+            continue;
+
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          fprintf (f, "  if (NULL != %s_%s (arg_node)\n"
+                      "      && SERSTACK_NOT_FOUND\n"
+                      "         != SSfindPos (%s_%s (arg_node), INFO_SER_STACK (arg_info)))\n"
+                      "    fprintf (INFO_SER_FILE (arg_info),\n"
+                      "             \"/* Fix link for `%s' attribute.  */\\n\"\n"
+                      "             \"SHLPfixLink (stack, %%d, %zu, %%d);\\n\",\n"
+                      "             SSfindPos (arg_node, INFO_SER_STACK (arg_info)),\n"
+                      "             SSfindPos (%s_%s (arg_node), INFO_SER_STACK (arg_info)));\n\n",
+                   node_name_upper, attrib_name_upper,
+                   node_name_upper, attrib_name_upper,
+                   attrib_name,
+                   pos,
+                   node_name_upper, attrib_name_upper);
+
+          pos++;
+          free (attrib_name_upper);
+        }
+
+      /* Traverse Sons.  */
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+
+          if (!strcmp (node_name, "Fundef")
+              && (!strcmp (son_name, "Next") || !strcmp (son_name, "Body")))
+            continue;
+
+          if (!strcmp (node_name, "Typedef") && !strcmp (son_name, "Next"))
+            continue;
+
+          if (!strcmp (node_name, "Objdef") && !strcmp (son_name, "Next"))
+            continue;
+
+          char *  son_name_upper = string_toupper (son_name);
+          fprintf (f, "  if (NULL != %s_%s (arg_node))\n"
+                      "    TRAVdo (%s_%s (arg_node), arg_info);\n\n",
+                   node_name_upper, son_name_upper,
+                   node_name_upper, son_name_upper);
+          free (son_name_upper);
+        }
+
+      /* Traverse into Attribs of type Node.  */
+       for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+
+          const char *  type_name = YAJL_GET_STRING (type);
+          
+          /* Skip all the attributes that are not of type Node.  */
+          if (strcmp (type_name, "Node"))
+            continue;
+
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          fprintf (f, "  if (NULL != %s_%s (arg_node))\n"
+                      "    TRAVdo (%s_%s (arg_node), arg_info);\n\n",
+                   node_name_upper, attrib_name_upper,
+                   node_name_upper, attrib_name_upper);
+          free (attrib_name_upper);
+        }
+
+
+      /* Generate function footer.  */
+      fprintf (f, "  DBUG_RETURN (arg_nde);\n"
                   "}\n\n");
       free (node_name_lower);
       free (node_name_upper);
