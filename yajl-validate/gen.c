@@ -977,3 +977,126 @@ gen_serialize_buildstack_h (const char *  fname)
   return true;
 }
 
+
+/* Generate the serialisation function SET<node-name> for all nodes.  */
+bool
+gen_serialize_node_c (yajl_val nodes, const char *  fname)
+{
+  FILE *  f;
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER (f, "   Functions to allocate node structures");
+
+  fprintf (f, "#include <stdio.h>\n"
+              "#include \"serialize_node.h\"\n"
+              "#include \"serialize_attribs.h\"\n"
+              "#include \"serialize_info.h\"\n"
+              "#include \"serialize_stack.h\"\n"
+              "#include \"serialize_filenames.h\"\n"
+              "#include \"tree_basic.h\"\n"
+              "#include \"traverse.h\"\n"
+              "#define DBUG_PREFIX \"SET\"\n"
+              "#include \"debug.h\"\n\n");
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      const char *  node_name = YAJL_OBJECT_KEYS (nodes)[i];
+      char *  node_name_lower = string_tolower (node_name);
+      char *  node_name_upper = string_toupper (node_name);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
+      const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_object);
+
+      /* Generate a function header.  */
+      fprintf (f, "node *\n"
+                  "SET%s (node *  arg_node, node *  arg_info)\n"
+                  "{\n"
+                  "  DBUG_ENTER ();\n"
+                  "  DBUG_PRINT (\"Serialising `%s' node\");\n"
+                  "  fprintf (INFO_SER_FILE (arg_info),\n"
+                  "           \", SHLPmakeNode (%%d, FILENAME (%%d), %%zd, %%zd\",\n"
+                  "           N_%s, SFNgetId (NODE_FILE (arg_node)), NODE_LINE (arg_node),\n"
+                  "           NODE_COL (arg_node));\n\n",
+               node_name_lower,
+               node_name,
+               node_name_lower); 
+
+      /* Traverse Attributes and generate a value if an attribute has 
+         `persist' = true (default).  All other attributes are ignored, as 
+         they will be set to their default values lateron.  */
+      for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+          
+          const char *  type_name = YAJL_GET_STRING (type);
+          struct attrtype_name *  atn;
+          
+          HASH_FIND_STR (attrtype_names, type_name, atn);
+          assert (atn);
+
+          if (!atn->persist)
+            continue;
+
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", \");\n");
+          fprintf (f, "  SATserialize%s (arg_info, %s_%s (arg_node), arg_node);\n",
+                   atn->name, node_name_upper, attrib_name_upper);
+          
+          free (attrib_name_upper);
+        }
+
+      /* Traverse Sons.  */
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+          char *  son_name_upper = string_toupper (son_name);
+          
+          if (i == 0)
+            fprintf (f, "\n");
+          
+          /* FUNDEF_BODY := NULL;  */
+          if (!strcmp (node_name, "Fundef") && !strcmp (son_name, "Body"))
+            fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", NULL\");\n");
+
+          /* {FUNDEF,OBJDEF,TYPEDEF}_NEXT := NULL;  */
+          else if (!strcmp (son_name, "Next") 
+                   && (!strcmp (node_name, "Fundef") 
+                       || !strcmp (node_name, "Typedef")
+                       || !strcmp (node_name, "Objdef")))
+            fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", NULL\");\n");
+
+          else
+            fprintf (f, "  if (NULL == %s_%s (arg_node))\n"
+                        "    fprintf (INFO_SER_FILE (arg_info), \", NULL\");\n"
+                        "  else\n"
+                        "    TRAVdo (%s_%s (arg_node), arg_info);\n",
+                     node_name_upper, son_name_upper,
+                     node_name_upper, son_name_upper);
+          
+          fprintf (f, "\n");
+          free (son_name_upper);
+        }
+
+      /* Traverse Flags.  */
+      for (size_t i = 0; flags && i < YAJL_OBJECT_LENGTH (flags); i++)
+        {
+          const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
+          char *  flag_name_upper = string_toupper (flag_name);
+          fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \", %%d\", %s_%s (arg_node));\n",
+                   node_name_upper, flag_name_upper);
+          free (flag_name_upper);
+        }
+
+      /* Generate function footer.  */
+      fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \")\");\n"
+                  "  DBUG_RETURN (arg_nde);\n"
+                  "}\n\n");
+      free (node_name_lower);
+      free (node_name_upper);
+    }
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
