@@ -438,6 +438,8 @@ gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
                                            node_name_upper, son_name_upper,
                                            j == YAJL_ARRAY_LENGTH (targets) - 1);
               }
+
+          free (son_name_upper);
         }
 
       for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
@@ -506,6 +508,8 @@ gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
                    node_name_upper, son_name_upper,
                    node_name_upper, son_name_upper,
                    node_name_upper, son_name_upper);
+
+          free (son_name_upper);
         }
 
       fprintf (f, "  DBUG_RETURN (arg_node);\n"
