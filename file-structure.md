@@ -6,10 +6,10 @@ document describes a structure of these files, things that are validated and
 the files that are generated so far.
 
 Currently there are four JSON files:
-    * `ast.json`
-    * `attrtype.json`
-    * `nodeset.json`
-    * `traversals.json`
+   * `ast.json`
+   * `attrtype.json`
+   * `nodeset.json`
+   * `traversals.json`
 
 First three files define the structure of the AST and the last file defines
 behaviour of every traversal used in `sac2c`.
