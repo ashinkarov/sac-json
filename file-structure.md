@@ -57,6 +57,50 @@ A typical nodeset entry looks as follows:
 ```
 
 
+Attribute types
+---------------
+
+The file at the top level contains an object where each key defines the name of
+the attribute.  Each attribute is an object with the following fields:
+
+   * `copy` (type string) specifies how to copy the attribute of the given
+     type.  Allowed values are `literal`, `function` and `hash`.  `literal` attributes
+     can be processed like basic C types (e.g. int).  `function` attributes
+     require a copy function to be present.  `hash` attributes are references to
+     to nodes in the tree and thus have to be processed using a hash table.
+
+   * `ctype` (type string) C representation of the type.
+   * `vtype` (type string) C type used in `va_arg` during the
+     serialisation/deserialisation.  If not present, `ctype` is used.
+   * `init` (type string) initial value.
+   * `persist` (type boolean) specifies whether the attribute has to be stored
+     and restored during serialisation.  Default value (or if the field is
+     not present is _true_).
+
+Mandatory fields are `copy`, `ctype` and `init`.
+
+
+### Validation ###
+
+   * Json types match the specification.
+   * The name of the attribute type matches the regular expression
+     `^[A-Z][a-zA-Z0-9_]*$`.
+   * The name of the attribute type is unique.
+   * Mandatory fields are present.
+   * Only fields from the above list are present within attribute type objects.
+
+
+### Example ###
+
+A typical example for the attribute type looks like:
+
+```
+ "FileType": {
+     "copy": "literal",
+     "ctype": "file_type",
+     "init": "FT_unknown"
+ }, 
+```
 
 
 Traversal-related JSON files

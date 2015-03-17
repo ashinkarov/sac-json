@@ -6,6 +6,17 @@
 #include "validator.h"
 #include "validate-attrtypes.h"
 
+static inline bool
+attrtype_field_allowed_p (const char *  x)
+{
+  return !strcmp (x, "ctype")
+         || !strcmp (x, "vtype")
+         || !strcmp (x, "copy")
+         || !strcmp (x, "init")
+         || !strcmp (x, "persist");
+}
+
+
 bool
 load_attrtype_names (yajl_val attrtypes, const char *  fname)
 {
@@ -30,6 +41,19 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
           json_err ("the attribute type name `%s' doesn't match the regexp `%s'",
                     name, regexp_txt[rxp_attrtype_name]);
           return false;
+        }
+
+      /* Check that attribute types contain only allowed fields.  */
+      for (size_t i = 0; i < YAJL_OBJECT_LENGTH (attrtype); i++)
+        {
+          const char *  x = YAJL_OBJECT_KEYS (attrtype)[i];
+
+          if (!attrtype_field_allowed_p (x))
+            {
+              json_err ("the attribute type `%s' contains invalid field `%s'",
+                        name, x);
+              return false;
+            }
         }
 
       /* Check that the node is unique.  */
