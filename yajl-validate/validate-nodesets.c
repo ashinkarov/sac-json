@@ -16,7 +16,8 @@
       3. Checks that the name matches RXP_NODE_NAME regular expression.
       4. Checks that json type of each nodeset is an array.
       5. Checks that each value of this array is a node name from
-         the NODE_NAMES where NAME_TYPE is NNT_NODE.  */
+         the NODE_NAMES where NAME_TYPE is NNT_NODE.
+      6. Each nodeset contains at least one element.  */
 bool
 load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
 {
@@ -52,6 +53,15 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
             {
               json_err ("json value of the key `%s' in the file `%s' "
                         "must be of type array", name, fname);
+              return false;
+            }
+        
+
+          /* The nodeset contains at least one element.  */
+          if (YAJL_ARRAY_LENGTH (nodes) < 1)
+            {
+              json_err ("the length of the `%s' nodeset array is "
+                        "less than 1", name);
               return false;
             }
 

@@ -19,9 +19,9 @@
 
 
 const char *regexp_txt[] = {
-  [rxp_node_name] = "[A-Z][a-zA-Z0-9_]*",
-  [rxp_attrtype_name] = "[A-Z][a-zA-Z0-9_]",
-  [rxp_traversal_name] = "[A-Z][A-Z]*"
+  [rxp_node_name] = "^[A-Z][a-zA-Z0-9_]*$",
+  [rxp_attrtype_name] = "^[A-Z][a-zA-Z0-9_]*$",
+  [rxp_traversal_name] = "^[A-Z][A-Z0-9]*$"
 };
 
 

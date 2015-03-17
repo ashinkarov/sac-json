@@ -18,6 +18,41 @@ behaviour of every traversal used in `sac2c`.
 AST-related JSON files
 ======================
 
+The main file with actual AST description is `ast.json`.  The `nodeset.json`
+defines "shortcut" names for groups of nodes used in the description of targets
+in the `ast.json`.  The file `attrtype.json` defines a list of types that node
+attributes can possibly have.
+
+Nodesets
+--------
+
+The top level file must contain an object where keys are the names of the
+nodesets.  Each nodeset is an array of strings, where each entry is a valid
+node as defined by `ast.json`.
+
+### Validation ###
+
+    * Each nodeset name must correspond to the following regexp:
+      `[A-Z][a-zA-Z0-9_]*`.
+    *
+
+
+### Example ###
+
+A typical nodeset entry looks as follows:
+
+
+```
+ "Interface": [
+     "Import",
+     "Export",
+     "Use",
+     "Provide"
+ ]
+
+```
+
+
 
 
 Traversal-related JSON files
@@ -34,7 +69,7 @@ traversal and the value is an object, describing a traversal.  For example:
 }
 ```
 
-Each name of the traversal must correspond to the `[A-Z][A-Z]*` regular expression,
+Each name of the traversal must correspond to the `^[A-Z][A-Z0-9]*$` regular expression,
 and each traversal object must contain fields `name`, `default` and `include`.
 
 Additionally a traversal may contain fields:
@@ -102,7 +137,7 @@ Validation
 
    * The name of the traversal is matched against the regexp.
    * The types of the fields within the traversal object are checked.
-   * None of the additional fileds are allowed within traversal objects.
+   * None of the additional fields are allowed within traversal objects.
    * The values of `travuser`, `traverror`, `travnone` and `travsons` must be
      valid names of the nodes as specified in `ast.json' and the lists cannot share
      the node.
