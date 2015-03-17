@@ -32,9 +32,13 @@ node as defined by `ast.json`.
 
 ### Validation ###
 
-    * Each nodeset name must correspond to the following regexp:
-      `[A-Z][a-zA-Z0-9_]*`.
-    *
+   * Types of the json objects are as specified.
+   * Each nodeset name corresponds to the following regexp:
+     `[A-Z][a-zA-Z0-9_]*`.
+   * Each nodeset array contains at least one element.
+   * Each element in nodeset arrays are valid node names.
+   * Nodeset names are unique.
+   * Nodeset names are different from node names.
 
 
 ### Example ###
