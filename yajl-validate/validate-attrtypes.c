@@ -42,9 +42,10 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
 
       const yajl_val copy = yajl_tree_get (attrtype, (const char *[]){"copy", 0}, yajl_t_string);
       const yajl_val ctype = yajl_tree_get (attrtype, (const char *[]){"ctype", 0}, yajl_t_string);
+      const yajl_val vtype = yajl_tree_get (attrtype, (const char *[]){"vtype", 0}, yajl_t_string);
       const yajl_val init = yajl_tree_get (attrtype, (const char *[]){"init", 0}, yajl_t_string);
       const yajl_val persist = yajl_tree_get (attrtype, (const char *[]){"persist", 0}, yajl_t_any);
-    
+
       /* Check that the `copy' attribute exists.  */
       enum attrtype_copy_type copy_type;
       if (!copy)
@@ -82,14 +83,17 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
         {
           json_err ("attrtype `%s' does not contain `init' tag", name);
           return false;
-        }     
+        }
       const char *  init_name = YAJL_GET_STRING (init);
+
+      const char *  vtype_name = vtype ? YAJL_GET_STRING (vtype) : NULL;
 
       assert (name && ctype_name && init_name);
       atn = malloc (sizeof *atn);
       atn->name = strdup (name);
       atn->copy_type = copy_type;
       atn->ctype = strdup (ctype_name);
+      atn->vtype = vtype_name ? strdup (vtype_name) : NULL;
       atn->init = strdup (init_name);
       atn->persist = persist && YAJL_IS_FALSE (persist) ? false : true;
       HASH_ADD_KEYPTR (hh, attrtype_names, atn->name,
@@ -113,6 +117,7 @@ attrype_names_free ()
       free (atn->name);
       free (atn->init);
       free (atn->ctype);
+      free (atn->vtype);
       free (atn);
     }
 }

@@ -151,6 +151,7 @@ main (void)
   gen_serialize_buildstack_h ("gen/serialize_buildstack.h");
   gen_serialize_node_c (ast_node, "gen/serialize_node.c");
   gen_serialize_link_c (ast_node, "gen/serialize_link.c");
+  gen_serialize_helper_c (ast_node, "gen/serialize_helper.c");
 
 out:
   yajl_tree_free (ast_node);

@@ -1144,7 +1144,7 @@ gen_serialize_link_c (yajl_val nodes, const char *  fname)
           const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
 
           const char *  type_name = YAJL_GET_STRING (type);
-          
+
           /* Skip all attributes that are not of type Link or CodeLink.  */
           if (strcmp (type_name, "Link") && strcmp (type_name, "CodeLink"))
             continue;
@@ -1199,7 +1199,7 @@ gen_serialize_link_c (yajl_val nodes, const char *  fname)
           const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
 
           const char *  type_name = YAJL_GET_STRING (type);
-          
+
           /* Skip all the attributes that are not of type Node.  */
           if (strcmp (type_name, "Node"))
             continue;
@@ -1219,6 +1219,249 @@ gen_serialize_link_c (yajl_val nodes, const char *  fname)
       free (node_name_lower);
       free (node_name_upper);
     }
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+/* Generate serialisation helper functions SHLPmakeNode and SHLPfixLink.  */
+bool
+gen_serialize_helper_c (yajl_val nodes, const char *  fname)
+{
+  FILE *  f;
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER (f, "    Functions needed by de-serialization code.");
+
+  fprintf (f, "#include \"types.h\"\n"
+              "#include \"str.h\"\n"
+              "#include \"memory.h\"\n"
+              "#include \"tree_basic.h\"\n"
+              "#include \"node_alloc.h\"\n"
+              "#include \"serialize.h\"\n"
+              "#include \"stdarg.h\"\n"
+              "#include \"check_mem.h\"\n"
+              "#include \"serialize_stack.h\"\n"
+              "#include \"serialize_helper.h\"\n"
+              "#define DBUG_PREFIX \"SHLP\"\n"
+              "#include \"debug.h\"\n"
+              "\n"
+              "#if !IS_CYGWIN\n"
+              "#  define VA_START(__args, __arg)  va_start (__args, __arg)\n"
+              "#  define VA_END(__args)  va_end (__args)\n"
+              "#else\n"
+              "#  define VA_START(__args, __arg)\n"
+              "#  define VA_END(__args)\n"
+              "#endif\n"
+              "\n"
+              "#ifndef DBUG_OFF\n"
+              "#  define CHECK_NODE(__node, __type)  CHKMisNode (__node, __type)\n"
+              "#else\n"
+              "#  define CHECK_NODE(__node, __type)\n"
+              "#endif\n"
+              "\n"
+              "node *\n"
+              "SHLPmakeNode (int _node_type, char *sfile, size_t lineno, size_t col ...)\n"
+              "{\n"
+              "  node *  result;\n"
+              "  va_list Argp;\n"
+              "\n"
+              "  va_start (Argp, sfile);\n"
+              "  result = SHLPmakeNodeVa (_node_type, sfile, lineno, col, Argp);\n"
+              "  va_end (Argp);\n"
+              "\n"
+              "  return (result);\n"
+              "}\n"
+              "\n"
+              "node *\n"
+              "SHLPmakeNodeVa (int _node_type, char *sfile, size_t lineno, size_t col,\n"
+              "                va_list args)\n"
+              "{\n"
+              "  nodetype node_type = (nodetype) _node_type;\n"
+              "  node *xthis = NULL;\n"
+              "  switch (node_type)\n"
+              "    {\n");
+
+
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      const char *  node_name = YAJL_OBJECT_KEYS (nodes)[i];
+      char *  node_name_lower = string_tolower (node_name);
+      char *  node_name_upper = string_toupper (node_name);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
+      const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_object);
+
+      /* Generate beginning of the 'case'.  */
+      fprintf (f, "    case N_%s:\n"
+                  "      {\n"
+                  "        struct NODE_ALLOC_N_%s *  nodealloc;\n"
+                  "        nodealloc = (struct NODE_ALLOC_N_%s *) MEMmalloc (sizeof *nodealloc);\n"
+                  "        xthis = (node *) &nodealloc->nodestructure;\n"
+                  "        NODE_TYPE (xthis) = node_type;\n"
+                  "        NODE_FILE (xthis) = sfile;\n"
+                  "        NODE_LINE (xthis) = lineno;\n"
+                  "        NODE_COL (xthis) = col;\n"
+                  "        NODE_ERROR (xthis) = NULL;\n"
+                  "\n"
+                  "        CHECK_NODE (xthis, node_type);\n",
+               node_name_lower,
+               node_name_upper,
+               node_name_upper);
+
+      if (sons && YAJL_OBJECT_LENGTH (sons) != 0)
+        fprintf (f, "        xthis->sons.N_%s = (struct SONS_N_%s *) &nodealloc->sonstructure;\n",
+                 node_name_lower, node_name_upper);
+
+      if ((flags && YAJL_OBJECT_LENGTH (flags) != 0)
+          || (attribs && YAJL_OBJECT_LENGTH (attribs) != 0))
+        fprintf (f, "        xthis->attribs.N_%s = (struct ATTRIBS_N_%s *) "
+                                                   "&nodealloc->attributestructure;\n",
+                 node_name_lower, node_name_upper);
+
+      /* Fill the node content.  */
+      if ((sons && YAJL_OBJECT_LENGTH (sons) != 0)
+          || (attribs && YAJL_OBJECT_LENGTH (attribs) != 0))
+        fprintf (f, "        VA_START (args, col);\n");
+
+      for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+
+          const char *  type_name = YAJL_GET_STRING (type);
+          struct attrtype_name *  atn;
+
+          HASH_FIND_STR (attrtype_names, type_name, atn);
+          assert (atn);
+
+          if (!atn->persist)
+            fprintf (f, "        %s_%s (xthis) = %s;\n",
+                    node_name_upper, attrib_name_upper, atn->init);
+          else
+            fprintf (f, "        %s_%s (xthis) = va_args (args, %s);\n",
+                     node_name_upper, attrib_name_upper,
+                     atn->vtype ? atn->vtype : atn->ctype);
+          free (attrib_name_upper);
+        }
+
+
+      /* Traverse Sons.  */
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+          char *  son_name_upper = string_toupper (son_name);
+          fprintf (f, "        %s_%s (xthis) = va_args (args, node *);\n",
+                   node_name_upper, son_name_upper);
+          free (son_name_upper);
+        }
+
+      /* Traverse into Attribs of type Node.  */
+       for (size_t i = 0; flags && i < YAJL_OBJECT_LENGTH (flags); i++)
+        {
+          const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
+          char *  flag_name_upper = string_toupper (flag_name);
+          fprintf (f, "        %s_%s (xthis) = va_args (args, int);\n",
+                   node_name_upper, flag_name_upper);
+          free (flag_name_upper);
+        }
+
+      /* Fill the node content.  */
+      if ((sons && YAJL_OBJECT_LENGTH (sons) != 0)
+          || (attribs && YAJL_OBJECT_LENGTH (attribs) != 0))
+        fprintf (f, "        VA_END (args);\n");
+
+
+      /* Generate function footer.  */
+      fprintf (f, "        break;\n"
+                  "      }\n\n");
+      free (node_name_lower);
+      free (node_name_upper);
+    }
+  
+  fprintf (f, "      default:\n"
+              "        DBUG_UNREACHABLE (\"Invalid node type found\");\n"
+              "      }\n"
+              "\n"
+              "  return (xthis);\n"
+              "}\n\n");
+
+
+  /* Generate SHLPfixLink  */
+  fprintf (f, "void\n"
+              "SHLPfixLink (serstack_t *  stack, int from, int no, int to)\n"
+              "{\n"
+              "  node *  fromp = NULL;\n"
+              "  node *  top = NULL;\n"
+              "\n"
+              "  if (from != SERSTACK_NOT_FOUND)\n"
+              "    {\n"
+              "      fromp = SSlookup (from, stack);\n"
+              "      if (to != SERSTACK_NOT_FOUND)\n"
+              "        top = SSlookup (to, stack);\n"
+              "\n"
+              "      switch (NODE_TYPE (fromp))\n"
+              "        {\n");
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      const char *  node_name = YAJL_OBJECT_KEYS (nodes)[i];
+      char *  node_name_lower = string_tolower (node_name);
+      char *  node_name_upper = string_toupper (node_name);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+
+      fprintf (f, "        case N_%s:\n", node_name_lower);
+      
+      for (size_t i = 0, pos = 1; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          char *  attrib_name_upper = string_toupper (attrib_name);
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+          const char *  type_name = YAJL_GET_STRING (type);
+
+          /* If the type of the attribute is not `Link' or `CodeLink' --- ignore it.  */
+          if (!strcmp (type_name, "Link") || !strcmp (type_name, "CodeLink"))
+            {
+              if (pos == 1)
+                fprintf (f, "          switch (no)\n"
+                            "            {\n");
+
+              fprintf (f, "            case %zu:\n"
+                          "              %s_%s (fromp) = top;\n"
+                          "              break;\n",
+                          pos,
+                          node_name_upper, attrib_name_upper);
+              pos++;
+            }
+
+          /* If we are at the last attribute and we have seen 
+             `Link' or `CodeLink' attributes then generate `default' 
+             case for the `no' switch.  */
+          if (i == YAJL_OBJECT_LENGTH (attribs) - 1 && pos > 1)
+            fprintf (f, "            default:\n"
+                        "              break;\n"
+                        "            }\n");
+
+          free (attrib_name_upper);
+        }
+
+      fprintf (f, "          break;\n");
+      free (node_name_lower);
+      free (node_name_upper);
+    }
+ 
+  fprintf (f, "        default:\n"
+              "          DBUG_UNREACHABLE (\"Invalid node type found\");\n"
+              "        }\n"
+              "    }\n"
+              "}\n\n");          
+
+
+
   GEN_FLUSH_AND_CLOSE (f);
   return true;
 }
