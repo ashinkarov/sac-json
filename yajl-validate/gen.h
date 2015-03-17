@@ -101,6 +101,7 @@ bool gen_serialize_buildstack_h (const char *  fname);
 bool gen_serialize_node_c (yajl_val nodes, const char *  fname);
 bool gen_serialize_link_c (yajl_val nodes, const char *  fname);
 bool gen_serialize_helper_c (yajl_val nodes, const char *  fname);
+bool gen_serialize_buildstack_c (yajl_val nodes, const char *  fname);
 
 
 

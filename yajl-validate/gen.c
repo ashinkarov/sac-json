@@ -1380,7 +1380,7 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
       free (node_name_lower);
       free (node_name_upper);
     }
-  
+
   fprintf (f, "      default:\n"
               "        DBUG_UNREACHABLE (\"Invalid node type found\");\n"
               "      }\n"
@@ -1414,7 +1414,7 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
       const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
 
       fprintf (f, "        case N_%s:\n", node_name_lower);
-      
+
       for (size_t i = 0, pos = 1; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
         {
           const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
@@ -1438,8 +1438,8 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
               pos++;
             }
 
-          /* If we are at the last attribute and we have seen 
-             `Link' or `CodeLink' attributes then generate `default' 
+          /* If we are at the last attribute and we have seen
+             `Link' or `CodeLink' attributes then generate `default'
              case for the `no' switch.  */
           if (i == YAJL_OBJECT_LENGTH (attribs) - 1 && pos > 1)
             fprintf (f, "            default:\n"
@@ -1453,14 +1453,102 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
       free (node_name_lower);
       free (node_name_upper);
     }
- 
+
   fprintf (f, "        default:\n"
               "          DBUG_UNREACHABLE (\"Invalid node type found\");\n"
               "        }\n"
               "    }\n"
-              "}\n\n");          
+              "}\n\n");
 
 
+
+  GEN_FLUSH_AND_CLOSE (f);
+  return true;
+}
+
+
+bool
+gen_serialize_buildstack_c (yajl_val nodes, const char *  fname)
+{
+  FILE *  f;
+  GEN_OPEN_FILE (f, fname);
+  GEN_HEADER (f, "    Functions needed by serialize buildstack traversal.");
+
+  fprintf (f, "#include <stdio.h>\n"
+              "#include \"serialize_buildstack.h\"\n"
+              "#include \"serialize_info.h\"\n"
+              "#include \"serialize_stack.h\"\n"
+              "#include \"tree_basic.h\"\n"
+              "#include \"traverse.h\"\n"
+              "#define DBUG_PREFIX \"SBT\"\n"
+              "#include \"debug.h\"\n\n");
+
+  for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
+    {
+      const char *  node_name = YAJL_OBJECT_KEYS (nodes)[i];
+      char *  node_name_lower = string_tolower (node_name);
+      char *  node_name_upper = string_toupper (node_name);
+      const yajl_val node = YAJL_OBJECT_VALUES (nodes)[i];
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_object);
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_object);
+
+      fprintf (f, "node *\n"
+                  "SBT%s (node *  arg_node, info *  arg_info)\n"
+                  "{\n"
+                  "  DBUG_ENTER ();\n"
+                  "  DBUG_PRINT (\"Stacking Annotate node\");\n"
+                  "  SSpush (arg_node, INFO_SER_STACK (arg_info));\n",
+               node_name_lower);
+
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+
+          /* Skip `Next' and `Body' sons of the node `Fundef'.  */
+          if (!strcmp (node_name, "Fundef")
+                       && (!strcmp (son_name, "Next") || !strcmp (son_name, "Body")))
+            continue;
+
+          /* Skip `Next' son of nodes `Objdef' and `Typedef'.  */
+          if ((!strcmp (node_name, "Objdef") || !strcmp (node_name, "Typedef"))
+              && !strcmp (son_name, "Next"))
+            continue;
+
+          char *  son_name_upper = string_toupper (son_name);
+          fprintf (f, "  if (NULL != %s_%s (arg_node))\n"
+                      "    %s_%s (arg_node) = TRAVdo (%s_%s (arg_node), arg_info);\n\n",
+                   node_name_upper, son_name_upper,
+                   node_name_upper, son_name_upper, node_name_upper, son_name_upper);
+          free (son_name_upper);
+        }
+
+      for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          const yajl_val type = yajl_tree_get (attrib, (const char *[]){"type", 0}, yajl_t_string);
+
+          const char *  type_name = YAJL_GET_STRING (type);
+
+          /* Consider only attributes of type `Node'.  */
+          if (strcmp (type_name, "Node"))
+            continue;
+
+          char *  attrib_name_upper = string_toupper (attrib_name);
+
+          fprintf (f, "  if (NULL != %s_%s (arg_node))\n"
+                      "    %s_%s (arg_node) = TRAVdo (%s_%s (arg_node), arg_info);\n\n",
+                   node_name_upper, attrib_name_upper,
+                   node_name_upper, attrib_name_upper, node_name_upper, attrib_name_upper);
+          free (attrib_name_upper);
+        }
+
+      fprintf (f, "  DBUG_RETURN (arg_node);\n"
+                  "}\n\n");
+
+      free (node_name_lower);
+      free (node_name_upper);
+    }
 
   GEN_FLUSH_AND_CLOSE (f);
   return true;
