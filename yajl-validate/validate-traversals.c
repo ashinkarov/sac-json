@@ -8,6 +8,23 @@
 #include "validator.h"
 #include "validate-traversals.h"
 
+
+static inline bool
+traversal_field_allowed_p (const char *  x)
+{
+  return !strcmp (x, "name")
+         || !strcmp (x, "default")
+         || !strcmp (x, "include")
+         || !strcmp (x, "travuser")
+         || !strcmp (x, "travsons")
+         || !strcmp (x, "travnone")
+         || !strcmp (x, "traverror")
+         || !strcmp (x, "ifndef")
+         || !strcmp (x, "prefun")
+         || !strcmp (x, "postfun");
+}
+
+
 static inline bool
 traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
                           struct traversal_name *  tn, enum trav_node_type tnt)
@@ -82,12 +99,23 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
           return false;
         }
 
-
       yajl_val traversal = YAJL_OBJECT_VALUES (traversals)[i];
       if (!YAJL_IS_OBJECT (traversal))
         {
           json_err ("traversal `%s' must be of json type object", name);
           return false;
+        }
+
+      /* Check that the object contains only allowed fields.  */
+      for (size_t i = 0; i < YAJL_OBJECT_LENGTH (traversal); i++)
+        {
+          const char *  x = YAJL_OBJECT_KEYS (traversal)[i];
+          if (!traversal_field_allowed_p (x))
+            {
+              json_err ("traversal `%s' contains unallowed field `%s'",
+                        name, x);
+              return false;
+            }
         }
 
       /* Check that `default' of the traversal is valid.  */
