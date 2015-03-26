@@ -46,7 +46,7 @@ node as defined by `ast.json`.
 A typical nodeset entry looks as follows:
 
 
-```
+```json
  "Interface": [
      "Import",
      "Export",
@@ -94,7 +94,7 @@ Mandatory fields are `copy`, `ctype` and `init`.
 
 A typical example for the attribute type looks like:
 
-```
+```json
  "FileType": {
      "copy": "literal",
      "ctype": "file_type",
@@ -225,7 +225,7 @@ attributes.
 ### Example ###
 
 A typical example of an AST node looks like this:
-```
+```json
 "Array": {
     "attributes": {
         "Elemtype": {
@@ -390,7 +390,7 @@ Example
 
 A typical example of a traversal object looks like:
 
-```
+```json
 "ACTRAN": {
     "default": "sons",
     "include": "annotate_cond_transfers.h",
