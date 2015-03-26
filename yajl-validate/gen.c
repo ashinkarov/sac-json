@@ -306,7 +306,7 @@ gen_attribs_h (yajl_val nodes, const char *  fname)
 
       char *  node_name_upper = string_toupper (YAJL_OBJECT_KEYS (nodes)[i]);
       char *  node_name_lower = string_tolower (YAJL_OBJECT_KEYS (nodes)[i]);
-      fprintf (f, "  struct ATTRIBS_N_%s N_%s;\n", node_name_upper, node_name_lower);
+      fprintf (f, "  struct ATTRIBS_N_%s *  N_%s;\n", node_name_upper, node_name_lower);
       free (node_name_upper);
       free (node_name_lower);
     }
