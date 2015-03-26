@@ -117,7 +117,8 @@ a node.  Every node is an object that may contain the following fields:
      be called in `check.c` for the given node type during the checking of node
      consistency.  Each function has to have one parameter of type `node *` and
      return `node *`.  The generated check for the function foo will look like:
-     ```c
+     
+     ```C
      xnode = foo  (xnode);
      ```
 
@@ -221,7 +222,80 @@ attributes.
    * Mandatory fields are present.
 
 
+### Example ###
 
+A typical example of an AST node looks like this:
+```
+"Array": {
+    "attributes": {
+        "Elemtype": {
+            "targets": {
+                "phases": "all", 
+                "contains": "any", 
+                "mandatory": true
+            }, 
+            "inconstructor": true, 
+            "type": "NewType", 
+            "description": [
+                "The type of all array elements. The Elemtype may be used to deduce the common shape", 
+                "of those elements."
+            ]
+        }, 
+        "FrameShape": {
+            "targets": {
+                "phases": "all", 
+                "contains": "any", 
+                "mandatory": true
+            }, 
+            "inconstructor": true, 
+            "type": "Shape", 
+            "description": [
+                "The frameshape of the array. The frameshape may NOT be an empty vector, with one", 
+                "simple scalar (e.g., N_num) hanging from AELEMS. Simple scalars must be represented", 
+                "directly as themselves, or via an N_id node."
+            ]
+        }, 
+        "String": {
+            "default": "NULL", 
+            "inconstructor": false, 
+            "type": "String", 
+            "targets": {
+                "phases": "all", 
+                "contains": "any", 
+                "mandatory": false
+            }, 
+            "description": [
+                "In case of constant character arrays defined as strings, this attribute holds the", 
+                "original definition. The definition needs to be safe for printing as a C string,", 
+                "e.g. special characters need to be escaped. TODO: This should be eliminated as soon", 
+                "as possible."
+            ]
+        }
+    }, 
+    "sons": {
+        "AElems": {
+            "targets": {
+                "phases": "all", 
+                "contains": "Exprs", 
+                "mandatory": false
+            }
+        }
+    }, 
+    "flags": {
+        "DummyFlag": {
+            "default": "FALSE"
+        }
+    }, 
+    "description": [
+        "Constant array of array elements. In early phases, the elements are exprs; after", 
+        "the array flattening phase, the elements may be an arbitrary mixture of N_id nodes", 
+        "and/or scalar constant nodes. The shapes of all elements must match. The shape of", 
+        "the array represented by the N_array is the catenation of the ARRAY_FRAMESHAPE and", 
+        "the shape specified by the ELEMTYPE."
+    ]
+}
+
+```
 
 Traversal-related JSON files
 ============================
