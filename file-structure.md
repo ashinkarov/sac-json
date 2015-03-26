@@ -95,11 +95,11 @@ Mandatory fields are `copy`, `ctype` and `init`.
 A typical example for the attribute type looks like:
 
 ```json
- "FileType": {
-     "copy": "literal",
-     "ctype": "file_type",
-     "init": "FT_unknown"
- },
+"FileType": {
+    "copy": "literal",
+    "ctype": "file_type",
+    "init": "FT_unknown"
+}
 ```
 
 
@@ -408,32 +408,32 @@ A typical example of a traversal object looks like:
 
 Generated files
 ===============
-   - ./types/types_trav.h.xsl
-   - ./types/types_nodetype.h.xsl
-   - ./tree/traverse_tables.h.xsl
-   - ./tree/traverse_tables.c.xsl
-   - ./tree/traverse_helper.c.xsl
-   - ./tree/sons.h.xsl
-   - ./tree/node_basic.h.xsl
-   - ./tree/node_basic.c.xsl
-   - ./tree/node_alloc.h.xsl
-   - ./tree/free_node.h.xsl
-   - ./tree/free_node.c.xsl
-   - ./tree/free_attribs.h.xsl
-   - ./tree/check_reset.h.xsl
-   - ./tree/check_reset.c.xsl
-   - ./tree/check_node.h.xsl
-   - ./tree/check_node.c.xsl
-   - ./tree/check.h.xsl
-   - ./tree/check.c.xsl
-   - ./tree/attribs.h.xsl
-   - ./serialize/serialize_node.h.xsl
-   - ./serialize/serialize_node.c.xsl
-   - ./serialize/serialize_link.h.xsl
-   - ./serialize/serialize_link.c.xsl
-   - ./serialize/serialize_helper.c.xsl
-   - ./serialize/serialize_buildstack.h.xsl
-   - ./serialize/serialize_buildstack.c.xsl
-   - ./serialize/serialize_attribs.h.xsl
-   - ./global/node_info.mac.xsl
+   - `types/types_trav.h`
+   - `types/types_nodetype.h`
+   - `tree/traverse_tables.h`
+   - `tree/traverse_tables.c`
+   - `tree/traverse_helper.c`
+   - `tree/sons.h`
+   - `tree/node_basic.h`
+   - `tree/node_basic.c`
+   - `tree/node_alloc.h`
+   - `tree/free_node.h`
+   - `tree/free_node.c`
+   - `tree/free_attribs.h`
+   - `tree/check_reset.h`
+   - `tree/check_reset.c`
+   - `tree/check_node.h`
+   - `tree/check_node.c`
+   - `tree/check.h`
+   - `tree/check.c`
+   - `tree/attribs.h`
+   - `serialize/serialize_node.h`
+   - `serialize/serialize_node.c`
+   - `serialize/serialize_link.h`
+   - `serialize/serialize_link.c`
+   - `serialize/serialize_helper.c`
+   - `serialize/serialize_buildstack.h`
+   - `serialize/serialize_buildstack.c`
+   - `serialize/serialize_attribs.h`
+   - `global/node_info.mac`
 
