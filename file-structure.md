@@ -1,7 +1,7 @@
 File structure of SaC JSON files
 ================================
 
-A number of C files in SaC is generated from JSON configuration files.  This 
+A number of C files in SaC is generated from JSON configuration files.  This
 document describes a structure of these files, things that are validated and
 the files that are generated so far.
 
@@ -99,12 +99,132 @@ A typical example for the attribute type looks like:
      "copy": "literal",
      "ctype": "file_type",
      "init": "FT_unknown"
- }, 
+ },
 ```
 
 
+Abstract Syntax Tree
+--------------------
+
+The `ast.json` file at the top level is an object where every key is the name of
+a node.  Every node is an object that may contain the following fields:
+
+   * `description` (type: array of string) specifies the purpose of the node.
+   * `sons` (type: object) specifies fields of the node of type `node *`.
+   * `attributes` (type: object) specifies fields of the node of varying types.
+   * `flags` (type: object) specifies fields of the node of type boolean.
+   * `checks` (type: array of strings) specifies a list of functions that will
+     be called in `check.c` for the given node type during the checking of node
+     consistency.  Each function has to have one parameter of type `node *` and
+     return `node *`.  The generated check for the function foo will look like:
+     ```c
+     xnode = foo  (xnode);
+     ```
+
+Only `description` is mandatory.  Sons, attributes and flags are of type object,
+where every key specifies a son or an attribute or a flag accordingly.  A son,
+an attribute or a flag are of json type object.
+
+### Son structure ###
+
+A son object may contain fields:
+
+   * `description` (type: array of strings) explains the purpose of the son.
+   * `targets` (type: object or array) specifies possible values that the son may contain
+     during a given phase of compilation.
+   * `default` (type: string) specifies initial value when constructing the
+     node via `TBmake` function.  The absence of this field implies that
+     the son will be passed via the arguments of the `TBmake` function.
+
+### Attribute structure ###
+
+An attribute object contains fields:
+
+   * `description` (type: array of strings) explains the purpose of the
+     attribute.
+
+   * `inconstructor` (type: boolean) specifies if the attribute should be
+     an argument of the `TBmake` function.
+
+   * `type` (type: string) specifies the type of the attribute.  The value of
+     `type` must be a valid attribute type as specified by `attrtypes.json`.
+
+   * `targets` (type: object or array) specifies possible values of the
+     attribute during a given phase of compilation.
+
+   * `default` (type: string) specifies initial value when constructing the
+     node via `TBmake` function.  If `default` is specified, its value
+     is being set to the attribute during `TBmake` even if `inconstructor`
+     is true.  If `inconstructor` is false or `default` is not specified,
+     the `init` value of the attribute type is used.
+
+Fields `type` and `targets` are mandatory.
+
+
+### Flag structure ###
+
+A flag object contains the following fields:
+
+   * `desc` (type: array of strings) describes the purpose of the flag.
+   * `default` (type: string) default value of the flag when the node is
+     created.  In case not present the default value `FALSE` is used.
+
+
+### Targets structure ###
+
+Targets in son or attribute can be either of type object or of type array.
+In case targets are of type array it means that array contains a number of
+targets of type object.
+
+The target object contains the following fields:
+
+   * `phases` specifies phases for which the target is applicable.  The json
+     type  of `phases` can be:
+
+      * string, in which case value `all` specifies that the target is
+        applicable fo all the compilation phaes, otherwise the value is treated
+        as the name of a phase.
+
+      * object, in which case only two fields are allowed: `from` and `to` which
+        specify the starting phase inclusively and the end phase exclusively.
+
+      * array, wherer every element can be a strings or an object.  In such a case
+        every element in the array specifies either the name of a phase or the
+        range of phases.
+
+   * `contains` (type: string or array of strings)  specifies the type of node
+     that a son or an attribute can have.  If the type is string, then only one
+     type of node is allowed, in case it is array, a set of nodes is allowed.
+     When `contains` is a part of an attribute target, the value of contains can
+     be `any`, which means that there are no restrictions on the type of a value.
+     Also, if a type of an attribute is not `node` the `contains` check is
+     ignored.  For nodes value `any` is not allowed.
+
+   * `mandatory` (type: boolean) specifies if a value of the son or the attribute
+     (converted to `intptr_t` type) must be not NULL.
+
+
+Note that arguments of `TBmake` functions are constructed by means of traversing
+sons and attributes, which means that the order in which attributes and sons
+are specified in `ast.json` matters.  It is directly reflected in the order
+of arguments of `TBmake` functions.  Keep this in mind when adding new sons or
+attributes.
+
+
+### Validation ###
+
+   * JSON types match the specification.
+   * Name of each node matches the regular expression `^[A-Z][a-zA-Z0-9_]*$`.
+   * Node names are unique.
+   * Node, Sons, Attributes, Flags and Targets contains only specified fields.
+   * Each node has description and description is of the right type.
+   * Mandatory fields are present.
+
+
+
+
 Traversal-related JSON files
-===========================
+============================
 
 A traversal file at the top level is an object where each key is a name of the
 traversal and the value is an object, describing a traversal.  For example:
@@ -165,16 +285,16 @@ The meaning of the fields are as follows:
       * none (expands to `TRAVnone`)
       * error (expands to `TRAVerror`)
       * user (expands tp `<capital-traversal-name><small-node-name>`, e.g. TRAVXfundef).
-    
+
    * `prefun` (type string) specifies a function that will be called before
       entering the traversal.
-    
+
    * `postfun` (type string) specifies a function that will be called after
       the traversal.
 
    * `ifndef` (type string) specifies a macro name which will be used as
       an argument to `#ifdef` statement allowing to conditionalise traversal
-      functions and pre/post functions.  In case the macro specified by the 
+      functions and pre/post functions.  In case the macro specified by the
       `ifdef` filed is defined at the moment of compilation,
       the traversal functions will be generated as usual, otherwise pre and
       post functions will be ignored and `TRAVerror` will be called for every

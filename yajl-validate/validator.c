@@ -92,6 +92,7 @@ main (void)
   GET_OUT_IF (!load_attrtype_names (attrtype_node, attrtype_fname));
   GET_OUT_IF (!load_and_validate_nodesets (nodeset_node, nodeset_fname));
   GET_OUT_IF (!load_and_validate_traversals (traversal_node, traversal_fname));
+  GET_OUT_IF (!validate_ast (ast_node));
 
   /* TODO Files to generate:
 

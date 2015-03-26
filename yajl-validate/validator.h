@@ -51,15 +51,15 @@ trav_node_type_name (enum trav_node_type n)
 {
   switch (n)
     {
-  case tnt_user:
+    case tnt_user:
       return "travuser";
-  case tnt_sons:
+    case tnt_sons:
       return "travsons";
-  case tnt_error:
+    case tnt_error:
       return "traverror";
-  case tnt_none:
+    case tnt_none:
       return "travnone";
-  default:
+    default:
       assert (false);
     }
 }
