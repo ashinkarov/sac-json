@@ -766,6 +766,8 @@
       <traversal id="POGO" name="Polyhedral Guard Optimization" default="sons" include="polyhedral_guard_optimization.h" >
         <travuser>
           <node name="Fundef" />
+          <node name="Part" />
+          <node name="With" />
           <node name="Assign" />
           <node name="Let" />
           <node name="Prf" />
@@ -2306,6 +2308,20 @@
        <node name="Let" />
        <node name="With" />
        <node name="Code" />
+     </travuser>
+   </traversal>
+   <traversal id="PWLFI" name="Polyhedral With-Loop-Folding Inference" default="sons" include="polyhedral_wlfi.h" >
+     <travuser>
+        <node name="Fundef"  />
+        <node name="Block"   />
+        <node name="Assign"  />
+        <node name="Let"  />
+        <node name="Id"  />
+        <node name="Cond" />
+        <node name="With"    />
+        <node name="Modarray"    />
+        <node name="Part"    />
+        <node name="Prf"     />
      </travuser>
    </traversal>
    <traversal id="AWLFI" name="Algebraic With-Loop-Folding Inference" default="sons" include="algebraic_wlfi.h" >
@@ -6383,7 +6399,7 @@ N_tfarg :
         </flag>
       </flags>
       <checks>
-        <check name="CHKassignAvisSSAAssign" />
+        <check name="CHKattribsAssign" />
       </checks>
     </node>
 <!--
@@ -8400,7 +8416,7 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="SSAAssign" inconstructor="no" >
+        <attribute name="SSAAssign" default="NULL" inconstructor="no" >
           <description>
             provides a direct link to the N_assign node containing the definition of the identifier represented by this AVIS node. In SSA form, AVIS_SSAASSIGN must only be NULL for identifiers for function arguments and with-loop index variables.
           </description>
@@ -8754,7 +8770,28 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                 <range name="opt_saacyc_pogo" />
+                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>	 
+	<attribute name="Npart" default="NULL" >
+	  <description> 
+	  Pointer to the N_part that defines this variable, if
+	  the variable is a WITHID_IDS or WITHID_VEC. It is 
+	  used by POGO (and other polyhedral codes) to locate the
+	  N_part that defines the variable, along with its generators.
+	  It is NOT defined except within the scope of 
+	  a specific traversal that descends through N_part nodes.
+	  In particular, it is set to NULL when we exit the N_part.
+	  </description>
+          <type name="Link">
+            <targets>
+              <target mandatory="no">
+                <any />
+                <phases>
+                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
                 </phases>
               </target>
             </targets>
@@ -8977,15 +9014,10 @@ N_tfarg :
 	  more than once.
 	  </description>
         </flag>	 
-	<flag name="IsAffineHandled" default="FALSE" >
-	  <description> 
-	  Used by PHUT to mark N_avis nodes whose values have
-	  been traversed.
-	  </description>
-        </flag>	 
       </flags>
     <checks>
       <check name="CHKavisReflection" />
+      <check name="CHKavisSsaassignNodeType" />
     </checks>
     </node>
 <!--
@@ -11618,6 +11650,9 @@ N_tfarg :
         </attribute>
       </attributes>
       <flags> <flag name="DummyFlag" default="FALSE"/> </flags>
+    <checks>
+      <check name="CHKattribsIds" />
+    </checks>
     </node>
 <!--
 

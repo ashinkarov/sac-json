@@ -3050,6 +3050,8 @@
         "name": "Polyhedral Guard Optimization", 
         "travuser": [
             "Fundef", 
+            "Part", 
+            "With", 
             "Assign", 
             "Let", 
             "Prf"
@@ -3092,6 +3094,23 @@
             "IdagEFam", 
             "IdagEFams", 
             "IdagVertices"
+        ]
+    }, 
+    "PWLFI": {
+        "default": "sons", 
+        "include": "polyhedral_wlfi.h", 
+        "name": "Polyhedral With-Loop-Folding Inference", 
+        "travuser": [
+            "Fundef", 
+            "Block", 
+            "Assign", 
+            "Let", 
+            "Id", 
+            "Cond", 
+            "With", 
+            "Modarray", 
+            "Part", 
+            "Prf"
         ]
     }, 
     "RC": {

@@ -2555,7 +2555,7 @@
                 }
             ], 
             "checks": [
-                "CHKassignAvisSSAAssign"
+                "CHKattribsAssign"
             ], 
             "description": "Spine of an N_block"
         }, 
@@ -4439,11 +4439,6 @@
                     "default": "FALSE", 
                     "name": "IsScalarized", 
                     "desc": "Used by LACSO to indicate that a small array\n\t  argument or result has been scalarized. Its only\n\t  function is to prevent us from doing the scalarization\n\t  more than once."
-                }, 
-                {
-                    "default": "FALSE", 
-                    "name": "IsAffineHandled", 
-                    "desc": "Used by PHUT to mark N_avis nodes whose values have\n\t  been traversed."
                 }
             ], 
             "attributes": [
@@ -4549,6 +4544,10 @@
                     }
                 }, 
                 {
+                    "name": "SSAAssign", 
+                    "default": "NULL", 
+                    "inconstructor": "no", 
+                    "type": "Link", 
                     "targets": {
                         "phases": {
                             "to": "ussa_ussa", 
@@ -4557,9 +4556,6 @@
                         "contains": "Assign", 
                         "mandatory": "no"
                     }, 
-                    "inconstructor": "no", 
-                    "type": "Link", 
-                    "name": "SSAAssign", 
                     "description": "provides a direct link to the N_assign node containing the definition of the identifier represented by this AVIS node. In SSA form, AVIS_SSAASSIGN must only be NULL for identifiers for function arguments and with-loop index variables."
                 }, 
                 {
@@ -4856,17 +4852,35 @@
                 {
                     "default": "-1", 
                     "targets": {
-                        "phases": "opt_saacyc_pogo", 
+                        "phases": {
+                            "to": "opt_saacyc_pogo", 
+                            "from": "opt_saacyc_pogo"
+                        }, 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
                     "type": "Integer", 
                     "name": "PolylibColumnIndex", 
                     "description": "This is used by PHUTcollectAffineExprs to assign an\n\t  origin-1 column number to each distinct name found in\n\t  any particular affine expression tree."
+                }, 
+                {
+                    "default": "NULL", 
+                    "targets": {
+                        "phases": {
+                            "to": "opt_saacyc_pogo", 
+                            "from": "opt_saacyc_pogo"
+                        }, 
+                        "contains": "any", 
+                        "mandatory": "no"
+                    }, 
+                    "type": "Link", 
+                    "name": "Npart", 
+                    "description": "Pointer to the N_part that defines this variable, if\n\t  the variable is a WITHID_IDS or WITHID_VEC. It is \n\t  used by POGO (and other polyhedral codes) to locate the\n\t  N_part that defines the variable, along with its generators.\n\t  It is NOT defined except within the scope of \n\t  a specific traversal that descends through N_part nodes.\n\t  In particular, it is set to NULL when we exit the N_part."
                 }
             ], 
             "checks": [
-                "CHKavisReflection"
+                "CHKavisReflection", 
+                "CHKavisSsaassignNodeType"
             ], 
             "description": "Arg and vardec information structure"
         }, 
@@ -7263,7 +7277,10 @@
                     "name": "DummyFlag"
                 }
             ], 
-            "name": "Ids"
+            "name": "Ids", 
+            "checks": [
+                "CHKattribsIds"
+            ]
         }, 
         {
             "attributes": [
