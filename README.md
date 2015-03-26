@@ -34,39 +34,39 @@ Progress
 ========
 
 The migration plan includes:
-  - [x] Converting `xml.ast' into `*.json'
-  - [x] Writing a validator for `*.json'
-  - [ ] Documenting the structure of `*.json' files
+  - [x] Converting `xml.ast` into `*.json`
+  - [x] Writing a validator for `*.json`
+  - [x] Documenting the structure of `*.json` files
   - [ ] Porting the HTML page (partially done)
-  - [ ] Porting the existing XSLT files
-   - [x] ./types/types_trav.h.xsl
-   - [x] ./types/types_nodetype.h.xsl
-   - [x] ./tree/traverse_tables.h.xsl
-   - [x] ./tree/traverse_tables.c.xsl
-   - [x] ./tree/traverse_helper.c.xsl
-   - [x] ./tree/sons.h.xsl
-   - [x] ./tree/node_basic.h.xsl
-   - [x] ./tree/node_basic.c.xsl
-   - [x] ./tree/node_alloc.h.xsl
-   - [x] ./tree/free_node.h.xsl
-   - [x] ./tree/free_node.c.xsl
-   - [x] ./tree/free_attribs.h.xsl
-   - [x] ./tree/check_reset.h.xsl
-   - [x] ./tree/check_reset.c.xsl
-   - [x] ./tree/check_node.h.xsl
-   - [x] ./tree/check_node.c.xsl
-   - [x] ./tree/check.h.xsl
-   - [x] ./tree/check.c.xsl
-   - [x] ./tree/attribs.h.xsl
-   - [x] ./serialize/serialize_node.h.xsl
-   - [x] ./serialize/serialize_node.c.xsl
-   - [x] ./serialize/serialize_link.h.xsl
-   - [x] ./serialize/serialize_link.c.xsl
-   - [x] ./serialize/serialize_helper.c.xsl
-   - [x] ./serialize/serialize_buildstack.h.xsl
-   - [x] ./serialize/serialize_buildstack.c.xsl
-   - [x] ./serialize/serialize_attribs.h.xsl
-   - [x] ./global/node_info.mac.xsl
+  - [x] Porting the existing XSLT files
+   - [x] types/types_trav.h.xsl
+   - [x] types/types_nodetype.h.xsl
+   - [x] tree/traverse_tables.h.xsl
+   - [x] tree/traverse_tables.c.xsl
+   - [x] tree/traverse_helper.c.xsl
+   - [x] tree/sons.h.xsl
+   - [x] tree/node_basic.h.xsl
+   - [x] tree/node_basic.c.xsl
+   - [x] tree/node_alloc.h.xsl
+   - [x] tree/free_node.h.xsl
+   - [x] tree/free_node.c.xsl
+   - [x] tree/free_attribs.h.xsl
+   - [x] tree/check_reset.h.xsl
+   - [x] tree/check_reset.c.xsl
+   - [x] tree/check_node.h.xsl
+   - [x] tree/check_node.c.xsl
+   - [x] tree/check.h.xsl
+   - [x] tree/check.c.xsl
+   - [x] tree/attribs.h.xsl
+   - [x] serialize/serialize_node.h.xsl
+   - [x] serialize/serialize_node.c.xsl
+   - [x] serialize/serialize_link.h.xsl
+   - [x] serialize/serialize_link.c.xsl
+   - [x] serialize/serialize_helper.c.xsl
+   - [x] serialize/serialize_buildstack.h.xsl
+   - [x] serialize/serialize_buildstack.c.xsl
+   - [x] serialize/serialize_attribs.h.xsl
+   - [x] global/node_info.mac.xsl
   - [ ] Replacing serialisation with json-based conversions
   - [ ] Introducing dump/restore at every phase.
 
@@ -74,8 +74,8 @@ The migration plan includes:
 Structure of the code
 =====================
 
-  * The `ast.xml' is the current XML-based description of the AST.
-  * `*.py' are scripts to convert XML to JSON and do some cleanup.
+  * The `ast.xml` is the current XML-based description of the AST.
+  * `*.py` are scripts to convert XML to JSON and do some cleanup.
   * The validation and code generation are in `yajl-validate`.
   * The HTML page is in the `html' directory.
 
