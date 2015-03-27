@@ -967,7 +967,7 @@ gen_serialize_buildstack_h (const char *  fname)
         continue;
 
       char *  name_lower = string_tolower (nn->name);
-      fprintf (f, "node *  SBTL%s (node *  arg_node, info *  arg_info);\n", name_lower);
+      fprintf (f, "node *  SBT%s (node *  arg_node, info *  arg_info);\n", name_lower);
       free (name_lower);
     }
 
