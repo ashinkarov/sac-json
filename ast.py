@@ -91,9 +91,7 @@ def parse_phases (ph):
         return "all"
 
 def parse_target (t):
-    # attribs: 'mandatory'
-    target_types = []
-    target_set = None
+    target_values = []
     if "mandatory" in t.attrib:
         mandatory = t.attrib["mandatory"]
     else:
@@ -103,29 +101,26 @@ def parse_target (t):
 
     for tc in t:
         if tc.tag == "node":
-            target_types.append (tc.attrib["name"])
+            target_values.append (tc.attrib["name"])
         elif tc.tag == "set":
-            assert target_set is None
-            target_set = tc.attrib["name"]
+            target_values.append (tc.attrib["name"])
         elif tc.tag == "phases":
             phases = parse_phases (tc)
         elif tc.tag == "any":
-            target_set = "any"
+            target_values.append ("any")
         elif tc.tag == "unknown":
-            taget_set = "any"
+            # FIXME this is weird, and shouldn't be any
+            #target_values.append ("any")
+            pass
         else:
             die ("unknown tag `%s' found in target" % tc.tag)
 
-    # Actually this is attaly stupid, as currently it is allowed to
-    # have set and node being set together, which is excessive
-    # as just node is enough.
+    if target_values == []:
+        target_values = "any"
+    elif len (target_values) == 1:
+        target_values = target_values[0]
 
-    tt = target_set if target_set is not None else "any"
-    if target_types != []:
-        tt = target_types
-        if len (tt) == 1:
-            tt = tt[0]
-    return {"mandatory": mandatory, "contains": tt, "phases": phases}
+    return {"mandatory": mandatory, "contains": target_values, "phases": phases}
 
 
 def parse_targets (ts):

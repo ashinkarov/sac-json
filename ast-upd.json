@@ -3030,7 +3030,10 @@
             "Expr": {
                 "targets": {
                     "phases": "all", 
-                    "contains": "Exprs", 
+                    "contains": [
+                        "Expr", 
+                        "Exprs"
+                    ], 
                     "mandatory": true
                 }
             }, 
