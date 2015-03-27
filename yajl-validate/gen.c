@@ -1244,32 +1244,11 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
               "#define DBUG_PREFIX \"SHLP\"\n"
               "#include \"debug.h\"\n"
               "\n"
-              "#if !IS_CYGWIN\n"
-              "#  define VA_START(__args, __arg)  va_start (__args, __arg)\n"
-              "#  define VA_END(__args)  va_end (__args)\n"
-              "#else\n"
-              "#  define VA_START(__args, __arg)\n"
-              "#  define VA_END(__args)\n"
-              "#endif\n"
-              "\n"
               "#ifndef DBUG_OFF\n"
               "#  define CHECK_NODE(__node, __type)  CHKMisNode (__node, __type)\n"
               "#else\n"
               "#  define CHECK_NODE(__node, __type)\n"
               "#endif\n"
-              "\n"
-              "node *\n"
-              "SHLPmakeNode (int _node_type, char *sfile, size_t lineno, size_t col ...)\n"
-              "{\n"
-              "  node *  result;\n"
-              "  va_list Argp;\n"
-              "\n"
-              "  va_start (Argp, sfile);\n"
-              "  result = SHLPmakeNodeVa (_node_type, sfile, lineno, col, Argp);\n"
-              "  va_end (Argp);\n"
-              "\n"
-              "  return (result);\n"
-              "}\n"
               "\n"
               "node *\n"
               "SHLPmakeNodeVa (int _node_type, char *sfile, size_t lineno, size_t col,\n"
@@ -1319,11 +1298,6 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
                                                    "&nodealloc->attributestructure;\n",
                  node_name_lower, node_name_upper);
 
-      /* Fill the node content.  */
-      if ((sons && YAJL_OBJECT_LENGTH (sons) != 0)
-          || (attribs && YAJL_OBJECT_LENGTH (attribs) != 0))
-        fprintf (f, "        VA_START (args, col);\n");
-
       for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
         {
           const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
@@ -1341,7 +1315,7 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
             fprintf (f, "        %s_%s (xthis) = %s;\n",
                     node_name_upper, attrib_name_upper, atn->init);
           else
-            fprintf (f, "        %s_%s (xthis) = va_args (args, %s);\n",
+            fprintf (f, "        %s_%s (xthis) = va_arg (args, %s);\n",
                      node_name_upper, attrib_name_upper,
                      atn->vtype ? atn->vtype : atn->ctype);
           free (attrib_name_upper);
@@ -1353,7 +1327,7 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
         {
           const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
           char *  son_name_upper = string_toupper (son_name);
-          fprintf (f, "        %s_%s (xthis) = va_args (args, node *);\n",
+          fprintf (f, "        %s_%s (xthis) = va_arg (args, node *);\n",
                    node_name_upper, son_name_upper);
           free (son_name_upper);
         }
@@ -1363,16 +1337,10 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
         {
           const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
           char *  flag_name_upper = string_toupper (flag_name);
-          fprintf (f, "        %s_%s (xthis) = va_args (args, int);\n",
+          fprintf (f, "        %s_%s (xthis) = va_arg (args, int);\n",
                    node_name_upper, flag_name_upper);
           free (flag_name_upper);
         }
-
-      /* Fill the node content.  */
-      if ((sons && YAJL_OBJECT_LENGTH (sons) != 0)
-          || (attribs && YAJL_OBJECT_LENGTH (attribs) != 0))
-        fprintf (f, "        VA_END (args);\n");
-
 
       /* Generate function footer.  */
       fprintf (f, "        break;\n"
@@ -1386,7 +1354,20 @@ gen_serialize_helper_c (yajl_val nodes, const char *  fname)
               "      }\n"
               "\n"
               "  return (xthis);\n"
-              "}\n\n");
+              "}\n\n" 
+              "\n"
+              "node *\n"
+              "SHLPmakeNode (int _node_type, char *sfile, size_t lineno, size_t col, ...)\n"
+              "{\n"
+              "  node *  result;\n"
+              "  va_list argp;\n"
+              "\n"
+              "  va_start (argp, col);\n"
+              "  result = SHLPmakeNodeVa (_node_type, sfile, lineno, col, argp);\n"
+              "  va_end (argp);\n"
+              "\n"
+              "  return (result);\n"
+              "}\n");
 
 
   /* Generate SHLPfixLink  */
