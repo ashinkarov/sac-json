@@ -1214,7 +1214,7 @@ gen_serialize_link_c (yajl_val nodes, const char *  fname)
 
 
       /* Generate function footer.  */
-      fprintf (f, "  DBUG_RETURN (arg_nde);\n"
+      fprintf (f, "  DBUG_RETURN (arg_node);\n"
                   "}\n\n");
       free (node_name_lower);
       free (node_name_upper);
