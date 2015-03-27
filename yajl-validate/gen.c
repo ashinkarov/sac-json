@@ -621,7 +621,7 @@ gen_free_node_c (yajl_val nodes, const char *  fname)
         }
 
       if (!strcmp (node_name, "Fundef"))
-        fprintf (f, "  DBUG_RETURN (result);\n"
+        fprintf (f, "  DBUG_RETURN (arg_node);\n"
                     "}\n\n");
       else
         {
