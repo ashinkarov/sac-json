@@ -289,6 +289,7 @@ gen_node_son_check (FILE *  f, yajl_val nodesets, const char *  node_name_upper,
     {
       assert (nn->name_type == nnt_nodeset);
       const yajl_val ns = yajl_tree_get (nodesets, (const char *[]){x, 0}, yajl_t_array);
+      assert (ns);
 
       for (size_t i = 0; i < YAJL_ARRAY_LENGTH (ns); i++)
         {
