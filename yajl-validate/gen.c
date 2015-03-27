@@ -1009,7 +1009,7 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
 
       /* Generate a function header.  */
       fprintf (f, "node *\n"
-                  "SET%s (node *  arg_node, node *  arg_info)\n"
+                  "SET%s (node *  arg_node, info *  arg_info)\n"
                   "{\n"
                   "  DBUG_ENTER ();\n"
                   "  DBUG_PRINT (\"Serialising `%s' node\");\n"
@@ -1091,7 +1091,7 @@ gen_serialize_node_c (yajl_val nodes, const char *  fname)
 
       /* Generate function footer.  */
       fprintf (f, "  fprintf (INFO_SER_FILE (arg_info), \")\");\n"
-                  "  DBUG_RETURN (arg_nde);\n"
+                  "  DBUG_RETURN (arg_node);\n"
                   "}\n\n");
       free (node_name_lower);
       free (node_name_upper);
