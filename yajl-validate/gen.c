@@ -204,7 +204,7 @@ gen_free_node_h (yajl_val nodes, const char *  fname)
   for (size_t i = 0; i < YAJL_OBJECT_LENGTH (nodes); i++)
     {
       char *  node_name_lower = string_tolower (YAJL_OBJECT_KEYS (nodes)[i]);
-      fprintf (f, "node *  FREE%s (node *  arg_node, node *  arg_info);\n", node_name_lower);
+      fprintf (f, "node *  FREE%s (node *  arg_node, info *  arg_info);\n", node_name_lower);
       free (node_name_lower);
     }
 
