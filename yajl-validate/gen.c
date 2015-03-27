@@ -867,7 +867,7 @@ gen_serialize_attribs_h (const char *  fname)
          FIXME: During the seriliazation all the parameters may become constant
          as serialization should not change them.  */
       if (!strcmp (atn->name, "String"))
-        const_qual = "char ";
+        const_qual = "const ";
 
       fprintf (f, "void SATserialize%s (info *, %s%s, node *);\n",
                atn->name, const_qual, atn->ctype);
