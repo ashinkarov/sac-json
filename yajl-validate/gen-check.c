@@ -158,7 +158,7 @@ gen_contains_item (FILE *  f, const char *  contains_name, const char *  node_na
       char *  contains_name_lower = string_tolower (contains_name);
       fprintf (f, "%sNODE_TYPE (%s_%s (arg_node)) != N_%s",
                is_first ? "" : " && ",
-               son_name_upper, node_name_upper,
+               node_name_upper, son_name_upper,
                contains_name_lower);
       free (contains_name_lower);
     }
@@ -166,7 +166,7 @@ gen_contains_item (FILE *  f, const char *  contains_name, const char *  node_na
     fprintf (f, "%s!is%s (%s_%s (arg_node))",
              is_first ? "" : " && ",
              contains_name,
-             son_name_upper, node_name_upper);
+             node_name_upper, son_name_upper);
 
 }
 
