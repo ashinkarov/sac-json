@@ -192,6 +192,9 @@ gen_traverse_tables_c (yajl_val nodes, yajl_val traversals, const char *  fname)
   GEN_OPEN_FILE (f, fname);
   GEN_HEADER (f, "   This file defines the function tables for traversal");
 
+  fprintf (f, "#include \"traverse_tables.h\"\n"
+              "#include \"traverse_helper.h\"\n\n");
+
   /* First we generate the list of includes.  */
   for (size_t i = 0; i < YAJL_OBJECT_LENGTH (traversals); i++)
     {
