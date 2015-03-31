@@ -499,83 +499,83 @@ validate_ast (const yajl_val ast)
             }
         }
 
-        const yajl_val description = yajl_tree_get (node, (const char *[]){"description", 0}, yajl_t_any);
+      const yajl_val description = yajl_tree_get (node, (const char *[]){"description", 0}, yajl_t_any);
 
-        /* Check that description is present.  */
-        if (!description)
-          {
-            //json_err ("node `%s' does not specify mandatory field `description'", name);
-            // FIXME turn this on when all the descriptions are fixed;
-            //return false;
-          }
+      /* Check that description is present.  */
+      if (!description)
+        {
+          //json_err ("node `%s' does not specify mandatory field `description'", name);
+          // FIXME turn this on when all the descriptions are fixed;
+          //return false;
+        }
 
-        if (!validate_description (name, "", description))
+      if (!validate_description (name, "", description))
+        return false;
+
+
+      const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_any);
+      /* If attributes exist, check that they are of the right json type.  */
+      if (attribs && !YAJL_IS_OBJECT (attribs))
+        {
+          json_err ("`attributes` field of node `%s' must be of type object", name);
           return false;
+        }
 
+      for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+        {
+          const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
+          const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
+          if (!validate_attribute (name, attrib_name, attrib))
+            return false;
+        }
 
-        const yajl_val attribs = yajl_tree_get (node, (const char *[]){"attributes", 0}, yajl_t_any);
-        /* If attributes exist, check that they are of the right json type.  */
-        if (attribs && !YAJL_IS_OBJECT (attribs))
+      const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_any);
+      /* If sons exist, check that they are of the right json type.  */
+      if (sons && !YAJL_IS_OBJECT (sons))
+        {
+          json_err ("`sons` field of node `%s' must be of type object", name);
+          return false;
+        }
+
+      for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
+        {
+          const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
+          const yajl_val son = YAJL_OBJECT_VALUES (sons)[i];
+          if (!validate_son (name, son_name, son))
+            return false;
+        }
+
+      const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_any);
+      /* If flags exist, check that they are of the right json type.  */
+      if (flags && !YAJL_IS_OBJECT (flags))
+        {
+          json_err ("`flags` field of node `%s' must be of type object", name);
+          return false;
+        }
+
+      for (size_t i = 0; flags && i < YAJL_OBJECT_LENGTH (flags); i++)
+        {
+          const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
+          const yajl_val flag = YAJL_OBJECT_VALUES (flags)[i];
+          if (!validate_flag (name, flag_name, flag))
+            return false;
+        }
+
+      const yajl_val checks = yajl_tree_get (node, (const char *[]){"checks", 0}, yajl_t_any);
+      if (checks)
+        if (!YAJL_IS_ARRAY (checks))
           {
-            json_err ("`attributes` field of node `%s' must be of type object", name);
+            json_err ("`checks' field of node `%s' must be of type array", name);
             return false;
           }
 
-        for (size_t i = 0; attribs && i < YAJL_OBJECT_LENGTH (attribs); i++)
+      for (size_t i = 0; checks && i < YAJL_ARRAY_LENGTH (checks); i++)
+        if (!YAJL_IS_STRING (YAJL_ARRAY_VALUES (checks)[i]))
           {
-            const char *  attrib_name = YAJL_OBJECT_KEYS (attribs)[i];
-            const yajl_val attrib = YAJL_OBJECT_VALUES (attribs)[i];
-            if (!validate_attribute (name, attrib_name, attrib))
-              return false;
-          }
-
-        const yajl_val sons = yajl_tree_get (node, (const char *[]){"sons", 0}, yajl_t_any);
-        /* If sons exist, check that they are of the right json type.  */
-        if (sons && !YAJL_IS_OBJECT (sons))
-          {
-            json_err ("`sons` field of node `%s' must be of type object", name);
+            json_err ("the item #%zu of `checks' in the node `%s' must be string",
+                      i+1, name);
             return false;
           }
-
-        for (size_t i = 0; sons && i < YAJL_OBJECT_LENGTH (sons); i++)
-          {
-            const char *  son_name = YAJL_OBJECT_KEYS (sons)[i];
-            const yajl_val son = YAJL_OBJECT_VALUES (sons)[i];
-            if (!validate_son (name, son_name, son))
-              return false;
-          }
-
-        const yajl_val flags = yajl_tree_get (node, (const char *[]){"flags", 0}, yajl_t_any);
-        /* If flags exist, check that they are of the right json type.  */
-        if (flags && !YAJL_IS_OBJECT (flags))
-          {
-            json_err ("`flags` field of node `%s' must be of type object", name);
-            return false;
-          }
-
-        for (size_t i = 0; flags && i < YAJL_OBJECT_LENGTH (flags); i++)
-          {
-            const char *  flag_name = YAJL_OBJECT_KEYS (flags)[i];
-            const yajl_val flag = YAJL_OBJECT_VALUES (flags)[i];
-            if (!validate_flag (name, flag_name, flag))
-              return false;
-          }
-
-        const yajl_val checks = yajl_tree_get (node, (const char *[]){"checks", 0}, yajl_t_any);
-        if (checks)
-          if (!YAJL_IS_ARRAY (checks))
-            {
-              json_err ("`checks' field of node `%s' must be of type array", name);
-              return false;
-            }
-
-        for (size_t i = 0; checks && i < YAJL_ARRAY_LENGTH (checks); i++)
-          if (!YAJL_IS_STRING (YAJL_ARRAY_VALUES (checks)[i]))
-            {
-              json_err ("the item #%zu of `checks' in the node `%s' must be string",
-                        i+1, name);
-              return false;
-            }
     }
 
   return true;
