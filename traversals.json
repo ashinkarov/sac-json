@@ -118,14 +118,12 @@
     "APC": {
         "default": "sons", 
         "include": "pad_collect.h", 
-        "name": "Array Padding Collect", 
-        "travuser": []
+        "name": "Array Padding Collect"
     }, 
     "APT": {
         "default": "sons", 
         "include": "pad_transform.h", 
-        "name": "Array Padding Transform", 
-        "travuser": []
+        "name": "Array Padding Transform"
     }, 
     "ARMP": {
         "default": "sons", 
@@ -192,9 +190,6 @@
         "default": "sons", 
         "include": "assignments_rearrange.h", 
         "name": "Assignments Rearrange", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Block"
         ]
@@ -303,9 +298,6 @@
         "default": "sons", 
         "include": "create_dataflowgraph.h", 
         "name": "Create Dataflowgraph", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Assign", 
             "Block", 
@@ -317,9 +309,6 @@
         "default": "sons", 
         "include": "cell_growth.h", 
         "name": "Cell Growth", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Assign", 
             "Block"
@@ -516,9 +505,6 @@
         "default": "sons", 
         "include": "consolidate_cells.h", 
         "name": "Consolidate Cells", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "EX", 
             "Fundef", 
@@ -566,9 +552,6 @@
         "default": "sons", 
         "include": "create_cells.h", 
         "name": "Create Cells", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Assign", 
             "Block"
@@ -591,9 +574,6 @@
         "default": "sons", 
         "include": "create_withinwith.h", 
         "name": "Create Withinwith Replication", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Ap", 
             "Assign", 
@@ -716,7 +696,6 @@
             "Fundef", 
             "Id", 
             "Ids", 
-            "Code", 
             "Prf"
         ]
     }, 
@@ -1267,8 +1246,6 @@
         "name": "Data reuse", 
         "travsons": [
             "Module", 
-            "With", 
-            "With2", 
             "Block"
         ], 
         "travuser": [
@@ -1887,8 +1864,7 @@
             "SPAp", 
             "Prf", 
             "Assign", 
-            "SetWL", 
-            "SPId"
+            "SetWL"
         ]
     }, 
     "HM": {
@@ -2702,8 +2678,7 @@
     "MSS": {
         "default": "sons", 
         "include": "move_sync_statement.h", 
-        "name": "Moving Sync Statements", 
-        "travuser": []
+        "name": "Moving Sync Statements"
     }, 
     "MTAS": {
         "default": "sons", 
@@ -2753,8 +2728,7 @@
     "MTRAN": {
         "default": "sons", 
         "include": "minimize_transfers.h", 
-        "name": "Minimise the number of device-host data transfers", 
-        "travuser": []
+        "name": "Minimise the number of device-host data transfers"
     }, 
     "MTRMI": {
         "default": "sons", 
@@ -2929,9 +2903,6 @@
         "default": "sons", 
         "include": "propagate_executionmode.h", 
         "name": "Propagate Executionmode", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Ap", 
             "Assign", 
@@ -3256,9 +3227,6 @@
         "default": "sons", 
         "include": "replicate_functions.h", 
         "name": "Replicate Functions", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Ap", 
             "Assign", 
@@ -3807,9 +3775,6 @@
         "default": "sons", 
         "include": "tag_executionmode.h", 
         "name": "Tag Executionmode", 
-        "traverror": [], 
-        "travnone": [], 
-        "travsons": [], 
         "travuser": [
             "Ap", 
             "Array", 
@@ -4361,7 +4326,6 @@
         "include": "wl_split_dimensions.h", 
         "name": "With-Loop Split Dimensions", 
         "traverror": [
-            "WLblock", 
             "WLublock"
         ], 
         "travuser": [

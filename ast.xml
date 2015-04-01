@@ -1116,7 +1116,6 @@
 		  <node name="Prf" />
 		  <node name="Assign" />
 		  <node name="SetWL" />
-		  <node name="SPId" />
 		</travuser>
 	      </traversal>
 	      <traversal id="CSGD" name="Check and Simplify Generic Definitions" default="sons" include="check_and_simplify_generic_definitions.h">
@@ -1638,7 +1637,6 @@
 	  <node name="Fundef" />
 	  <node name="Id" />
 	  <node name="Ids" />
-    <node name="Code" />
     <node name="Prf" />
 	</travuser>
       </traversal>
@@ -2547,7 +2545,6 @@
 </travuser>
 <traverror>
   <!-- blocking is not supported for now. -->
-  <node name="WLblock" />
   <node name="WLublock" />
 </traverror>
     </traversal>
@@ -2717,8 +2714,6 @@
       </travuser>
       <travsons>
         <node name="Module" />
-        <node name="With" />
-        <node name="With2" />
         <node name="Block" />
       </travsons>
     </traversal>
@@ -4361,7 +4356,7 @@ N_tfvertex :
           <type name="VertexWrapper">
             <targets>
               <target mandatory="yes">
-                <node name="vertex" />
+                <node name="Tfvertex" />
                 <phases>
                   <all/>
                 </phases>
@@ -5108,7 +5103,7 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="SymbolName" default="NULL" mandatory="no" inconstructor="no">
+        <attribute name="SymbolName" default="NULL" inconstructor="no">
           <type name="String">
             <targets>
               <target mandatory="no">
@@ -5157,7 +5152,7 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="FunNo" default="0" mandatory="no" inconstructor="no">
+        <attribute name="FunNo" default="0" inconstructor="no">
           <type name="Integer">
             <targets>
               <target mandatory="no">
@@ -5555,7 +5550,7 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="NumSpawnSync" default="0" mandatory="no" inconstructor="no">
+        <attribute name="NumSpawnSync" default="0" inconstructor="no">
           <type name="Integer">
             <targets>
               <target mandatory="no">
@@ -5567,7 +5562,7 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="WLCount" default="0" mandatory="no" inconstructor="no">
+        <attribute name="WLCount" default="0" inconstructor="no">
           <type name="Integer">
             <targets>
               <target mandatory="no">
@@ -9588,7 +9583,7 @@ N_tfarg :
         </son>
       </sons>
       <attributes>
-        <attribute name="Used" default="0" mandatory="yes" inconstructor="no">
+        <attribute name="Used" default="0" inconstructor="no">
 	<description> Reference count - the number of PART_CODE
 	 entries that point to this code block.
 	</description>
@@ -12107,7 +12102,7 @@ N_tfarg :
         <son name="VFams">
           <targets>
             <target mandatory="no">
-              <node name="Idagvfam" />
+              <node name="IdagVFam" />
               <phases>
                 <all />
               </phases>
@@ -12117,7 +12112,7 @@ N_tfarg :
         <son name="EFams">
           <targets>
             <target mandatory="no">
-              <node name="Idagefam" />
+              <node name="IdagEFam" />
               <phases>
                 <all />
               </phases>
@@ -12275,7 +12270,7 @@ N_tfarg :
         <son name="Next">
           <targets>
             <target mandatory="no">
-              <node name="Idagvertices" />
+              <node name="IdagVertices" />
               <phases>
                 <all />
               </phases>
@@ -12312,7 +12307,7 @@ N_tfarg :
         <son name="Next">
           <targets>
             <target mandatory="no">
-              <node name="Idagefams" />
+              <node name="IdagEFams" />
               <phases>
                 <all />
               </phases>
@@ -12325,7 +12320,7 @@ N_tfarg :
           <type name="ExtLink">
             <targets>
               <target mandatory="yes">
-                <node name="Idagefam" />
+                <node name="IdagEFam" />
                 <phases>
                   <all />
                 </phases>

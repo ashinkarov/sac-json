@@ -442,7 +442,7 @@
                 "type": "VertexWrapper", 
                 "targets": {
                     "phases": "all", 
-                    "contains": "vertex", 
+                    "contains": "Tfvertex", 
                     "mandatory": true
                 }
             }
@@ -1052,7 +1052,6 @@
                 ]
             }, 
             "SymbolName": {
-                "mandatory": false, 
                 "default": "NULL", 
                 "inconstructor": false, 
                 "type": "String", 
@@ -1108,7 +1107,6 @@
                 }
             }, 
             "FunNo": {
-                "mandatory": false, 
                 "default": "0", 
                 "inconstructor": false, 
                 "type": "Integer", 
@@ -1501,7 +1499,6 @@
                 ]
             }, 
             "NumSpawnSync": {
-                "mandatory": false, 
                 "default": "0", 
                 "inconstructor": false, 
                 "type": "Integer", 
@@ -1515,7 +1512,6 @@
                 }
             }, 
             "WLCount": {
-                "mandatory": false, 
                 "default": "0", 
                 "inconstructor": false, 
                 "type": "Integer", 
@@ -5319,7 +5315,6 @@
     "Code": {
         "attributes": {
             "Used": {
-                "mandatory": true, 
                 "default": "0", 
                 "inconstructor": false, 
                 "type": "Integer", 
@@ -7564,14 +7559,14 @@
             "VFams": {
                 "targets": {
                     "phases": "all", 
-                    "contains": "Idagvfam", 
+                    "contains": "IdagVFam", 
                     "mandatory": false
                 }
             }, 
             "EFams": {
                 "targets": {
                     "phases": "all", 
-                    "contains": "Idagefam", 
+                    "contains": "IdagEFam", 
                     "mandatory": false
                 }
             }
@@ -7700,7 +7695,7 @@
             "Next": {
                 "targets": {
                     "phases": "all", 
-                    "contains": "Idagvertices", 
+                    "contains": "IdagVertices", 
                     "mandatory": false
                 }
             }
@@ -7721,7 +7716,7 @@
                 "type": "ExtLink", 
                 "targets": {
                     "phases": "all", 
-                    "contains": "Idagefam", 
+                    "contains": "IdagEFam", 
                     "mandatory": true
                 }
             }
@@ -7730,7 +7725,7 @@
             "Next": {
                 "targets": {
                     "phases": "all", 
-                    "contains": "Idagefams", 
+                    "contains": "IdagEFams", 
                     "mandatory": false
                 }
             }

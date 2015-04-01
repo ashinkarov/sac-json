@@ -473,7 +473,7 @@
                     "name": "wrapperlink", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "vertex", 
+                        "contains": "Tfvertex", 
                         "mandatory": "yes"
                     }
                 }
@@ -1158,11 +1158,10 @@
                     ]
                 }, 
                 {
-                    "mandatory": "no", 
-                    "name": "SymbolName", 
                     "default": "NULL", 
                     "inconstructor": "no", 
                     "type": "String", 
+                    "name": "SymbolName", 
                     "targets": {
                         "phases": {
                             "to": "final", 
@@ -1216,11 +1215,10 @@
                     }
                 }, 
                 {
-                    "mandatory": "no", 
-                    "name": "FunNo", 
                     "default": "0", 
                     "inconstructor": "no", 
                     "type": "Integer", 
+                    "name": "FunNo", 
                     "targets": {
                         "phases": {
                             "to": "final", 
@@ -1586,11 +1584,10 @@
                     "description": "This attribute points to the slow clone implementation if this\n            fundef is the fast clone"
                 }, 
                 {
-                    "mandatory": "no", 
-                    "name": "NumSpawnSync", 
                     "default": "0", 
                     "inconstructor": "no", 
                     "type": "Integer", 
+                    "name": "NumSpawnSync", 
                     "targets": {
                         "phases": {
                             "to": "final", 
@@ -1601,11 +1598,10 @@
                     }
                 }, 
                 {
-                    "mandatory": "no", 
-                    "name": "WLCount", 
                     "default": "0", 
                     "inconstructor": "no", 
                     "type": "Integer", 
+                    "name": "WLCount", 
                     "targets": {
                         "phases": {
                             "to": "final", 
@@ -5384,7 +5380,6 @@
         {
             "attributes": [
                 {
-                    "mandatory": "yes", 
                     "name": "Used", 
                     "default": "0", 
                     "inconstructor": "no", 
@@ -7723,7 +7718,7 @@
                     "name": "VFams", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "Idagvfam", 
+                        "contains": "IdagVFam", 
                         "mandatory": "no"
                     }
                 }, 
@@ -7731,7 +7726,7 @@
                     "name": "EFams", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "Idagefam", 
+                        "contains": "IdagEFam", 
                         "mandatory": "no"
                     }
                 }
@@ -7870,7 +7865,7 @@
                     "name": "Next", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "Idagvertices", 
+                        "contains": "IdagVertices", 
                         "mandatory": "no"
                     }
                 }
@@ -7892,7 +7887,7 @@
                     "name": "EFam", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "Idagefam", 
+                        "contains": "IdagEFam", 
                         "mandatory": "yes"
                     }
                 }
@@ -7902,7 +7897,7 @@
                     "name": "Next", 
                     "targets": {
                         "phases": "all", 
-                        "contains": "Idagefams", 
+                        "contains": "IdagEFams", 
                         "mandatory": "no"
                     }
                 }
