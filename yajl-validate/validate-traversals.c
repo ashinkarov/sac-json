@@ -50,6 +50,16 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
           return false;
         }
 
+      /* Check that the string is a valid name of node or a nodeset.  */
+      struct node_name *  nn;
+      HASH_FIND_STR (node_names, trav_node, nn);
+      if (!nn)
+        {
+          json_err ("%s of the `%s' in the traversal `%s' is not a node or a nodeset",
+                    trav_node, nodelist_name, tn->name);
+          // FIXME make it an error.
+        }
+
       HASH_FIND_STR (tn->traversal_nodes, trav_node, trn);
       if (trn)
         {
@@ -59,11 +69,13 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
           /* FIXME this should be turned on, as it is a real errror.  */
           //return false;
         }
-
-      trn = malloc (sizeof *trn);
-      trn->node_type = tnt;
-      trn->name = strdup (trav_node);
-      HASH_ADD_KEYPTR (hh, tn->traversal_nodes, trn->name, strlen (trn->name), trn);
+      else
+        {
+          trn = malloc (sizeof *trn);
+          trn->node_type = tnt;
+          trn->name = strdup (trav_node);
+          HASH_ADD_KEYPTR (hh, tn->traversal_nodes, trn->name, strlen (trn->name), trn);
+        }
     }
 
   return true;
@@ -170,11 +182,11 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
 
       if (!traversal_validate_nodes (traversal, "travuser", tn, tnt_user))
         return false;
-      if (!traversal_validate_nodes (traversal, "traverror", tn, tnt_error))
+      if (!traversal_validate_nodes (traversal, "travsons", tn, tnt_sons))
         return false;
       if (!traversal_validate_nodes (traversal, "travnone", tn, tnt_none))
         return false;
-      if (!traversal_validate_nodes (traversal, "travsons", tn, tnt_sons))
+      if (!traversal_validate_nodes (traversal, "traverror", tn, tnt_error))
         return false;
     }
 

@@ -257,6 +257,16 @@ validate_target (const char *  node_name, const char *  son_attr_name,
                     "be `any'", tn, sa, node_name);
           return false;
         }
+     
+      /* Check that the value of the string is a node or a nodeset.  */
+      struct node_name *  nn;
+      HASH_FIND_STR (node_names, x, nn);
+      if (!nn && strcmp (x, "any"))
+        {
+          json_err ("the value `%s' of `contains' in the target %sof %sof the node `%s' is not "
+                    "a valid node or nodeset", x, tn, sa, node_name);
+          // FIXME return false;
+        }
     }
 
   if (YAJL_IS_ARRAY (contains))
@@ -266,6 +276,19 @@ validate_target (const char *  node_name, const char *  son_attr_name,
           json_err ("the value of the #%zu item in `contains' of the target %sof %sof the "
                     "node `%s' is not string", i+1, tn, sa, node_name);
           return false;
+        }
+      else
+        {
+          /* Check that the value of the string is a node or a nodeset.  */
+          const char *  x = YAJL_GET_STRING (YAJL_ARRAY_VALUES (contains)[i]);
+          struct node_name *  nn;
+          HASH_FIND_STR (node_names, x, nn);
+          if (!nn && strcmp (x, "any"))
+            {
+              json_err ("the value `%s' of the #%zu item in `contains' of the target %sof %sof the "
+                        "node `%s' is not a node or a nodeset", x, i+1, tn, sa, node_name);
+              // FIXME return false;
+            }
         }
 
   /* Verify `mandatory'.  */
