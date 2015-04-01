@@ -46,7 +46,7 @@ def parse_traversals (t):
     return lst
 
 # syntaxtree node-specific
-def parse_phases (ph):
+def parse_phases (ph, field_name):
     # attribs: none
     ph_all = False
     phases = []
@@ -73,7 +73,7 @@ def parse_phases (ph):
 
     if ph_all:
         if not (len (phases) == 0):
-            warn ("phase %s has <all/> and range or phase specification" % ph)
+            warn ("phase `%s' of field `%s' has <all/> and range or phase specification" % (ph, field_name))
             dump_stderr (ph)
             pass
 
@@ -86,11 +86,11 @@ def parse_phases (ph):
             return phases
 
     else:
-        warn ("empty phase found")
+        warn ("field `%s' has an empty phase" % field_name)
         dump_stderr (ph)
         return "all"
 
-def parse_target (t):
+def parse_target (t, field_name):
     target_values = []
     if "mandatory" in t.attrib:
         mandatory = t.attrib["mandatory"]
@@ -105,7 +105,7 @@ def parse_target (t):
         elif tc.tag == "set":
             target_values.append (tc.attrib["name"])
         elif tc.tag == "phases":
-            phases = parse_phases (tc)
+            phases = parse_phases (tc, field_name)
         elif tc.tag == "any":
             target_values.append ("any")
         elif tc.tag == "unknown":
@@ -123,11 +123,11 @@ def parse_target (t):
     return {"mandatory": mandatory, "contains": target_values, "phases": phases}
 
 
-def parse_targets (ts):
+def parse_targets (ts, field_name):
     targets = []
     for t in ts:
         if t.tag == "target":
-            targets.append (parse_target (t))
+            targets.append (parse_target (t, field_name))
         elif t.tag == "node" and t.get ("name") == "Cudast":
             # this is fucking wrong, ignore it
             pass
@@ -147,9 +147,9 @@ def parse_son (s):
         if t.tag == "description":
             desc = t.text.strip ()
         elif t.tag == "targets":
-            targets = parse_targets (t)
+            targets = parse_targets (t, name)
         elif t.tag == "target":
-            targets = [ parse_target (t) ]
+            targets = [ parse_target (t, name) ]
         else:
             die ("unknown tag `%s' found in son" % t.tag)
 
@@ -180,9 +180,9 @@ def parse_attribute (s):
 
             for tt in t:
                 if "targets" == tt.tag:
-                    attr_targets = parse_targets (tt)
+                    attr_targets = parse_targets (tt, name)
                 elif "target" == tt.tag:
-                    attr_targets = parse_target (tt)
+                    attr_targets = parse_target (tt, name)
                 else:
                     #dump_stderr (t)
                     die ("unknown tag `%s' found in type" % tt.tag)
@@ -231,10 +231,8 @@ def parse_flag (s):
         if f.tag == "description":
             desc = "" if f.text is None else f.text
             desc = desc.strip ()
-        elif f.tag == "phases":
-            phases = parse_phases (f)
         else:
-            die ("unknown tag `%s' found in flag" % f.tag)
+            die ("unknown tag `%s' found in flag `%s'" % (f.tag, name))
 
     ret = {"name": name}
     if default is not None:

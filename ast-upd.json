@@ -101,7 +101,10 @@
             "ThreadFuns": {
                 "default": "NULL", 
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "pc_lw3"
+                    }, 
                     "contains": "Fundef", 
                     "mandatory": false
                 }, 
@@ -1343,7 +1346,10 @@
                 "inconstructor": false, 
                 "type": "MTExecMode", 
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "pc", 
+                        "from": "mt"
+                    }, 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -1477,23 +1483,6 @@
                     "This attribute is used by check_lacfuns to determine unique call sites of LaC functions."
                 ]
             }, 
-            "Callap": {
-                "default": "NULL", 
-                "inconstructor": false, 
-                "type": "ExtLink", 
-                "targets": {
-                    "phases": {
-                        "to": "opt_saacyc_edfa", 
-                        "from": "opt_saacyc_edfa"
-                    }, 
-                    "contains": "Ap", 
-                    "mandatory": false
-                }, 
-                "description": [
-                    "If this function is a LACFUN, this attribute points to the N_ap node that invokes", 
-                    "it from outside the LACFUN. Valid only during EDFA."
-                ]
-            }, 
             "SlowClone": {
                 "default": "NULL", 
                 "inconstructor": false, 
@@ -1519,7 +1508,7 @@
                 "targets": {
                     "phases": {
                         "to": "final", 
-                        "from": "fp_css"
+                        "from": "tp_css"
                     }, 
                     "contains": "any", 
                     "mandatory": false
@@ -1543,7 +1532,7 @@
                 "targets": {
                     "phases": {
                         "to": "final", 
-                        "from": "fp_lva"
+                        "from": "tp_lva"
                     }, 
                     "contains": "Livevars", 
                     "mandatory": false
@@ -1800,12 +1789,6 @@
                     "This is a cuda global kernel function."
                 ]
             }, 
-            "IsCudaDevicefun": {
-                "default": "FALSE", 
-                "desc": [
-                    "This is a cuda device function (called within a global kernel function)."
-                ]
-            }, 
             "IsWrapperfun": {}, 
             "IsWrapperEntryfun": {
                 "default": "FALSE"
@@ -1964,7 +1947,6 @@
                     "Set to false otherwise."
                 ]
             }, 
-            "IsPadded": {}, 
             "IsAliasing": {
                 "default": "TRUE"
             }, 
@@ -1975,10 +1957,6 @@
             "IsUnique": {}, 
             "IsInUse": {
                 "default": "FALSE", 
-                "phases": {
-                    "to": "final", 
-                    "from": ""
-                }, 
                 "desc": [
                     "Used to mark unused function arguments in DeadCodeRemoval. Marked arguments are removed", 
                     "in signature simplification."
@@ -1986,35 +1964,9 @@
             }, 
             "IsDuplicate": {
                 "default": "FALSE", 
-                "phases": {
-                    "to": "opt_saacyc_edfa", 
-                    "from": "opt_saacyc_edfa"
-                }, 
                 "desc": [
                     "Used to mark duplicated function arguments in EDFA. Marked arguments are removed", 
                     "by EDFA, but this flag allows us to simplify outer-level calls in a cleaner fashion."
-                ]
-            }, 
-            "IsNeedsMin": {
-                "default": "FALSE", 
-                "phases": {
-                    "to": "opt_saacyc_petl", 
-                    "from": "opt_saacyc_petl"
-                }, 
-                "desc": [
-                    "Used to mark LACFUN arguments that have a non-NULL AVIS_MIN in the calling environment,", 
-                    "but not (yet) in the local environment. This flag is used only in PETL."
-                ]
-            }, 
-            "IsNeedsMax": {
-                "default": "FALSE", 
-                "phases": {
-                    "to": "opt_saacyc_petl", 
-                    "from": "opt_saacyc_petl"
-                }, 
-                "desc": [
-                    "Used to mark LACFUN arguments that have a non-NULL AVIS_MAX in the calling environment,", 
-                    "but not (yet) in the local environment. This flag is used only in PETL."
                 ]
             }, 
             "IsCudaDefined": {
@@ -2104,15 +2056,6 @@
                     "phases": "all", 
                     "contains": "any", 
                     "mandatory": false
-                }
-            }, 
-            "SPMD_Prolog_ICMs": {
-                "inconstructor": false, 
-                "type": "Link", 
-                "targets": {
-                    "phases": "comp", 
-                    "contains": "Fundef", 
-                    "mandatory": true
                 }
             }, 
             "SSACounter": {
@@ -2324,13 +2267,6 @@
             }
         }, 
         "flags": {
-            "IsPadded": {}, 
-            "HasBeenEliminated": {
-                "desc": [
-                    "Used in ArrayElimination to mark vardecs that are not used anymore. These are later", 
-                    "freed by DCR"
-                ]
-            }, 
             "IsSticky": {
                 "default": "FALSE", 
                 "desc": [
@@ -2360,7 +2296,6 @@
             }
         }, 
         "flags": {
-            "IsUnused": {}, 
             "IsNotAllowedToBeMovedUp": {
                 "default": "FALSE", 
                 "desc": [
@@ -2373,13 +2308,6 @@
                 "desc": [
                     "This flag is used during the \"Withloop Lock Optimization\" process. It indicates that", 
                     "certain assignments are not allowed to be moved below the global object-lock release."
-                ]
-            }, 
-            "HasMoved": {
-                "default": "FALSE", 
-                "desc": [
-                    "This flag is used during moving sync statements phase in FP to indicate that a node", 
-                    "has been tried to move before."
                 ]
             }
         }, 
@@ -2502,7 +2430,7 @@
                 "targets": {
                     "phases": {
                         "to": "final", 
-                        "from": "fp_syn"
+                        "from": "tp_syn"
                     }, 
                     "contains": "Let", 
                     "mandatory": false
@@ -2518,7 +2446,7 @@
                 "targets": {
                     "phases": {
                         "to": "final", 
-                        "from": "fp_lva"
+                        "from": "tp_lva"
                     }, 
                     "contains": "Livevars", 
                     "mandatory": false
@@ -2534,7 +2462,7 @@
                 "targets": {
                     "phases": {
                         "to": "final", 
-                        "from": "fp_css"
+                        "from": "tp_css"
                     }, 
                     "contains": "any", 
                     "mandatory": false
@@ -2645,7 +2573,10 @@
                 "inconstructor": false, 
                 "type": "Link", 
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "final", 
+                        "from": "pc"
+                    }, 
                     "contains": "Expr", 
                     "mandatory": true
                 }
@@ -3679,13 +3610,6 @@
             }
         }, 
         "flags": {
-            "IsNoteIntersectPresent": {
-                "default": "FALSE", 
-                "desc": [
-                    "Set by AWLFI for _sel_VxA_(iv, PWL) to indicate that an _noteintersect_ node has", 
-                    "been generated for iv."
-                ]
-            }, 
             "IsInplaceSelect": {
                 "default": "FALSE"
             }, 
@@ -3700,10 +3624,6 @@
             }, 
             "IsFoldNow": {
                 "default": "FALSE", 
-                "phases": {
-                    "to": "opt_saacyc_cubsl", 
-                    "from": "opt_saacyc_cubsl"
-                }, 
                 "desc": [
                     "Set to true by CUBSL if this sel is in a consumer-WL and has been determined to be", 
                     "foldable by AWLF."
@@ -3810,9 +3730,6 @@
                     "mandatory": false
                 }
             }
-        }, 
-        "flags": {
-            "IsEndOfStatement": {}
         }
     }, 
     "Pragma": {
@@ -3894,7 +3811,10 @@
                 "inconstructor": false, 
                 "type": "String", 
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "popt", 
+                        "from": "mod"
+                    }, 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -3903,7 +3823,10 @@
                 "inconstructor": false, 
                 "type": "String", 
                 "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "popt", 
+                        "from": "mod"
+                    }, 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -3912,16 +3835,10 @@
                 "inconstructor": false, 
                 "type": "String", 
                 "targets": {
-                    "phases": "all", 
-                    "contains": "any", 
-                    "mandatory": false
-                }
-            }, 
-            "wldist": {
-                "inconstructor": false, 
-                "type": "String", 
-                "targets": {
-                    "phases": "all", 
+                    "phases": {
+                        "to": "popt", 
+                        "from": "mod"
+                    }, 
                     "contains": "any", 
                     "mandatory": false
                 }
@@ -4145,19 +4062,6 @@
                     "Used to indicate which VARDECS are no longer needed and can thus be eliminated."
                 ]
             }, 
-            "IsDeadReturn": {
-                "desc": [
-                    "Used to indicate a dead N_return value. This is used solely by DCI/DCR to mark return", 
-                    "values that are not used by the external caller. We must not use AVIS_ISDEAD for", 
-                    "this purpose, because the value may be in use elsewhere, such as for an AVIS_SHAPE."
-                ]
-            }, 
-            "IsLifted": {
-                "desc": [
-                    "Used by SpmdLift traversal in order to indicate which VARDECS are no longer needed", 
-                    "and can thus be eliminated."
-                ]
-            }, 
             "IsUniqueConsumed": {
                 "default": "FALSE", 
                 "desc": [
@@ -4321,41 +4225,10 @@
                     "If true, the given variable is a loop index and the loop needs to be blocked"
                 ]
             }, 
-            "IsGenarrayMemval": {
-                "default": "FALSE", 
-                "desc": [
-                    "Marks genarray with-loo operatorp memval identifier. Only used in SPMD functions."
-                ]
-            }, 
-            "IsModarrayMemval": {
-                "default": "FALSE", 
-                "desc": [
-                    "Marks modarray with-loop operator memval identifier. Only used in SPMD functions."
-                ]
-            }, 
-            "IsBreakMemval": {
-                "default": "FALSE", 
-                "desc": [
-                    "Marks break with-loop operator memval identifier. Only used in SPMD functions."
-                ]
-            }, 
-            "IsPropagateDefault": {
-                "default": "FALSE", 
-                "desc": [
-                    "Marks propagate with-loop operator default identifier. Only used in SPMD functions."
-                ]
-            }, 
             "FinverseSwap": {
                 "default": "FALSE", 
                 "desc": [
                     "If true, the AVIS_MIN and AVIS_MAX values for this index vector have to be swapped."
-                ]
-            }, 
-            "GenericMarker": {
-                "default": "FALSE", 
-                "desc": [
-                    "This Boolean may be used by any local traversal, as long as you promise to reset", 
-                    "it to its default value when you are done. At present, it is used by EDFA and LFU."
                 ]
             }, 
             "IsScalarized": {
@@ -4834,17 +4707,6 @@
         ]
     }, 
     "MT": {
-        "attributes": {
-            "Fundef": {
-                "inconstructor": false, 
-                "type": "ExtLink", 
-                "targets": {
-                    "phases": "all", 
-                    "contains": "Fundef", 
-                    "mandatory": true
-                }
-            }
-        }, 
         "sons": {
             "Region": {
                 "targets": {
@@ -5135,9 +4997,6 @@
                 "default": "FALSE"
             }, 
             "IsDependent": {}, 
-            "isAWLFFoldable": {
-                "default": "FALSE"
-            }, 
             "containsFunAps": {
                 "desc": [
                     "indicates whether any partition contains an application of a user defined function.", 

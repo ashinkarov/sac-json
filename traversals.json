@@ -3096,10 +3096,10 @@
             "IdagVertices"
         ]
     }, 
-    "PWLFI": {
+    "PWLF": {
         "default": "sons", 
-        "include": "polyhedral_wlfi.h", 
-        "name": "Polyhedral With-Loop-Folding Inference", 
+        "include": "polyhedral_wlf.h", 
+        "name": "Polyhedral With-Loop-Folding", 
         "travuser": [
             "Fundef", 
             "Block", 

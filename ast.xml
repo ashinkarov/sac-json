@@ -2310,7 +2310,7 @@
        <node name="Code" />
      </travuser>
    </traversal>
-   <traversal id="PWLFI" name="Polyhedral With-Loop-Folding Inference" default="sons" include="polyhedral_wlfi.h" >
+   <traversal id="PWLF" name="Polyhedral With-Loop-Folding" default="sons" include="polyhedral_wlf.h" >
      <travuser>
         <node name="Fundef"  />
         <node name="Block"   />
@@ -3903,7 +3903,6 @@
               <node name="Fundef" />
               <phases>
                 <range from="pc_lw3" to="final"/>
-                <all/>
               </phases>
             </target>
           </targets>
@@ -5400,7 +5399,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <!-- <range from="BuildMultithread" to="crece"/> TODO -->
+                  <range from="mt" to="pc"/>
                 </phases>
               </target>
             </targets>
@@ -5540,23 +5539,6 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="Callap" default="NULL" inconstructor="no">
-          <description>
-	  If this function is a LACFUN, this attribute points to
-	  the N_ap node that invokes it from outside the
-	  LACFUN. Valid only during EDFA.
-          </description>
-          <type name="ExtLink">
-            <targets>
-              <target mandatory="no">
-                <node name="Ap" />
-                <phases>
-                  <range from="opt_saacyc_edfa" to="opt_saacyc_edfa" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
         <attribute name="SlowClone" default="NULL" inconstructor="no">
           <description>
             This attribute points to the slow clone implementation if this
@@ -5579,7 +5561,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <range from="fp_css" to="final"/>
+                  <range from="tp_css" to="final"/>
                 </phases>
               </target>
             </targets>
@@ -5606,7 +5588,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Livevars" />
                 <phases>
-                  <phase from="fp_lva" to="final" />
+                  <range from="tp_lva" to="final" />
                 </phases>
               </target>
             </targets>
@@ -5702,9 +5684,6 @@ N_tfarg :
         </flag>
         <flag name="IsCudaGlobalfun" default="FALSE">
           <description>This is a cuda global kernel function.</description>
-        </flag>
-        <flag name="IsCudaDevicefun" default="FALSE">
-          <description>This is a cuda device function (called within a global kernel function).</description>
         </flag>
         <flag name="IsWrapperfun" />
         <flag name="IsWrapperEntryfun" default="FALSE"/>
@@ -5881,7 +5860,6 @@ N_tfarg :
 	  <description> Set to true after resolving objects if the given argument was introduced by an object dependency and thus will be removed once the objects are reintroduced in precompile. Set to false otherwise.
 	  </description>
 	</flag>
-        <flag name="IsPadded" />
         <flag name="IsAliasing" default="TRUE" />
         <flag name="IsRefcounted" default="TRUE" />
         <flag name="HasLinksignInfo" />
@@ -5889,9 +5867,6 @@ N_tfarg :
 	<flag name="IsInUse" default="FALSE" >
 	  <description> Used to mark unused function arguments in DeadCodeRemoval. Marked arguments are removed in signature simplification.
 	  </description>
-                <phases>
-                  <range from="" to="final" />
-                </phases>
         </flag>	 
 	<flag name="IsDuplicate" default="FALSE" >
 	  <description> Used to mark duplicated function arguments in
@@ -5899,27 +5874,6 @@ N_tfarg :
 	    flag allows us to simplify outer-level calls in a cleaner
 	    fashion.
 	  </description>
-          <phases>
-            <range from="opt_saacyc_edfa" to="opt_saacyc_edfa" />
-          </phases>
-        </flag>	 
-	<flag name="IsNeedsMin" default="FALSE" >
-	  <description> Used to mark LACFUN arguments that have a
-	  non-NULL AVIS_MIN in the calling environment, but not (yet)
-	  in the local environment. This flag is used only in PETL.
-	  </description>
-          <phases>
-            <range from="opt_saacyc_petl" to="opt_saacyc_petl" />
-          </phases>
-        </flag>	 
-	<flag name="IsNeedsMax" default="FALSE" >
-	  <description> Used to mark LACFUN arguments that have a
-	  non-NULL AVIS_MAX in the calling environment, but not (yet)
-	  in the local environment. This flag is used only in PETL.
-	  </description>
-          <phases>
-            <range from="opt_saacyc_petl" to="opt_saacyc_petl" />
-          </phases>
         </flag>	 
         <flag name="IsCudaDefined" default="FALSE" /> 
       </flags>
@@ -6006,18 +5960,6 @@ N_tfarg :
                 <any />
                 <phases>
                   <all />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
-        <attribute name="SPMD_Prolog_ICMs" inconstructor="no">
-          <type name="Link">
-            <targets>
-              <target mandatory="yes">
-                <node name="Fundef" />
-                <phases>
-                  <phase name="comp" />
                 </phases>
               </target>
             </targets>
@@ -6229,10 +6171,6 @@ N_tfarg :
         </attribute>
       </attributes>
       <flags>
-        <flag name="IsPadded" />
-        <flag name="HasBeenEliminated" >
-	  <description>Used in ArrayElimination to mark vardecs that are not used anymore. These are later freed by DCR</description>
-	</flag>
         <flag name="IsSticky" default="FALSE">
           <description>This vardec should not be removed by DeadFunctionRemoval. This is exclusively used by MT code generation within SPMD functions to ensure that dummy vardecs in intriduced when creating the SPMD functions that only become vital during code generation do not vanish until then.</description>
         </flag>
@@ -6299,7 +6237,7 @@ N_tfarg :
               <target mandatory="yes">
                 <any />
                 <phases>
-                  <range name="daa" />
+                  <phase name="daa" />
                 </phases>
               </target>
             </targets>
@@ -6376,7 +6314,6 @@ N_tfarg :
         </attribute>
       </attributes>
       <flags>
-        <flag name="IsUnused" />
         <flag name="IsNotAllowedToBeMovedUp" default="FALSE">
           <description>
             This flag is used during the "Withloop Lock Optimization" process.
@@ -6389,12 +6326,6 @@ N_tfarg :
             This flag is used during the "Withloop Lock Optimization" process.
             It indicates that certain assignments are not allowed to be moved
             below the global object-lock release.
-          </description>
-        </flag>
-        <flag name="HasMoved" default="FALSE">
-          <description>
-            This flag is used during moving sync statements phase in FP to
-            indicate that a node has been tried to move before.
           </description>
         </flag>
       </flags>
@@ -6460,7 +6391,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Let" />
                 <phases>
-                  <phase from="fp_syn" to="final" />
+                  <range from="tp_syn" to="final" />
                 </phases>
               </target>
             </targets>
@@ -6476,7 +6407,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Livevars" />
                 <phases>
-                  <phase from="fp_lva" to="final" />
+                  <range from="tp_lva" to="final" />
                 </phases>
               </target>
             </targets>
@@ -6492,7 +6423,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <phase from="fp_css" to="final" />
+                  <range from="tp_css" to="final" />
                 </phases>
               </target>
             </targets>
@@ -6594,7 +6525,7 @@ N_tfarg :
               <target mandatory="yes">
                 <set name="Expr" />
                 <phases>
-                  <!--  <range from="precompile" to="final" /> TODO -->
+                  <range from="pc" to="final" />
                 </phases>
               </target>
             </targets>
@@ -7768,13 +7699,6 @@ N_tfarg :
         </attribute>
       </attributes>
         <flags>
-        <flag name="IsNoteIntersectPresent" default="FALSE" >
-          <description>
-                  Set by AWLFI for _sel_VxA_(iv, PWL) to
-                  indicate that an _noteintersect_ node has been
-                  generated for iv.
-          </description>
-        </flag>
         <flag name="IsInplaceSelect" default="FALSE" >
           <description>
           </description>
@@ -7796,9 +7720,6 @@ N_tfarg :
             Set to true by CUBSL if this sel is in a consumer-WL and
 	    has been determined to be foldable by AWLF.
 	  </description>
-          <phases>
-            <range from="opt_saacyc_cubsl" to="opt_saacyc_cubsl" />
-          </phases>
 	</flag>
       </flags>
     </node>
@@ -7920,9 +7841,6 @@ N_tfarg :
           </type>
         </attribute>
       </attributes>
-      <flags>
-        <flag name="IsEndOfStatement" />
-      </flags>
     </node>
 <!--
 
@@ -8064,7 +7982,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <!-- <range from="imp" to="readsib" /> TODO -->
+                  <range from="mod" to="popt" />
                 </phases>
               </target>
             </targets>
@@ -8076,7 +7994,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <!-- <range from="import" to="readsib" /> TODO -->
+                  <range from="mod" to="popt" />
                 </phases>
               </target>
             </targets>
@@ -8088,17 +8006,8 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <!-- <range from="import" to="readsib" /> TODO -->
+                  <range from="mod" to="popt" />
                 </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
-        <attribute name="wldist" inconstructor="no" >
-          <type name="String">
-            <targets>
-              <target mandatory="no">
-                <any />
               </target>
             </targets>
           </type>
@@ -8602,6 +8511,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Avis" />
                 <phases>
+                  <all />
                 </phases>
               </target>
             </targets>
@@ -8720,7 +8630,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                 <range name="daa" />
+                 <phase name="daa" />
                 </phases>
               </target>
             </targets>
@@ -8735,7 +8645,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                 <range name="pc_mc" />
+                 <phase name="pc_mc" />
                 </phases>
               </target>
             </targets>
@@ -8809,19 +8719,6 @@ N_tfarg :
         </flag>
         <flag name="IsDead" >
           <description>Used to indicate 
-            which VARDECS are no longer needed and can thus be eliminated.
-          </description>
-        </flag>
-        <flag name="IsDeadReturn" >
-          <description>Used to indicate a dead N_return value.
-	   This is used solely by DCI/DCR to mark return values that
-	   are not used by the external caller. We must not use
-	   AVIS_ISDEAD for this purpose, because the value may be
-	   in use elsewhere, such as for an AVIS_SHAPE.
-          </description>
-        </flag>
-        <flag name="IsLifted" >
-          <description>Used by SpmdLift traversal in order to indicate 
             which VARDECS are no longer needed and can thus be eliminated.
           </description>
         </flag>
@@ -8968,44 +8865,12 @@ N_tfarg :
                   If true, the given variable is a loop index and the loop needs to be blocked
           </description>
         </flag>
-        <flag name="IsGenarrayMemval" default="FALSE" >
-          <description>
-             Marks genarray with-loo operatorp memval identifier.
-             Only used in SPMD functions.
-          </description>
-        </flag>
-        <flag name="IsModarrayMemval" default="FALSE" >
-          <description>
-             Marks modarray with-loop operator memval identifier.
-             Only used in SPMD functions.                  
-          </description>
-        </flag>
-        <flag name="IsBreakMemval" default="FALSE" >
-          <description>
-             Marks break with-loop operator memval identifier.
-             Only used in SPMD functions.                  
-          </description>
-        </flag>
-        <flag name="IsPropagateDefault" default="FALSE" >
-          <description>
-             Marks propagate with-loop operator default identifier.
-             Only used in SPMD functions.                  
-          </description>
-        </flag>
         <flag name="FinverseSwap" default="FALSE" >
           <description>
                   If true, the AVIS_MIN and AVIS_MAX values for this
                   index vector have to be swapped.
           </description>
         </flag>
-	<flag name="GenericMarker" default="FALSE" >
-	  <description> 
-	  This Boolean may be used by any local traversal,
-	  as long as you promise to reset it to its default
-	  value when you are done. At present, it is used
-	  by EDFA and LFU.
-	  </description>
-        </flag>	 
 	<flag name="IsScalarized" default="FALSE" >
 	  <description> 
 	  Used by LACSO to indicate that a small array
@@ -9038,20 +8903,6 @@ N_tfarg :
           </targets>
         </son>
       </sons>
-      <attributes>
-        <attribute name="Fundef" inconstructor="no" >
-          <type name="ExtLink">
-            <targets>
-              <target mandatory="yes">
-                <node name="Fundef" />
-                <phases>
-                  <unknown />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
-      </attributes>
       <flags> <flag name="DummyFlag" default="FALSE"/> </flags>
     </node>
 <!--
@@ -9370,7 +9221,6 @@ N_tfarg :
         <flag name="Cudarizable" default="FALSE" />
         <flag name="hasRC" default="FALSE" />
         <flag name="IsDependent" />
-        <flag name="isAWLFFoldable" default="FALSE" />
         <flag name="containsFunAps" >
           <description>
              indicates whether any partition contains an application
@@ -10417,6 +10267,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
+                  <all />
                 </phases>
               </target>
             </targets>
