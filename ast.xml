@@ -5807,7 +5807,7 @@ N_tfarg :
               <target mandatory="yes">
                 <any />
                 <phases>
-                  <phase name="rid" />
+                  <phase name="pc_rid" />
                 </phases>
               </target>
             </targets>
@@ -5941,7 +5941,7 @@ N_tfarg :
             <target mandatory="no">
               <node name="Arg" />
               <phases>
-                <phase name="lw3"/>
+                <phase name="pc_lw3"/>
               </phases>
             </target>
           </targets>
@@ -5966,9 +5966,13 @@ N_tfarg :
               <target mandatory="no">
                 <node name="SSAcnt" />
                 <phases>
-                  <phase name="ssa" />
-                  <phase name="wltssa" />
-                  <phase name="ssawc" />
+                   <phase name="ptc_ssa" />
+                   <phase name="popt_ssa" />
+                   <phase name="opt_cyc_wlfssa" />
+                   <phase name="opt_cyc_lurssa" />
+                   <phase name="opt_cyc_wlurssa" />
+                   <phase name="opt_saacyc_lurssa" />
+                   <phase name="opt_saacyc_wlurssa" />
                 </phases>
               </target>
             </targets>
@@ -6244,7 +6248,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="With" />
                 <phases>
-                  <phase name="wlf" />
+                  <phase name="opt_wlfs" />
                 </phases>
               </target>
             </targets>
@@ -6256,7 +6260,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="With" />
                 <phases>
-                  <phase name="wlf" />
+                  <phase name="opt_wlfs" />
                 </phases>
               </target>
             </targets>
@@ -6292,7 +6296,7 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Block" />
                 <phases>
-                  <phase name="imem" />
+                  <phase name="cuda_mtran" />
                 </phases>
               </target>
             </targets>
@@ -7141,9 +7145,8 @@ N_tfarg :
           <type name="Link">
             <targets>
               <target mandatory="yes">
-                <unknown />
                 <phases>
-                  <phase name="wlf" />
+                  <phase name="opt_cyc_wlf" />
                 </phases>
               </target>
             </targets>
@@ -8345,9 +8348,13 @@ N_tfarg :
               <target mandatory="no">
                 <node name="SSAcnt" />
                 <phases>
-                  <phase name="ptc_ssa" />
-                  <phase name="wlt_ssa" />
-                  <phase name="popt_ssa" />
+                   <phase name="ptc_ssa" />
+                   <phase name="popt_ssa" />
+                   <phase name="opt_cyc_wlfssa" />
+                   <phase name="opt_cyc_lurssa" />
+                   <phase name="opt_cyc_wlurssa" />
+                   <phase name="opt_saacyc_lurssa" />
+                   <phase name="opt_saacyc_wlurssa" />
                 </phases>
               </target>
             </targets>
@@ -8359,9 +8366,13 @@ N_tfarg :
               <target mandatory="no">
                 <node name="SSAstack" />
                 <phases>
-                  <phase name="ptc_ssa" />
-                  <phase name="wlt_ssa" />
-                  <phase name="popt_ssa" />
+                   <phase name="ptc_ssa" />
+                   <phase name="popt_ssa" />
+                   <phase name="opt_cyc_wlfssa" />
+                   <phase name="opt_cyc_lurssa" />
+                   <phase name="opt_cyc_wlurssa" />
+                   <phase name="opt_saacyc_lurssa" />
+                   <phase name="opt_saacyc_wlurssa" />
                 </phases>
               </target>
             </targets>
@@ -8373,9 +8384,13 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Avis" />
                 <phases>
-                  <phase name="ptc_ssa" />
-                  <phase name="wlt_ssa" />
-                  <phase name="popt_ssa" />
+                   <phase name="ptc_ssa" />
+                   <phase name="popt_ssa" />
+                   <phase name="opt_cyc_wlfssa" />
+                   <phase name="opt_cyc_lurssa" />
+                   <phase name="opt_cyc_wlurssa" />
+                   <phase name="opt_saacyc_lurssa" />
+                   <phase name="opt_saacyc_wlurssa" />
                 </phases>
               </target>
             </targets>
@@ -8387,9 +8402,13 @@ N_tfarg :
               <target mandatory="no">
                 <node name="Avis" />
                 <phases>
-                  <phase name="ptc_ssa" />
-                  <phase name="wlt_ssa" />
-                  <phase name="popt_ssa" />
+                   <phase name="ptc_ssa" />
+                   <phase name="popt_ssa" />
+                   <phase name="opt_cyc_wlfssa" />
+                   <phase name="opt_cyc_lurssa" />
+                   <phase name="opt_cyc_wlurssa" />
+                   <phase name="opt_saacyc_lurssa" />
+                   <phase name="opt_saacyc_wlurssa" />
                 </phases>
               </target>
             </targets>
@@ -8404,7 +8423,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <phase name="opt_lir" />
+                  <range from="opt" to="cuda" />
                 </phases>
               </target>
             </targets>
@@ -8484,17 +8503,20 @@ N_tfarg :
                 <phases>
                   <phase name="opt_scc" />
                   <phase name="opt_cyc_cse" />
-                  <phase name="opt_lir" />
-                  <phase name="pc_ussa" />
-                  <phase name="wlt_ussa" />
-		  <phase name="ussa_rera" />
+                  <phase name="opt_dlir" />
+                  <phase name="opt_wlir" />
+                  <phase name="opt_cyc_dlir" />
+                  <phase name="opt_cyc_wlir" />
+                  <phase name="opt_saacyc_dlir" />
+                  <phase name="opt_saacyc_wlir" />
+                  <range from="ussa" to="mt" />
                   <phase name="mem_racc" />
                 </phases>
               </target>
 	      <target mandatory="no">
 	        <node name="Objdef" />
 		<phases>
-		  <phase name="pc_reso" />
+		  <phase name="ussa_reso" />
 		</phases>
               </target>
             </targets>
@@ -8558,7 +8580,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <phase name="ia" />
+                  <phase name="mem_ia" />
                 </phases>
               </target>
             </targets>
@@ -8573,7 +8595,7 @@ N_tfarg :
 	      <target mandatory="yes">
 	        <node name="Id" />
 		<phases>
-		  <phase name="cu" />
+		  <phase name="popt_cuq" />
 		</phases>
 	      </target>
 	    </targets>
@@ -9204,7 +9226,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <phase name="pc_ima" />
+                  <phase name="pc_imemdist" />
                 </phases>
               </target>
             </targets>
@@ -9315,7 +9337,6 @@ N_tfarg :
 	    part of a matrix. E.g., Gaussian Elimination.
 	  </description>
 	</flag>
-        <flag name="IsRefcounted" default="TRUE" />
         <flag name="Cudarizable" default="FALSE" />
         <flag name="IsConsumerPart"  default="FALSE">
           <description> 
@@ -9784,18 +9805,6 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-        <attribute name="ReUse" inconstructor="no">
-          <type name="DFMask">
-            <targets>
-              <target mandatory="no">
-                <any />
-                <phases>
-                  <phase name="rci" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
         <attribute name="Dist" inconstructor="no" >
           <type name="String">
             <targets>
@@ -9818,7 +9827,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <phase name="pc_ima" />
+                  <phase name="pc_imemdist" />
                 </phases>
               </target>
             </targets>
@@ -9951,18 +9960,6 @@ N_tfarg :
         </son>
       </sons>
       <attributes>
-        <attribute name="SPEXPR" inconstructor="no">
-          <type name="Link">
-            <targets>
-              <target mandatory="yes">
-                <any />
-                <phases>
-                  <phase name="sp" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
         <attribute name="Idx" inconstructor="no">
           <type name="Link">
             <targets>
@@ -10046,18 +10043,6 @@ N_tfarg :
         </son>
       </sons>
       <attributes>
-        <attribute name="SPEXPR" inconstructor="no">
-          <type name="Link">
-            <targets>
-              <target mandatory="yes">
-                <any />
-                <phases>
-                  <phase name="sp" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
         <attribute name="Idx" inconstructor="no">
           <type name="Link">
             <targets>
@@ -10149,23 +10134,6 @@ N_tfarg :
           </targets>
         </son>
       </sons>
-      <attributes>
-        <attribute name="SPEXPR" inconstructor="no">
-          <description> Used in sac.y only in order to ship the WL body result
-                        into the N_code!
-          </description>
-          <type name="Link">
-            <targets>
-              <target mandatory="yes">
-                <any />
-                <phases>
-                  <phase name="sp" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>
-      </attributes>
       <flags> <flag name="DummyFlag" default="FALSE"/> </flags>
     </node>
 <!--

@@ -2042,7 +2042,7 @@
                     "type": "String", 
                     "name": "TypeString", 
                     "targets": {
-                        "phases": "rid", 
+                        "phases": "pc_rid", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -2119,9 +2119,13 @@
                     "name": "SSACounter", 
                     "targets": {
                         "phases": [
-                            "ssa", 
-                            "wltssa", 
-                            "ssawc"
+                            "ptc_ssa", 
+                            "popt_ssa", 
+                            "opt_cyc_wlfssa", 
+                            "opt_cyc_lurssa", 
+                            "opt_cyc_wlurssa", 
+                            "opt_saacyc_lurssa", 
+                            "opt_saacyc_wlurssa"
                         ], 
                         "contains": "SSAcnt", 
                         "mandatory": "no"
@@ -2204,7 +2208,7 @@
                     "default": "NULL", 
                     "name": "Shareds", 
                     "targets": {
-                        "phases": "lw3", 
+                        "phases": "pc_lw3", 
                         "contains": "Arg", 
                         "mandatory": "no"
                     }
@@ -2419,7 +2423,7 @@
                     "type": "Link", 
                     "name": "Visited_With", 
                     "targets": {
-                        "phases": "wlf", 
+                        "phases": "opt_wlfs", 
                         "contains": "With", 
                         "mandatory": "no"
                     }
@@ -2429,7 +2433,7 @@
                     "type": "Link", 
                     "name": "Tag", 
                     "targets": {
-                        "phases": "wlf", 
+                        "phases": "opt_wlfs", 
                         "contains": "With", 
                         "mandatory": "no"
                     }
@@ -2465,7 +2469,7 @@
                     "type": "Link", 
                     "name": "Containing_Block", 
                     "targets": {
-                        "phases": "imem", 
+                        "phases": "cuda_mtran", 
                         "contains": "Block", 
                         "mandatory": "no"
                     }
@@ -3224,7 +3228,7 @@
                     "type": "Link", 
                     "name": "WL", 
                     "targets": {
-                        "phases": "wlf", 
+                        "phases": "opt_cyc_wlf", 
                         "contains": "any", 
                         "mandatory": "yes"
                     }
@@ -4451,8 +4455,12 @@
                     "targets": {
                         "phases": [
                             "ptc_ssa", 
-                            "wlt_ssa", 
-                            "popt_ssa"
+                            "popt_ssa", 
+                            "opt_cyc_wlfssa", 
+                            "opt_cyc_lurssa", 
+                            "opt_cyc_wlurssa", 
+                            "opt_saacyc_lurssa", 
+                            "opt_saacyc_wlurssa"
                         ], 
                         "contains": "SSAcnt", 
                         "mandatory": "no"
@@ -4465,8 +4473,12 @@
                     "targets": {
                         "phases": [
                             "ptc_ssa", 
-                            "wlt_ssa", 
-                            "popt_ssa"
+                            "popt_ssa", 
+                            "opt_cyc_wlfssa", 
+                            "opt_cyc_lurssa", 
+                            "opt_cyc_wlurssa", 
+                            "opt_saacyc_lurssa", 
+                            "opt_saacyc_wlurssa"
                         ], 
                         "contains": "SSAstack", 
                         "mandatory": "no"
@@ -4479,8 +4491,12 @@
                     "targets": {
                         "phases": [
                             "ptc_ssa", 
-                            "wlt_ssa", 
-                            "popt_ssa"
+                            "popt_ssa", 
+                            "opt_cyc_wlfssa", 
+                            "opt_cyc_lurssa", 
+                            "opt_cyc_wlurssa", 
+                            "opt_saacyc_lurssa", 
+                            "opt_saacyc_wlurssa"
                         ], 
                         "contains": "Avis", 
                         "mandatory": "no"
@@ -4493,8 +4509,12 @@
                     "targets": {
                         "phases": [
                             "ptc_ssa", 
-                            "wlt_ssa", 
-                            "popt_ssa"
+                            "popt_ssa", 
+                            "opt_cyc_wlfssa", 
+                            "opt_cyc_lurssa", 
+                            "opt_cyc_wlurssa", 
+                            "opt_saacyc_lurssa", 
+                            "opt_saacyc_wlurssa"
                         ], 
                         "contains": "Avis", 
                         "mandatory": "no"
@@ -4502,7 +4522,10 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "opt_lir", 
+                        "phases": {
+                            "to": "cuda", 
+                            "from": "opt"
+                        }, 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4576,17 +4599,23 @@
                             "phases": [
                                 "opt_scc", 
                                 "opt_cyc_cse", 
-                                "opt_lir", 
-                                "pc_ussa", 
-                                "wlt_ussa", 
-                                "ussa_rera", 
+                                "opt_dlir", 
+                                "opt_wlir", 
+                                "opt_cyc_dlir", 
+                                "opt_cyc_wlir", 
+                                "opt_saacyc_dlir", 
+                                "opt_saacyc_wlir", 
+                                {
+                                    "to": "mt", 
+                                    "from": "ussa"
+                                }, 
                                 "mem_racc"
                             ], 
                             "contains": "Avis", 
                             "mandatory": "no"
                         }, 
                         {
-                            "phases": "pc_reso", 
+                            "phases": "ussa_reso", 
                             "contains": "Objdef", 
                             "mandatory": "no"
                         }
@@ -4638,7 +4667,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "ia", 
+                        "phases": "mem_ia", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -4649,7 +4678,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "cu", 
+                        "phases": "popt_cuq", 
                         "contains": "Id", 
                         "mandatory": "yes"
                     }, 
@@ -5018,7 +5047,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "pc_ima", 
+                        "phases": "pc_imemdist", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -5149,10 +5178,6 @@
                 {
                     "name": "IsCopy", 
                     "desc": "Set to true if this WL partition is a copy partition.\n\t    I.e., it copies, without an index vector offset, elements of the\n\t    producer-WL partition.\n\t    This value is critical to optimizations that reuse\n\t    memory by performing in-placed indexed assigns into a small\n\t    part of a matrix. E.g., Gaussian Elimination."
-                }, 
-                {
-                    "default": "TRUE", 
-                    "name": "IsRefcounted"
                 }, 
                 {
                     "default": "FALSE", 
@@ -5555,16 +5580,6 @@
                 }, 
                 {
                     "inconstructor": "no", 
-                    "type": "DFMask", 
-                    "name": "ReUse", 
-                    "targets": {
-                        "phases": "rci", 
-                        "contains": "any", 
-                        "mandatory": "no"
-                    }
-                }, 
-                {
-                    "inconstructor": "no", 
                     "type": "String", 
                     "name": "Dist", 
                     "targets": {
@@ -5575,7 +5590,7 @@
                 }, 
                 {
                     "targets": {
-                        "phases": "pc_ima", 
+                        "phases": "pc_imemdist", 
                         "contains": "any", 
                         "mandatory": "no"
                     }, 
@@ -5640,16 +5655,6 @@
         }, 
         {
             "attributes": [
-                {
-                    "inconstructor": "no", 
-                    "type": "Link", 
-                    "name": "SPEXPR", 
-                    "targets": {
-                        "phases": "sp", 
-                        "contains": "any", 
-                        "mandatory": "yes"
-                    }
-                }, 
                 {
                     "inconstructor": "no", 
                     "type": "Link", 
@@ -5770,16 +5775,6 @@
                 {
                     "inconstructor": "no", 
                     "type": "Link", 
-                    "name": "SPEXPR", 
-                    "targets": {
-                        "phases": "sp", 
-                        "contains": "any", 
-                        "mandatory": "yes"
-                    }
-                }, 
-                {
-                    "inconstructor": "no", 
-                    "type": "Link", 
                     "name": "Idx", 
                     "targets": {
                         "phases": {
@@ -5857,19 +5852,6 @@
             "description": "withloop operation"
         }, 
         {
-            "attributes": [
-                {
-                    "targets": {
-                        "phases": "sp", 
-                        "contains": "any", 
-                        "mandatory": "yes"
-                    }, 
-                    "inconstructor": "no", 
-                    "type": "Link", 
-                    "name": "SPEXPR", 
-                    "description": "Used in sac.y only in order to ship the WL body result\n                        into the N_code!"
-                }
-            ], 
             "sons": [
                 {
                     "name": "Neutral", 
