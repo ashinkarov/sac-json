@@ -14,6 +14,7 @@
 
 #include <regex.h>
 #include <yajl/yajl_tree.h>
+#include <yajl/yajl_parse.h>
 
 #include "validator.h"
 
@@ -92,15 +93,31 @@ bool
 parse_json (const char *txt, yajl_val *t)
 {
   char errbuf[BUFSIZ];
+  size_t txt_len = strlen (txt);
+
+  /* This is a workaround of a bug in the yajl library to show the
+     correct position in the error message produced by the library.
+     In case this is fixed in yajl, one should avoid double parsing
+     and pring the error message produced by yajl_tree_parse.  */
+  yajl_status stat;
+  yajl_handle hand = yajl_alloc(NULL, NULL, NULL);
+  stat = yajl_parse(hand, (const unsigned char *)txt, txt_len);
+
+  if (stat != yajl_status_ok)
+    {
+      unsigned char * str;
+      str = yajl_get_error(hand, 1, (const unsigned char *) txt, txt_len);
+      json_err ("%s", (const char *) str);
+      yajl_free_error(hand, str);
+      yajl_free (hand);
+      return false;
+    }
+  else
+    yajl_free (hand);
 
   *t = yajl_tree_parse ((const char *)txt, errbuf, sizeof (errbuf));
 
-  if (*t == NULL)
-    {
-      json_err ("%s", errbuf);
-      return false;
-    }
-
+  assert (*t != NULL); 
   return true;
 }
 

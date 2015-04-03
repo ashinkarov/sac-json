@@ -51,9 +51,10 @@ get_yajl_tree_from_file (const char *  fname)
   if (!text)
     return NULL;
 
-  parse_json (text, &node);
-  free (text);
+  if (!parse_json (text, &node))
+    node = NULL;
 
+  free (text);
   return node;
 }
 
