@@ -7755,14 +7755,9 @@ N_tfarg :
           <targets>
             <target mandatory="yes">
               <node name="Exprs" />
-              <phases>
-                <all />
-              </phases>
-            </target>
-            <target mandatory="yes">
               <node name="SPId" />
               <phases>
-              <all />
+                <all />
               </phases>
             </target>
           </targets>
@@ -8221,11 +8216,6 @@ N_tfarg :
             <targets>
               <target mandatory="yes">
                 <node name="Vardec" />
-                <phases>
-                  <all />
-                </phases>
-              </target>
-              <target mandatory="yes">
                 <node name="Arg" />
                 <phases>
                   <all />
@@ -10532,11 +10522,6 @@ N_tfarg :
           <targets>
             <target mandatory="no">
               <node name="WLublock" />
-              <phases>
-                <all />
-              </phases>
-            </target>
-            <target mandatory="no">
               <node name="WLstride" />
               <phases>
                 <all />
@@ -10803,11 +10788,6 @@ N_tfarg :
           <targets>
             <target mandatory="yes">
               <node name="Num" />
-              <phases>
-                <all />
-              </phases>
-            </target>
-            <target mandatory="yes">
               <node name="Id" />
               <phases>
                 <all />
@@ -10820,11 +10800,6 @@ N_tfarg :
           <targets>
             <target mandatory="yes">
               <node name="Num" />
-              <phases>
-                <all />
-              </phases>
-            </target>
-            <target mandatory="yes">
               <node name="Id" />
               <phases>
                 <all />

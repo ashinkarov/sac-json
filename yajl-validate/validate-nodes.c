@@ -311,6 +311,36 @@ validate_target (const char *  node_name, const char *  son_attr_name,
 }
 
 
+/* Check that in the array of targets there is no target that
+   is specified for `all' phases.  */
+static bool
+target_all_speicified_once_p (const yajl_val targets, const char *  node_name,
+                              const char *  son_attr_name, bool son_p)
+{
+  assert (YAJL_IS_ARRAY (targets));
+  
+  /* If this is an array of one element we don't care.  */
+  if (YAJL_ARRAY_LENGTH (targets) == 1)
+    return true;
+
+  for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
+    {
+      const yajl_val target = YAJL_ARRAY_VALUES (targets)[i];
+      const yajl_val phases = yajl_tree_get (target, (const char *[]){"phases", 0}, yajl_t_any);
+      const char *  x;
+      if (phases && YAJL_IS_STRING (phases) && !strcmp (x=YAJL_GET_STRING (phases), "all"))
+        {
+          json_err ("target #%zu of %s `%s' of node `%s' is specified for all phases, "
+                    "but there are other targets for this son/attribute",
+                    i+1, son_p ? "son" : "attribute", son_attr_name, node_name);
+          return false;
+        }
+    }
+
+  return true;
+}
+
+
 static bool
 validate_attribute (const char *  node_name, const char *  attr_name, const yajl_val attribute)
 {
@@ -379,8 +409,12 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   if (YAJL_IS_OBJECT (targets))
     res = res && validate_target (node_name, attr_name, targets, false, 0);
   else if (YAJL_IS_ARRAY (targets))
-    for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
-      res = res && validate_target (node_name, attr_name, YAJL_ARRAY_VALUES (targets)[i], false, i+1);
+    {
+      for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
+        res = res && validate_target (node_name, attr_name, YAJL_ARRAY_VALUES (targets)[i], false, i+1);
+      
+      res = res && target_all_speicified_once_p (targets, node_name, attr_name, false);
+    }
   else
     {
       json_err ("`targets' of attribute `%s' of node `%s' must be of type object or array",
@@ -449,8 +483,12 @@ validate_son (const char *  node_name, const char *  son_name, const yajl_val so
   if (YAJL_IS_OBJECT (targets))
     res = res && validate_target (node_name, son_name, targets, true, 0);
   else if (YAJL_IS_ARRAY (targets))
-    for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
-      res = res && validate_target (node_name, son_name, YAJL_ARRAY_VALUES (targets)[i], true, i);
+    {
+      for (size_t i = 0; i < YAJL_ARRAY_LENGTH (targets); i++)
+        res = res && validate_target (node_name, son_name, YAJL_ARRAY_VALUES (targets)[i], true, i);
+
+      res = res && target_all_speicified_once_p (targets, node_name, son_name, true);
+    }
   else
     {
       json_err ("`targets' of son `%s' of node `%s' must be of type object or array",

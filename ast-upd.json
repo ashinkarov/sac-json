@@ -3657,18 +3657,14 @@
         "attributes": {}, 
         "sons": {
             "Vec": {
-                "targets": [
-                    {
-                        "phases": "all", 
-                        "contains": "Exprs", 
-                        "mandatory": true
-                    }, 
-                    {
-                        "phases": "all", 
-                        "contains": "SPId", 
-                        "mandatory": true
-                    }
-                ]
+                "targets": {
+                    "phases": "all", 
+                    "contains": [
+                        "Exprs", 
+                        "SPId"
+                    ], 
+                    "mandatory": true
+                }
             }, 
             "Expr": {
                 "targets": {
@@ -4244,18 +4240,14 @@
                 "default": "NULL", 
                 "inconstructor": false, 
                 "type": "Link", 
-                "targets": [
-                    {
-                        "phases": "all", 
-                        "contains": "Vardec", 
-                        "mandatory": true
-                    }, 
-                    {
-                        "phases": "all", 
-                        "contains": "Arg", 
-                        "mandatory": true
-                    }
-                ], 
+                "targets": {
+                    "phases": "all", 
+                    "contains": [
+                        "Vardec", 
+                        "Arg"
+                    ], 
+                    "mandatory": true
+                }, 
                 "description": [
                     "If this variable is a local, this is a link to its N_vardec. Otherwise, it is a function", 
                     "parameter, and this is a link to its N_arg."
@@ -6227,18 +6219,14 @@
                 }
             }, 
             "Contents": {
-                "targets": [
-                    {
-                        "phases": "all", 
-                        "contains": "WLublock", 
-                        "mandatory": false
-                    }, 
-                    {
-                        "phases": "all", 
-                        "contains": "WLstride", 
-                        "mandatory": false
-                    }
-                ]
+                "targets": {
+                    "phases": "all", 
+                    "contains": [
+                        "WLublock", 
+                        "WLstride"
+                    ], 
+                    "mandatory": false
+                }
             }, 
             "Next": {
                 "targets": {
@@ -6465,36 +6453,28 @@
         }, 
         "sons": {
             "Bound1": {
-                "targets": [
-                    {
-                        "phases": "all", 
-                        "contains": "Num", 
-                        "mandatory": true
-                    }, 
-                    {
-                        "phases": "all", 
-                        "contains": "Id", 
-                        "mandatory": true
-                    }
-                ], 
+                "targets": {
+                    "phases": "all", 
+                    "contains": [
+                        "Num", 
+                        "Id"
+                    ], 
+                    "mandatory": true
+                }, 
                 "description": [
                     "Encodes the lower bound of the grid. This needs to be a N_num node if ISDYNAMIC is", 
                     "not set."
                 ]
             }, 
             "Bound2": {
-                "targets": [
-                    {
-                        "phases": "all", 
-                        "contains": "Num", 
-                        "mandatory": true
-                    }, 
-                    {
-                        "phases": "all", 
-                        "contains": "Id", 
-                        "mandatory": true
-                    }
-                ], 
+                "targets": {
+                    "phases": "all", 
+                    "contains": [
+                        "Num", 
+                        "Id"
+                    ], 
+                    "mandatory": true
+                }, 
                 "description": [
                     "Encodes the upper bound of the grid. This needs to be a N_num node if ISDYNAMIC is", 
                     "not set."

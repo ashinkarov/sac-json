@@ -464,7 +464,8 @@ gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
           assert (targets);
           if (YAJL_IS_OBJECT (targets))
             gen_node_attrib_check_target (f, targets, node_name_upper, attrib_name_upper,
-                                          !strcmp (an->name, "Node"), true);
+                                          !strcmp (an->name, "Node")
+                                          || !strcmp (an->name, "Link"), true);
 
           else if (YAJL_IS_ARRAY (targets))
             for (size_t j = 0; j < YAJL_ARRAY_LENGTH (targets); j++)
@@ -474,7 +475,8 @@ gen_check_c (yajl_val nodes, yajl_val nodesets, const char *  fname)
 
                 gen_node_attrib_check_target (f, YAJL_ARRAY_VALUES (targets)[j],
                                               node_name_upper, attrib_name_upper,
-                                              !strcmp (an->name, "Node"),
+                                              !strcmp (an->name, "Node")
+                                              || !strcmp (an->name, "Link"),
                                               j == YAJL_ARRAY_LENGTH (targets) - 1);
               }
 
