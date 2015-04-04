@@ -747,7 +747,7 @@ gen_check_reset_c (yajl_val nodes, const char *  fname)
    The return value is ARG_NODE.  */
 
 bool
-gen_check_nodes_c (yajl_val nodes, const char *  fname)
+gen_check_node_c (yajl_val nodes, const char *  fname)
 {
   FILE *  f;
   GEN_OPEN_FILE (f, fname);

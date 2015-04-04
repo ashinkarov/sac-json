@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-//#include <stdarg.h>
+#include <getopt.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -42,6 +42,43 @@ struct attrtype_name *  attrtype_names = NULL;
 struct traversal_name *  traversal_names = NULL;
 
 
+/* Path to sac2c sources.  */
+char *  sac2cbase = NULL;
+
+
+/* Path of each file in sac2c source tree.  */
+char *gen_file_pathes[] =
+{
+  [f_types_trav_h] =           "types/types_trav.h",
+  [f_types_nodetype_h] =       "types/types_nodetype.h",
+  [f_traverse_tables_h] =      "tree/traverse_tables.h",
+  [f_traverse_tables_c] =      "tree/traverse_tables.c",
+  [f_traverse_helper_c] =      "tree/traverse_helper.c",
+  [f_sons_h] =                 "tree/sons.h",
+  [f_node_info_mac] =          "global/node_info.mac",
+  [f_free_node_h] =            "tree/free_node.h",
+  [f_attribs_h] =              "tree/attribs.h",
+  [f_node_alloc_h] =           "tree/node_alloc.h",
+  [f_node_basic_h] =           "tree/node_basic.h",
+  [f_free_attribs_h] =         "tree/free_attribs.h",
+  [f_check_reset_h] =          "tree/check_reset.h",
+  [f_check_node_h] =           "tree/check_node.h",
+  [f_check_h] =                "tree/check.h",
+  [f_node_basic_c] =           "tree/node_basic.c",
+  [f_free_node_c] =            "tree/free_node.c",
+  [f_check_reset_c] =          "tree/check_reset.c",
+  [f_check_node_c] =           "tree/check_node.c",
+  [f_check_c] =                "tree/check.c",
+  [f_serialize_attribs_h] =    "serialize/serialize_attribs.h",
+  [f_serialize_node_h] =       "serialize/serialize_node.h",
+  [f_serialize_link_h] =       "serialize/serialize_link.h",
+  [f_serialize_buildstack_h] = "serialize/serialize_buildstack.h",
+  [f_serialize_node_c] =       "serialize/serialize_node.c",
+  [f_serialize_link_c] =       "serialize/serialize_link.c",
+  [f_serialize_helper_c] =     "serialize/serialize_helper.c",
+  [f_serialize_buildstack_c] = "serialize/serialize_buildstack.c"
+};
+
 static yajl_val
 get_yajl_tree_from_file (const char *  fname)
 {
@@ -67,10 +104,61 @@ do {                          \
     }                         \
 } while (0)
 
-int
-main (void)
+
+
+static int
+usage (const char *  prog_name)
 {
-  //../ast.json  ../attributes.json  ../nodesets.json  ../traversals.json
+  fprintf (stderr, "usage: %s [flags]\n"
+                   "    --sac2cbase, -s  Set the location of sac2c.\n"
+                   "    --help, -h       Print help message and exit.\n\n",
+           prog_name);
+
+  return EXIT_FAILURE;
+}
+
+
+static struct option long_options[] =
+{
+  {"sac2cbase", required_argument, NULL, 's'},
+  {"help", no_argument, NULL, 'h'},
+  {NULL, 0, NULL, 0}
+};
+
+
+
+
+int
+main (int argc, char *argv[])
+{
+  const char *  prog_name = argv[0];
+  int ch;
+
+  while ((ch = getopt_long(argc, argv, "s:h", long_options, NULL)) != -1)
+    switch (ch)
+    {
+    case 's':
+      sac2cbase = strdup (optarg);
+      break;
+
+    case 'h':
+      exit (usage (prog_name));
+
+    case '?':
+      break;
+
+    default:
+      abort ();
+    }
+
+  if (!sac2cbase && !getenv ("SAC2CBASE"))
+    {
+      json_err ("The location of sac2c is unknown");
+      return EXIT_FAILURE;
+    }
+  else
+    sac2cbase = strdup (getenv ("SAC2CBASE"));
+
   int ret = EXIT_SUCCESS;
 
   yajl_val ast_node = NULL;
@@ -95,68 +183,56 @@ main (void)
   GET_OUT_IF (!load_and_validate_traversals (traversal_node, traversal_fname));
   GET_OUT_IF (!validate_ast (ast_node));
 
-  /* TODO Files to generate:
+  /* Make a full path to each file including sac2cbase prefix.  */
+  char *prefixed_pathes[f_max];
 
-     [x] ./types/types_trav.h.xsl
-     [x] ./types/types_nodetype.h.xsl
-     [x] ./tree/traverse_tables.h.xsl
-     [x] ./tree/traverse_tables.c.xsl
-     [x] ./tree/traverse_helper.c.xsl
-     [x] ./tree/sons.h.xsl
-     [x] ./tree/node_basic.h.xsl
-     [x] ./tree/node_basic.c.xsl
-     [x] ./tree/node_alloc.h.xsl
-     [x] ./tree/free_node.h.xsl
-     [x] ./tree/free_node.c.xsl
-     [x] ./tree/free_attribs.h.xsl
-     [x] ./tree/check_reset.h.xsl
-     [x] ./tree/check_reset.c.xsl
-     [x] ./tree/check_node.h.xsl
-     [x] ./tree/check_node.c.xsl
-     [x] ./tree/check.h.xsl
-     [x] ./tree/check.c.xsl
-     [x] ./tree/attribs.h.xsl
-     [x] ./serialize/serialize_node.h.xsl
-     [x] ./serialize/serialize_node.c.xsl
-     [x] ./serialize/serialize_link.h.xsl
-     [x] ./serialize/serialize_link.c.xsl
-     [x] ./serialize/serialize_helper.c.xsl
-     [x] ./serialize/serialize_buildstack.h.xsl
-     [x] ./serialize/serialize_buildstack.c.xsl
-     [x] ./serialize/serialize_attribs.h.xsl
-     [x] ./global/node_info.mac.xsl  */
+  for (size_t i = 0; i < f_max; i++)
+    {
+      const char *  p = "/src/libsac2c/";
+      prefixed_pathes[i] = malloc (strlen (sac2cbase)
+                                   + strlen (p)
+                                   + strlen (gen_file_pathes[i])
+                                   + 1);
+      sprintf (prefixed_pathes[i], "%s%s%s", sac2cbase, p, gen_file_pathes[i]);
+    }
 
-  gen_types_trav_h (traversal_node, "gen/types_trav.h");
-  gen_types_nodetype_h (ast_node, "gen/types_nodetype.h");
-  gen_traverse_tables_h (ast_node, traversal_node, "gen/traverse_tables.h");
-  gen_traverse_tables_c (ast_node, traversal_node, "gen/traverse_tables.c");
-  gen_traverse_helper_c (ast_node, "gen/traverse_helper.c");
-  gen_sons_h (ast_node, "gen/sons.h");
-  gen_node_info_mac (ast_node, "gen/node_info.mac");
-  gen_free_node_h (ast_node, "gen/free_node.h");
-  gen_attribs_h (ast_node, "gen/attribs.h");
-  gen_node_alloc_h (ast_node, "gen/node_alloc.h");
-  gen_node_basic_h (ast_node, "gen/node_basic.h");
-  gen_free_attribs_h ("gen/free_attribs.h");
-  gen_check_reset_h ("gen/check_reset.h");
-  gen_check_node_h ("gen/check_node.h");
-  gen_check_h ("gen/check.h");
-  gen_node_basic_c (ast_node, nodeset_node, "gen/node_basic.c");
-  gen_free_node_c (ast_node, "gen/free_node.c");
-  gen_check_reset_c (ast_node, "gen/check_reset.c");
-  gen_check_nodes_c (ast_node, "gen/check_node.c");
-  gen_check_c (ast_node, nodeset_node, "gen/check.c");
+#define PP(x) prefixed_pathes[x]
 
-  gen_serialize_attribs_h ("gen/serialize_attribs.h");
-  gen_serialize_node_h ("gen/serialize_node.h");
-  gen_serialize_link_h ("gen/serialize_link.h");
-  gen_serialize_buildstack_h ("gen/serialize_buildstack.h");
-  gen_serialize_node_c (ast_node, "gen/serialize_node.c");
-  gen_serialize_link_c (ast_node, "gen/serialize_link.c");
-  gen_serialize_helper_c (ast_node, "gen/serialize_helper.c");
-  gen_serialize_buildstack_c (ast_node, "gen/serialize_buildstack.c");
+  gen_types_trav_h (traversal_node, PP (f_types_trav_h));
+  gen_types_nodetype_h (ast_node, PP (f_types_nodetype_h));
+  gen_traverse_tables_h (ast_node, traversal_node, PP (f_traverse_tables_h));
+  gen_traverse_tables_c (ast_node, traversal_node, PP (f_traverse_tables_c));
+  gen_traverse_helper_c (ast_node, PP (f_traverse_helper_c));
+  gen_sons_h (ast_node, PP (f_sons_h));
+  gen_node_info_mac (ast_node, PP (f_node_info_mac));
+  gen_free_node_h (ast_node, PP (f_free_node_h));
+  gen_attribs_h (ast_node, PP (f_attribs_h));
+  gen_node_alloc_h (ast_node, PP (f_node_alloc_h));
+  gen_node_basic_h (ast_node, PP (f_node_basic_h));
+  gen_free_attribs_h (PP (f_free_attribs_h));
+  gen_check_reset_h (PP (f_check_reset_h));
+  gen_check_node_h (PP (f_check_node_h));
+  gen_check_h (PP (f_check_h));
+  gen_node_basic_c (ast_node, nodeset_node, PP (f_node_basic_c));
+  gen_free_node_c (ast_node, PP (f_free_node_c));
+  gen_check_reset_c (ast_node, PP (f_check_reset_c));
+  gen_check_node_c (ast_node, PP (f_check_node_c));
+  gen_check_c (ast_node, nodeset_node, PP (f_check_c));
+  gen_serialize_attribs_h (PP (f_serialize_attribs_h));
+  gen_serialize_node_h (PP (f_serialize_node_h));
+  gen_serialize_link_h (PP (f_serialize_link_h));
+  gen_serialize_buildstack_h (PP (f_serialize_buildstack_h));
+  gen_serialize_node_c (ast_node, PP (f_serialize_node_c));
+  gen_serialize_link_c (ast_node, PP (f_serialize_link_c));
+  gen_serialize_helper_c (ast_node, PP (f_serialize_helper_c));
+  gen_serialize_buildstack_c (ast_node, PP (f_serialize_buildstack_c));
+
+#undef PP
+  for (size_t i = 0; i < f_max; i++)
+    free (prefixed_pathes[i]);
 
 out:
+  free (sac2cbase);
   yajl_tree_free (ast_node);
   yajl_tree_free (attrtype_node);
   yajl_tree_free (nodeset_node);

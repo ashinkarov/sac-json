@@ -145,14 +145,6 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
           return false;
         }
 
-      /* TODO obtain path to the sac2c externally.  */
-      const char *  sac2cbase;
-      if (!(sac2cbase = getenv ("SAC2CBASE")))
-        {
-          json_err ("SAC2CBASE shell variable is not defined");
-          return false;
-        }
-
       const char *  p = "/src/libsac2c";
       char path[strlen (sac2cbase) + strlen (p) + 1];
       sprintf (path, "%s%s", sac2cbase, p);

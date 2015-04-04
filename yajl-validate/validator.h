@@ -22,6 +22,38 @@
 #define YAJL_ARRAY_VALUES(v) ((v)->u.array.values)
 #define YAJL_STRING_VALUE(v) ((v)->u.string)
 
+enum file_names
+{
+  f_types_trav_h,
+  f_types_nodetype_h,
+  f_traverse_tables_h,
+  f_traverse_tables_c,
+  f_traverse_helper_c,
+  f_sons_h,
+  f_node_info_mac,
+  f_free_node_h,
+  f_attribs_h,
+  f_node_alloc_h,
+  f_node_basic_h,
+  f_free_attribs_h,
+  f_check_reset_h,
+  f_check_node_h,
+  f_check_h,
+  f_node_basic_c,
+  f_free_node_c,
+  f_check_reset_c,
+  f_check_node_c,
+  f_check_c,
+  f_serialize_attribs_h,
+  f_serialize_node_h,
+  f_serialize_link_h,
+  f_serialize_buildstack_h,
+  f_serialize_node_c,
+  f_serialize_link_c,
+  f_serialize_helper_c,
+  f_serialize_buildstack_c,
+  f_max
+};
 
 enum tree_regexps
 {
@@ -130,7 +162,7 @@ struct traversal_name
 extern struct node_name *  node_names;
 extern struct attrtype_name *  attrtype_names;
 extern struct traversal_name *  traversal_names;
-
+extern char *  sac2cbase;
 
 /* A list of the regular expressions we might ever want to use
    during the validation.  We keep it in a list to avoid potential
