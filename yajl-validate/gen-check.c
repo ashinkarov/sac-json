@@ -146,14 +146,9 @@ gen_contains_item (FILE *  f, const char *  contains_name, const char *  node_na
   struct node_name *  nn;
 
   HASH_FIND_STR (node_names, contains_name, nn);
-  if (!nn)
-      /* FIXME this is lethal and should be replaced with assert when the problem is
-         fixed in the ast.json.  */
-      json_warn ("the node/nodeset `%s' in the target of son `%s' of the "
-                 "node `%s' is not found!",
-                 contains_name, son_name_upper, node_name_upper);
+  assert (nn);
 
-  if (!nn || nn->name_type == nnt_node)
+  if (nn->name_type == nnt_node)
     {
       char *  contains_name_lower = string_tolower (contains_name);
       fprintf (f, "%sNODE_TYPE (%s_%s (arg_node)) != N_%s",
