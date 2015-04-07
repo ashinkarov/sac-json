@@ -43,7 +43,7 @@
 
             #ast-desc .node-container {
             }
-            
+
             #header {
                 position: absolute;
                 height: 100px;
@@ -122,7 +122,7 @@
                 padding: 0;
                 width: 600px
             }
-            
+
             .target-phase {
                 color: #339966;
             }
@@ -140,7 +140,7 @@
             $.each (syntaxtree_json, function(i, val) {
                 ast_json.push ({"id": "node_" + i, "text": i});
             });
-            
+
             function gen_name (name) {
                 return "<span class='item-name'>" + name + "</span>";
             }
@@ -163,7 +163,7 @@
                     return "<span class='target-phase'>" + ph + "</span>";
                 } else {
                     return "<span class='target-phase'>" + ph['from'] + "</span>"
-                         + " &rarr; " 
+                         + " &rarr; "
                          + "<span class='target-phase'>" + ph['to'] + "</span>"
                          + "</span>";
                 }
@@ -197,13 +197,13 @@
                     t += gen_phase (phases);
 
                 t += "</span>";
-                
+
                 return t;
             }
 
             function gen_targets (tgts) {
                 var t = "<ol class='target-list'> ";
-                
+
                 if (tgts instanceof  Array)
                     $.each (tgts, function (i, tgt) {
                         t += gen_target (tgt);
@@ -211,14 +211,14 @@
                 else if (tgts instanceof Object)
                     t += gen_target (tgts);
                 t += "</ol>";
-                return t;   
+                return t;
             }
 
             function gen_node (name, node) {
                 var t = "<div class='node-container'>";
-                
+
                 t += "<h1>" + name + "</h1>"
-                if (node.hasOwnProperty ('description')) 
+                if (node.hasOwnProperty ('description'))
                     t += "<div class='node-description'>" + node['description'].join  (" ") + "</div>";
 
                 //t += "<ul class='node-ul'>";
@@ -228,18 +228,18 @@
                     t += "<h2>Sons</h2><ol class='node-sons'>"
                     $.each (node['sons'], function (son_name, val) {
                         t += "<li><div class='node-son'>";
-                        
+
                         t += gen_name (son_name);
                         t += gen_default (val);
                         t += gen_description (val);
 
                         t += gen_targets (val['targets']);
-                        
+
                         t += "</div>";
                     });
                     t += "</ol>"
                 }
-                
+
                 // Then we have attributes
                 if (node.hasOwnProperty ('attributes')) {
                     t += "<h2>Attributes</h2><ol class='node-attributes'>"
@@ -270,13 +270,13 @@
                            in json, as everywhere else, not DESC!  */
                         if (val.hasOwnProperty ('desc'))
                             t += "<div class='item-description'>" + val['desc'] + "</div>"
-                        
+
                         t += "</div>";
                     });
                     t += "</ol>"
                 }
 
-                
+
                 t += "</div>";
                 return t;
             }
@@ -290,11 +290,13 @@
         <div id="ast-desc"></div>
 
         <script>
-            $('#ast-tree').jstree({
-                'core': {
-                    'data': ast_json,
+            $("#ast-tree").jstree({
+                "core": {
+                    "data": ast_json,
                     "check_callback" : true
-                }
+                },
+
+                "plugins": ["sort"]
             });
 
             $('#ast-tree').on("changed.jstree", function (e, data) {
