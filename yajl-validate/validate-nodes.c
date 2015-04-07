@@ -265,7 +265,7 @@ validate_target (const char *  node_name, const char *  son_attr_name,
         {
           json_err ("the value `%s' of `contains' in the target %sof %sof the node `%s' is not "
                     "a valid node or nodeset", x, tn, sa, node_name);
-          // FIXME return false;
+          return false;
         }
     }
 
@@ -287,7 +287,7 @@ validate_target (const char *  node_name, const char *  son_attr_name,
             {
               json_err ("the value `%s' of the #%zu item in `contains' of the target %sof %sof the "
                         "node `%s' is not a node or a nodeset", x, i+1, tn, sa, node_name);
-              // FIXME return false;
+              return false;
             }
         }
 
