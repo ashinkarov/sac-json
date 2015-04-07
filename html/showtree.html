@@ -137,12 +137,12 @@
         <script src="./ast.js"></script>
         <script>
             var ast_json = [];
-            $.each (syntaxtree_json['syntaxtree'], function(i, val) {
-                ast_json.push ({"id": "node_" + i, "text": val['name']});
+            $.each (syntaxtree_json, function(i, val) {
+                ast_json.push ({"id": "node_" + i, "text": i});
             });
             
-            function gen_name (obj) {
-                return "<span class='item-name'>" + obj['name'] + "</span>";
+            function gen_name (name) {
+                return "<span class='item-name'>" + name + "</span>";
             }
 
             function gen_default (obj) {
@@ -153,7 +153,7 @@
 
             function gen_description (obj) {
                 if (obj.hasOwnProperty ('description'))
-                    return "<div class='item-description'>" + obj['description'] + "</div>";
+                    return "<div class='item-description'>" + obj['description'].join (" ") + "</div>";
 
                 return "";
             }
@@ -173,8 +173,7 @@
                 var contains = tgt['contains'];
                 var phases = tgt['phases'];
 
-                // FIXME we want to make this field boolean!
-                var t = "<li> " +  (tgt['mandatory'] == "yes" ? "&#x2714;" : "&#x2717;");
+                var t = "<li> " +  (tgt['mandatory'] ? "&#x2714;" : "&#x2717;");
 
                 if (contains === "any")
                     t += "<span class='target-contains'>Any</span>";
@@ -215,22 +214,22 @@
                 return t;   
             }
 
-            function gen_node (node) {
+            function gen_node (name, node) {
                 var t = "<div class='node-container'>";
                 
-                t += "<h1>" + node['name'] + "</h1>"
+                t += "<h1>" + name + "</h1>"
                 if (node.hasOwnProperty ('description')) 
-                    t += "<div class='node-description'>" + node['description'] + "</div>";
+                    t += "<div class='node-description'>" + node['description'].join  (" ") + "</div>";
 
                 //t += "<ul class='node-ul'>";
 
                 // Then we have sons
                 if (node.hasOwnProperty ('sons')) {
                     t += "<h2>Sons</h2><ol class='node-sons'>"
-                    $.each (node['sons'], function (i, val) {
+                    $.each (node['sons'], function (son_name, val) {
                         t += "<li><div class='node-son'>";
                         
-                        t += gen_name (val);
+                        t += gen_name (son_name);
                         t += gen_default (val);
                         t += gen_description (val);
 
@@ -244,10 +243,10 @@
                 // Then we have attributes
                 if (node.hasOwnProperty ('attributes')) {
                     t += "<h2>Attributes</h2><ol class='node-attributes'>"
-                    $.each (node['attributes'], function (i, val) {
+                    $.each (node['attributes'], function (attr_name, val) {
                         t += "<li><div class='node-attribute'>";
 
-                        t += gen_name (val);
+                        t += gen_name (attr_name);
                         t += " :: <span class='attribute-type'>" + val['type'] + "</span> ";
                         t += gen_default (val);
                         t += gen_description (val);
@@ -261,10 +260,10 @@
                 // Then we have attributes
                 if (node.hasOwnProperty ('flags')) {
                     t += "<h2>Flags</h2><ol class='node-flags'>"
-                    $.each (node['flags'], function (i, val) {
+                    $.each (node['flags'], function (flag_name, val) {
                         t += "<li><div class='node-flag'>";
 
-                        t += gen_name (val);
+                        t += gen_name (flag_name);
                         t += gen_default (val);
 
                         /* FIXME this is bollocks, this field should be called DESCRIPTION
@@ -302,8 +301,8 @@
                 $('#ast-desc').html ("");
 
                 $.each (data.selected, function (i, val) {
-                    var id = parseInt (val.replace(/node_([0-9]*)/, "$1"));
-                    var txt = gen_node (syntaxtree_json['syntaxtree'][id]);
+                    var id = val.replace(/node_([0-9]*)/, "$1");
+                    var txt = gen_node (id, syntaxtree_json[id]);
                     $('#ast-desc').append (txt + "<br/>");
                 });
             });
