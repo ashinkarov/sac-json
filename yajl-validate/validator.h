@@ -163,6 +163,7 @@ extern struct node_name *  node_names;
 extern struct attrtype_name *  attrtype_names;
 extern struct traversal_name *  traversal_names;
 extern char *  sac2cbase;
+extern const char *gen_file_pathes[];
 
 /* A list of the regular expressions we might ever want to use
    during the validation.  We keep it in a list to avoid potential

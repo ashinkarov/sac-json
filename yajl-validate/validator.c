@@ -47,7 +47,7 @@ char *  sac2cbase = NULL;
 
 
 /* Path of each file in sac2c source tree.  */
-char *gen_file_pathes[] =
+const char *gen_file_pathes[] =
 {
   [f_types_trav_h] =           "types/types_trav.h",
   [f_types_nodetype_h] =       "types/types_nodetype.h",
