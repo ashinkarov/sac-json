@@ -274,12 +274,9 @@ gen_node_son_check (FILE *  f, yajl_val nodesets, const char *  node_name_upper,
               son_name_upper, node_name_upper);
 
   HASH_FIND_STR (node_names, x, nn);
-  /* FIXME this should become an assertion when the name is fixed in ast.json.  */
-  if (NULL == nn)
-    json_warn ("the target %s of the son %s of node %s is not found",
-               x, son_name_upper, node_name_upper);
+  assert (nn);
 
-  if (!nn || nn->name_type == nnt_node)
+  if (nn->name_type == nnt_node)
     {
       char *  n_lower = string_tolower (x);
       fprintf (f, nchk_pattern, node_name_upper, son_name_upper, n_lower);
