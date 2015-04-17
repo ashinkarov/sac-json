@@ -1,0 +1,89 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'PT Serif', serif;
+}
+
+body{
+    overflow: hidden;
+    padding-top: 100px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+}
+
+a, a:hover {
+    color: #336699;
+    text-decoration: none;
+}
+
+h1,h2,h3,h4,h5,h6,span.item-name{
+    color:#000;
+    font-weight:400;
+    -webkit-font-feature-settings:"liga","dlig";
+    -moz-font-feature-settings:"liga=1, dlig=1";
+    -ms-font-feature-settings:"liga","dlig";
+    -o-font-feature-settings:"liga","dlig";
+    font-feature-settings:"liga","dlig"
+}
+
+#ast-desc .node-container {
+}
+
+#header {
+    position: absolute;
+    height: 100px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-bottom: 1px #ccc solid;
+    text-align: center;
+}
+
+#menu {
+    display: table;
+    margin: auto;
+}
+
+#menu ul
+{
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+
+#menu li
+{
+    list-style: none;
+    float: left;
+    margin-right: 0.5em;
+}
+
+#menu a
+{
+    display: block;
+    text-decoration: none;
+    color: #0000ee;
+    text-align: center;
+    padding: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#menu li.selected a {
+    text-decoration: underline;
+}
+
+#menu a:visited {
+    color: #0000ee;
+}
+
+#menu a:hover
+{
+    color: #ee3333;
+}

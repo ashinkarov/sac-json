@@ -1,4 +1,4 @@
-var syntaxtree_json =    
+var syntaxtree_json =
 {
     "Module": {
         "attributes": {
@@ -7733,9 +7733,9 @@ var syntaxtree_json =
             "of with-loop code for each target architecture."
         ]
     }
-};
-          
-var traversals_json =    
+}
+;
+var traversals_json =
 {
     "ACTRAN": {
         "default": "sons", 
@@ -12161,8 +12161,9 @@ var traversals_json =
             "Generator"
         ]
     }
-};     
-var nodesets_json =      
+}
+;
+var nodesets_json =
 {
     "Expr": [
         "Num",
@@ -12234,8 +12235,9 @@ var nodesets_json =
         "With",
         "With2"
     ]
-};       
-var attrtypes_json =     
+}
+;
+var attrtypes_json =
 {
     "AccessFeature": {
         "copy": "literal", 
@@ -12273,7 +12275,7 @@ var attrtypes_json =
     "Char": {
         "copy": "literal", 
         "ctype": "unsigned char", 
-        "init": "'\0'", 
+        "init": "'\\0'", 
         "vtype": "int"
     }, 
     "CodeLink": {
@@ -12536,5 +12538,5 @@ var attrtypes_json =
         "ctype": "vertex*", 
         "init": "NULL"
     }
-};      
-
+}
+;

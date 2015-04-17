@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>SaC AST and viewver</title>
+        <title>SaC Abstract Syntax Tree</title>
         <meta name="description" content="An HTML representation of the internal AST format of SaC">
 
         <!-- Define a viewport to mobile devices to use - telling the browser to assume that the page is
@@ -11,51 +11,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="./css/style.css" />
+        <link rel="stylesheet" type="text/css" href="./css/sac-ast.css">
         <style>
-            * {
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-                font-family: 'PT Serif', serif;
-            }
-
-            body{
-                overflow: hidden;
-                padding-top: 100px;
-            }
-
-            html, body {
-                margin: 0;
-                padding: 0;
-                top: 0;
-                bottom: 0;
-            }
-
-            h1,h2,h3,h4,h5,h6,span.item-name{
-                color:#000;
-                font-weight:400;
-                -webkit-font-feature-settings:"liga","dlig";
-                -moz-font-feature-settings:"liga=1, dlig=1";
-                -ms-font-feature-settings:"liga","dlig";
-                -o-font-feature-settings:"liga","dlig";
-                font-feature-settings:"liga","dlig"
-            }
-
-            #ast-desc .node-container {
-            }
-
-            #header {
-                position: absolute;
-                height: 100px;
-                width: 100%;
-                top: 0;
-                left: 0;
-                border-bottom: 1px #888 dotted;
-            }
-
             #ast-tree {
                 padding-left: 20px;
-                padding-top: 20px;
+                /*padding-top: 20px;*/
                 top: 100px;
                 bottom: 0;
                 width: 25%;
@@ -131,15 +91,27 @@
                 margin-left: 30px;
             }
         </style>
-
         <script src="./js/jquery-1.11.2.js"></script>
         <script src="./js/jstree.js"></script>
+        <script src="./js/jquery.scrollTo.js"></script>
         <script src="./ast.js"></script>
         <script>
             var ast_json = [];
             $.each (syntaxtree_json, function(i, val) {
                 ast_json.push ({"id": "node_" + i, "text": i});
             });
+
+            // A function to click nodes in the tree.
+            function click_tree (id) {
+                // Deselect all the nodes in the tree.
+                $("#ast-tree").jstree ("deselect_all");
+
+                // Select an ID node.
+                $("#ast-tree").jstree ("select_node", id).trigger("select_node.jstree");
+
+                // Update the location in the tree div.
+                $("#ast-tree").scrollTo (id);
+            }
 
             function gen_name (name) {
                 return "<span class='item-name'>" + name + "</span>";
@@ -178,18 +150,26 @@
                 if (contains === "any")
                     t += "<span class='target-contains'>Any</span>";
                 else if (contains instanceof Array)
-                    // FIXME  we want to insert links to types here
                     t += $.map (contains, function (val) {
-                             return "<span class='target-type'>" + val + "</span>";
+                             var href = 
+                                 val in nodesets_json
+                                 ? "shownodesets.html#ns_" + val
+                                 : "javascript:click_tree (\"#node_" + val + "\")"
+
+                             return "<span class='target-type'><a href='" + href + "'>" + val + "</a></span>";
                          }).join (", ");
-                else
-                    t += "<span class='target-type'>" + contains + "</span>";
+                else {
+                    var href = contains in nodesets_json
+                               ? "shownodesets.html#ns_" + contains
+                               : "javascript:click_tree (\"#node_" + contains + "\")"
+
+                    t += "<span class='target-type'><a href='" + href + "'>" + contains + "</a></span>";
+                }
 
                 t += "<span class='target-phases'>";
                 if (phases === "all")
                     t += "<span class='target-phase'>Any phase</span>";
                 else if (phases instanceof  Array)
-                    // FIXME  we want to insert links to types here
                     t += $.map (phases, function (val) {
                              return gen_phase (val);
                          }).join (", ");
@@ -247,7 +227,13 @@
                         t += "<li><div class='node-attribute'>";
 
                         t += gen_name (attr_name);
-                        t += " :: <span class='attribute-type'>" + val['type'] + "</span> ";
+                        t += " :: <span class='attribute-type'>"
+                           + "<a href='showattrtypes.html#attrt_" 
+                           + val['type'] 
+                           + "'>" 
+                           + val['type']
+                           + "</a>"
+                           + "</span> ";
                         t += gen_default (val);
                         t += gen_description (val);
                         t += gen_targets (val['targets']);
@@ -284,12 +270,23 @@
     </head>
     <body>
         <div id="header">
+            <div id="menu">
+                <ul>
+                    <li class="selected"><a href="showtree.html">SaC AST</a></li>
+                    <li><a href="showattrtypes.html">SaC Attribute Types</a></li>
+                    <li><a href="showtraversals.html">SaC Traversals</a></li>
+                    <li><a href="shownodesets.html">SaC Nodesets</a></li>
+                </ul>
+            </div>
             <h1>SaC Abstract Syntax Tree</h1>
         </div>
         <div id="ast-tree"></div>
         <div id="ast-desc"></div>
 
         <script>
+            // Remember a hash link when loading the page
+            var anchor = window.location.hash;
+
             $("#ast-tree").jstree({
                 "core": {
                     "data": ast_json,
@@ -297,17 +294,31 @@
                 },
 
                 "plugins": ["sort"]
+            })
+            // Bind a function that selects a node passed via hash link
+            // in case such a node is valid.
+            .bind("loaded.jstree", function () {
+                if ($(anchor).length > 0) {
+                    // Select a node stored in ANCHOR and send an event to trigger redrawing.
+                    $("#ast-tree").jstree("select_node", anchor).trigger("select_node.jstree");
+
+                    // Scroll a page to the selected node.
+                    $("#ast-tree").scrollTo (anchor);
+                }
             });
+
 
             $('#ast-tree').on("changed.jstree", function (e, data) {
                 $('#ast-desc').html ("");
 
                 $.each (data.selected, function (i, val) {
-                    var id = val.replace(/node_([0-9]*)/, "$1");
+                    var id = val.replace(/node_(.*)/, "$1");
                     var txt = gen_node (id, syntaxtree_json[id]);
                     $('#ast-desc').append (txt + "<br/>");
                 });
             });
+
+
         </script>
     </body>
 </html>

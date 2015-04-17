@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SaC Nodesets</title>
+        <meta name="description" content="An HTML representation of SaC Nodesets">
+
+        <!-- Define a viewport to mobile devices to use - telling the browser to assume that the page is
+             as wide as the device (width=device-width) and setting the initial page zoom level to be 1
+             (initial-scale=1.0) -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="./css/style.css" />
+        <link rel="stylesheet" type="text/css" href="./css/sac-ast.css">
+        <style>
+            #main {
+                position: fixed;
+                top: 100px;
+                bottom: 0;
+                width: 100%;
+                overflow: auto;
+                border-bottom: 1px #888 dotted;
+            }
+
+            #nodesets-table {
+                max-width: 800px;
+                margin: auto;
+                margin-top: 15px;
+                border-collapse: collapse;
+            }
+
+            td, th {
+                padding: .5em;
+            }
+
+            th {
+                text-align: left;
+                padding-bottom: 15px;
+                /*background:#ccc;*/
+                /*border-bottom: 2px solid #ccc;*/
+            }
+
+            tr:nth-child(even) td {
+                background:#eee;
+            }
+
+            .init {
+                text-align: center;
+            }
+
+            td.ctype {
+                font-family: monospace;
+            }
+        </style>
+        <script src="./js/jquery-1.11.2.js"></script>
+        <script src="./js/jstree.js"></script>
+        <script src="./ast.js"></script>
+        <script>
+        </script>
+    </head>
+    <body>
+        <div id="header">
+
+            <div id="menu">
+                <ul>
+                    <li><a href="showtree.html">SaC AST</a></li>
+                    <li><a href="showattrtypes.html">SaC Attribute Types</a></li>
+                    <li><a href="showtraversals.html">SaC Traversals</a></li>
+                    <li class="selected"><a href="shownodesets.html">SaC Nodesets</a></li>
+                </ul>
+            </div>
+            <h1>SaC Nodesets</h1>
+        </div>
+        <div id="main">
+            <table id="nodesets-table">
+            </table>
+        </div>
+
+        <script>
+            function gen_links (arr) {
+                var t = ""
+                var len = arr.length
+
+                for (var i = 0; i < len; i++) {
+                    t += "<a href='showtree.html#node_" + arr[i] + "'>"
+                       + arr[i]
+                       + "</a>"
+
+                    if (i != len - 1)
+                        t += ", "
+                }
+                return t
+            }
+            function gen_rows (obj) {
+                var t = "<tr>"
+                      + "<th>Name</th>"
+                      + "<th>Nodes</th>"
+                      + "</tr>"
+
+                $.each (obj, function (name, val) {
+                    t += "<tr>"
+                      +  "<td id='ns_" + name + "'>"
+                      +  name 
+                      +  "</td>"
+                      +  "<td>" + gen_links (val) + "</td>"
+                      +  "</tr>"
+                });
+                return t
+            }
+
+            $(document).ready (function () {
+                $("#nodesets-table").html (gen_rows (nodesets_json));
+            });
+        </script>
+    </body>
+</html>

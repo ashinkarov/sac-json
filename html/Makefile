@@ -8,12 +8,15 @@ ATTRTYPES  := ../attr-types.json
 
 ast.js: $(AST) $(NODESETS) $(TRAVERSALS) $(ATTRTYPES)
 	@echo Generating $@
-	@echo -e        "\
-var syntaxtree_json =    \n\
-`cat $(AST)`;\n          \n\
-var traversals_json =    \n\
-`cat $(TRAVERSALS)`;     \n\
-var nodesets_json =      \n\
-`cat $(NODESETS)`;       \n\
-var attrtypes_json =     \n\
-`cat $(ATTRTYPES)`;      \n" > $@
+	@echo "var syntaxtree_json =" >  $@
+	@cat $(AST)                   >> $@
+	@echo ";"                     >> $@
+	@echo "var traversals_json =" >> $@
+	@cat $(TRAVERSALS)            >> $@
+	@echo ";"                     >> $@
+	@echo "var nodesets_json ="   >> $@
+	@cat $(NODESETS)              >> $@
+	@echo ";"                     >> $@
+	@echo "var attrtypes_json ="  >> $@
+	@cat $(ATTRTYPES)             >> $@
+	@echo ";"                     >> $@
