@@ -37,7 +37,7 @@ The migration plan includes:
   - [x] Converting `xml.ast` into `*.json`
   - [x] Writing a validator for `*.json`
   - [x] Documenting the structure of `*.json` files
-  - [ ] Porting the HTML page (partially done)
+  - [x] Porting the HTML page
   - [x] Porting the existing XSLT files
    - [x] types/types_trav.h.xsl
    - [x] types/types_nodetype.h.xsl
