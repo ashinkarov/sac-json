@@ -1032,13 +1032,14 @@
             "With", 
             "Withid", 
             "Exprs", 
-            "Module"
+            "Module", 
+            "Genarray"
         ]
     }, 
     "DLIRMOV": {
         "default": "sons", 
         "include": "loop_invariant_removal.h", 
-        "name": "Loop Invariants Move Traversal", 
+        "name": "Loop Invariant Move Traversal", 
         "travuser": [
             "Id", 
             "Withid", 
@@ -1046,6 +1047,36 @@
             "Block", 
             "Let", 
             "Ids"
+        ]
+    }, 
+    "DMIDA": {
+        "default": "sons", 
+        "include": "identify_distributable_arrays.h", 
+        "name": "Identify distributable arrays for the distributed memory backend", 
+        "travuser": [
+            "Let", 
+            "Ids"
+        ]
+    }, 
+    "DMISEF": {
+        "default": "sons", 
+        "include": "identify_side_effect_functions.h", 
+        "name": "Identify side effect functions for the distributed memory backend", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Ap", 
+            "Exprs", 
+            "Ret"
+        ]
+    }, 
+    "DMISEFA": {
+        "default": "sons", 
+        "include": "identify_side_effect_function_aps.h", 
+        "name": "Identify function applications with side-effects for the distributed memory backend", 
+        "travuser": [
+            "Ap", 
+            "Fundef"
         ]
     }, 
     "DMUI": {
@@ -3024,6 +3055,21 @@
             "Part", 
             "With", 
             "Assign", 
+            "Ap", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "POLYS": {
+        "default": "sons", 
+        "include": "polyhedral_setup.h", 
+        "name": "Polyhedral Analysis Setup", 
+        "travuser": [
+            "Fundef", 
+            "Part", 
+            "With", 
+            "Assign", 
+            "Ap", 
             "Let", 
             "Prf"
         ]
@@ -3081,7 +3127,8 @@
             "With", 
             "Modarray", 
             "Part", 
-            "Prf"
+            "Prf", 
+            "Ap"
         ]
     }, 
     "RC": {
@@ -3953,6 +4000,16 @@
             "Fundef"
         ]
     }, 
+    "UID": {
+        "default": "sons", 
+        "include": "runtime_function_id.h", 
+        "name": "Set unique ids for generic functions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg"
+        ]
+    }, 
     "UPRF": {
         "default": "sons", 
         "include": "prfunroll.h", 
@@ -4197,7 +4254,7 @@
     "WLIR": {
         "default": "sons", 
         "include": "withloop_invariant_removal.h", 
-        "name": "Loop Invariants Traversal", 
+        "name": "With-Loop Invariant Traversal", 
         "travuser": [
             "Ids", 
             "Assign", 

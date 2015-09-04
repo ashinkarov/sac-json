@@ -1201,6 +1201,21 @@
                     }
                 }, 
                 {
+                    "name": "SourceName", 
+                    "default": "NULL", 
+                    "inconstructor": "no", 
+                    "type": "String", 
+                    "targets": {
+                        "phases": {
+                            "to": "final", 
+                            "from": "pc_rid"
+                        }, 
+                        "contains": "any", 
+                        "mandatory": "no"
+                    }, 
+                    "description": "original name of a function"
+                }, 
+                {
                     "default": "NULL", 
                     "inconstructor": "no", 
                     "type": "NewType", 
@@ -1652,6 +1667,67 @@
                     "type": "Link", 
                     "name": "withops", 
                     "description": "Used by mutc backend for lifting desc mallocs up"
+                }, 
+                {
+                    "name": "Callerfundef", 
+                    "default": "NULL", 
+                    "inconstructor": "no", 
+                    "type": "ExtLink", 
+                    "targets": {
+                        "phases": [
+                            {
+                                "to": "opt_saacyc_edfa", 
+                                "from": "opt_saacyc_edfa"
+                            }, 
+                            {
+                                "to": "opt_saacyc_pogo", 
+                                "from": "opt_saacyc_pogo"
+                            }, 
+                            {
+                                "to": "opt_saacyc_pwlf", 
+                                "from": "opt_saacyc_pwlf"
+                            }
+                        ], 
+                        "contains": "Assign", 
+                        "mandatory": "no"
+                    }, 
+                    "description": "For a LACFUN, this attribute points to the N_fundef code of its \n\t  external caller. Other functions have NULL here.\n\t  Valid only during EDFA, POGO, and PWLF. Referenced in PHUT,\n\t  so any PHUT callers must maintain this. It would be nice to\n\t  have this maintained throughout compilation, but that may not\n\t  be trivial."
+                }, 
+                {
+                    "name": "Callap", 
+                    "default": "NULL", 
+                    "inconstructor": "no", 
+                    "type": "ExtLink", 
+                    "targets": {
+                        "phases": [
+                            {
+                                "to": "opt_saacyc_edfa", 
+                                "from": "opt_saacyc_edfa"
+                            }, 
+                            {
+                                "to": "opt_saacyc_pogo", 
+                                "from": "opt_saacyc_pogo"
+                            }, 
+                            {
+                                "to": "opt_saacyc_pwlf", 
+                                "from": "opt_saacyc_pwlf"
+                            }
+                        ], 
+                        "contains": "Ap", 
+                        "mandatory": "no"
+                    }, 
+                    "description": "If this function is a LACFUN, this attribute points to\n\t  the N_assign node for the N_ap that invokes the LACFUN from outside the\n\t  LACFUN; else NULL. Valid only during EDFA, POGO, and PWLF. Referenced in PHUT,\n\t  so any PHUT callers must maintain this. It would be nice to\n\t  have this maintained throughout compilation, but that may not\n\t  be trivial."
+                }, 
+                {
+                    "targets": {
+                        "phases": "all", 
+                        "contains": "any", 
+                        "mandatory": "no"
+                    }, 
+                    "inconstructor": "no", 
+                    "type": "String", 
+                    "name": "RtspecId", 
+                    "description": "Used by rtspec to uniquely identify a function"
                 }
             ], 
             "sons": [
@@ -1948,6 +2024,11 @@
                     "default": "FALSE", 
                     "name": "IsSlowClone", 
                     "desc": "This function is a slow clone"
+                }, 
+                {
+                    "default": "FALSE", 
+                    "name": "DistMemHasSideEffects", 
+                    "desc": "This function has side effects and may only be executed by the master node when the distributed memory backend is used."
                 }
             ], 
             "name": "Fundef", 
@@ -2006,6 +2087,11 @@
                 }, 
                 {
                     "name": "IsUnique"
+                }, 
+                {
+                    "default": "FALSE", 
+                    "name": "DistMemIsUniqueLeaf", 
+                    "desc": "Indicates that this argument is unique and that it is not passed to another function."
                 }, 
                 {
                     "default": "FALSE", 
@@ -2977,12 +3063,23 @@
             "name": "Ap", 
             "sons": [
                 {
-                    "name": "Args", 
                     "targets": {
                         "phases": "all", 
                         "contains": "Exprs", 
                         "mandatory": "no"
-                    }
+                    }, 
+                    "name": "Args", 
+                    "description": "Argument list for function invocation"
+                }, 
+                {
+                    "default": "NULL", 
+                    "targets": {
+                        "phases": "all", 
+                        "contains": "Exprs", 
+                        "mandatory": "no"
+                    }, 
+                    "name": "LoopCount", 
+                    "description": "If AP_FUNDEF is a LOOPFUN, we may be able to deduce the\n\t  iteration count for the loop. If so, AP_LOOPCOUNT is an N_exprs\n\t  that is the count; else NULL.\n\t  The count may be a constant ( e.g., 42), or it may be symbolic\n\t  ( e.g., UB-LB)."
                 }
             ], 
             "flags": [
@@ -3005,6 +3102,11 @@
                 {
                     "name": "ToSpawn", 
                     "desc": "This node calls a function which contains spawns"
+                }, 
+                {
+                    "default": "FALSE", 
+                    "name": "DistMemHasSideEffects", 
+                    "desc": "This function application has side effects and may only be executed by the master node when the distributed memory backend is used."
                 }
             ], 
             "attributes": [
@@ -4254,11 +4356,6 @@
                 }, 
                 {
                     "default": "FALSE", 
-                    "name": "IsWLFolded", 
-                    "desc": "If true, the given variable is the result of a producerWL\n             that has been folded out of existence."
-                }, 
-                {
-                    "default": "FALSE", 
                     "name": "IsHostReferenced"
                 }, 
                 {
@@ -4313,6 +4410,11 @@
                 }, 
                 {
                     "default": "FALSE", 
+                    "name": "DistMemSuballoc", 
+                    "desc": "This variable is allocated using a suballoc. It may need to be allocated in the\n            DSM memory."
+                }, 
+                {
+                    "default": "FALSE", 
                     "name": "NeedBlocked", 
                     "desc": "If true, the given variable is a loop index and the loop needs to be blocked"
                 }, 
@@ -4325,6 +4427,16 @@
                     "default": "FALSE", 
                     "name": "IsScalarized", 
                     "desc": "Used by LACSO to indicate that a small array\n\t  argument or result has been scalarized. Its only\n\t  function is to prevent us from doing the scalarization\n\t  more than once."
+                }, 
+                {
+                    "default": "FALSE", 
+                    "name": "IsHasAft", 
+                    "desc": "This flag is used by PHUT to keep track of N_id nodes that\n\t  have already had an Affine Function Tree (AFT) built for them, so\n\t  that we do not put redundant constraints into ISL input files.\n\t  The extremely high cost of polyhedral model analysis \n\t  make this quite important."
+                }, 
+                {
+                    "default": "TRUE", 
+                    "name": "DistMemIsDistributable", 
+                    "desc": "This flag indicates whether the array is distributable. \n    That is not the case if the array is written to in the body of a parallel genarray/modarray with-loop\n    (including nested with-loops) but it is not the result of the (outermost) with-loop."
                 }
             ], 
             "attributes": [
@@ -4757,25 +4869,11 @@
                     "description": "Hidey-hole used by LACSO to link the being-scalarized array to its\n\t   scalar elements. Strictly local, and could be eliminated with\n\t   a bit of work."
                 }, 
                 {
-                    "default": "-1", 
-                    "targets": {
-                        "phases": {
-                            "to": "opt_saacyc_pogo", 
-                            "from": "opt_saacyc_pogo"
-                        }, 
-                        "contains": "any", 
-                        "mandatory": "no"
-                    }, 
-                    "type": "Integer", 
-                    "name": "PolylibColumnIndex", 
-                    "description": "This is used by PHUTcollectAffineExprs to assign an\n\t  origin-1 column number to each distinct name found in\n\t  any particular affine expression tree."
-                }, 
-                {
                     "default": "NULL", 
                     "targets": {
                         "phases": {
-                            "to": "opt_saacyc_pogo", 
-                            "from": "opt_saacyc_pogo"
+                            "to": "final", 
+                            "from": "opt_saacyc_polys"
                         }, 
                         "contains": "any", 
                         "mandatory": "no"
@@ -7075,6 +7173,11 @@
                 {
                     "default": "FALSE", 
                     "name": "IsUnique"
+                }, 
+                {
+                    "default": "FALSE", 
+                    "name": "DistMemBroadcastArg", 
+                    "desc": "This return value needs to be broadcast\n            and is therefore allocated in DSM memory."
                 }
             ], 
             "name": "Ret"

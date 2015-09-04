@@ -126,6 +126,13 @@
           <node name="Fundef" />
         </travuser>
       </traversal>
+      <traversal id="UID" name="Set unique ids for generic functions" default="sons" include="runtime_function_id.h">
+        <travuser>
+          <node name="Module" />
+          <node name="Fundef" />
+          <node name="Arg" />
+        </travuser>
+      </traversal>
       <traversal id="CLF" name="Create loop functions" default="sons" include="create_loop_fun.h">
         <travuser>
           <node name="Assign" />
@@ -394,6 +401,18 @@
           <node name="Id" />
           <node name="Prf" />
         </travuser>
+      </traversal>
+      <traversal id="DMISEFA" name="Identify function applications with side-effects for the distributed memory backend" default="sons" include="identify_side_effect_function_aps.h">
+        <travuser>
+	        <node name="Ap" />
+	        <node name="Fundef" />
+	      </travuser>
+      </traversal>
+      <traversal id="DMIDA" name="Identify distributable arrays for the distributed memory backend" default="sons" include="identify_distributable_arrays.h">
+        <travuser>
+	        <node name="Let" />
+	        <node name="Ids" />
+	      </travuser>
       </traversal>
       <traversal id="ACUPTN" name="Annotate CUDA partitions" default="sons" include="annotate_cuda_partition.h" >
         <travuser>
@@ -769,6 +788,18 @@
           <node name="Part" />
           <node name="With" />
           <node name="Assign" />
+          <node name="Ap" />
+          <node name="Let" />
+          <node name="Prf" />
+        </travuser>
+      </traversal> 
+      <traversal id="POLYS" name="Polyhedral Analysis Setup" default="sons" include="polyhedral_setup.h" >
+        <travuser>
+          <node name="Fundef" />
+          <node name="Part" />
+          <node name="With" />
+          <node name="Assign" />
+          <node name="Ap" />
           <node name="Let" />
           <node name="Prf" />
         </travuser>
@@ -943,6 +974,15 @@
           <node name="Cond" />
           <node name="Arg" />
         </travuser>
+      </traversal>
+      <traversal id="DMISEF" name="Identify side effect functions for the distributed memory backend" default="sons" include="identify_side_effect_functions.h">
+        <travuser>
+	        <node name="Fundef" />
+	        <node name="Arg" />
+	        <node name="Ap" />
+	        <node name="Exprs" />
+	        <node name="Ret" />
+	      </travuser>
       </traversal>
       <traversal id="USSAT" name="UndoSSATransform Traversal" default="sons" include="UndoSSATransform.h" >
         <travuser>
@@ -2037,9 +2077,10 @@
         <node name="Withid" />
         <node name="Exprs" />
         <node name="Module" />
+        <node name="Genarray" />
       </travuser>
     </traversal>
-    <traversal id="WLIR" name="Loop Invariants Traversal" default="sons" include="withloop_invariant_removal.h" >
+    <traversal id="WLIR" name="With-Loop Invariant Traversal" default="sons" include="withloop_invariant_removal.h" >
       <travuser>
         <node name="Ids" />
         <node name="Assign" />
@@ -2054,7 +2095,7 @@
         <node name="Withid" />
       </travuser>
     </traversal>
-    <traversal id="DLIRMOV" name="Loop Invariants Move Traversal" default="sons" include="loop_invariant_removal.h" >
+    <traversal id="DLIRMOV" name="Loop Invariant Move Traversal" default="sons" include="loop_invariant_removal.h" >
       <travuser>
         <node name="Id" />
         <node name="Withid" />
@@ -2320,6 +2361,7 @@
         <node name="Modarray"    />
         <node name="Part"    />
         <node name="Prf"     />
+        <node name="Ap"     />
      </travuser>
    </traversal>
    <traversal id="AWLFI" name="Algebraic With-Loop-Folding Inference" default="sons" include="algebraic_wlfi.h" >
@@ -5140,6 +5182,19 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
+        <attribute name="SourceName" default="NULL" inconstructor="no">
+          <description>original name of a function</description>
+          <type name="String">
+            <targets>
+              <target mandatory="no">
+                <any />
+                <phases>
+                  <range from="pc_rid" to="final" />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
         <attribute name="WrapperType" default="NULL" inconstructor="no">
           <type name="NewType">
             <targets>
@@ -5616,6 +5671,63 @@ N_tfarg :
             </target>
           </type>
         </attribute>
+        <attribute name="Callerfundef" default="NULL" inconstructor="no">
+          <description>
+	  For a LACFUN, this attribute points to the N_fundef code of its 
+	  external caller. Other functions have NULL here.
+	  Valid only during EDFA, POGO, and PWLF. Referenced in PHUT,
+	  so any PHUT callers must maintain this. It would be nice to
+	  have this maintained throughout compilation, but that may not
+	  be trivial.
+          </description>
+          <type name="ExtLink">
+            <targets>
+              <target mandatory="no">
+                <node name="Assign" />
+                <phases>
+                  <range from="opt_saacyc_edfa" to="opt_saacyc_edfa" />
+                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
+                  <range from="opt_saacyc_pwlf" to="opt_saacyc_pwlf" />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="Callap" default="NULL" inconstructor="no">
+          <description>
+	  If this function is a LACFUN, this attribute points to
+	  the N_assign node for the N_ap that invokes the LACFUN from outside the
+	  LACFUN; else NULL. Valid only during EDFA, POGO, and PWLF. Referenced in PHUT,
+	  so any PHUT callers must maintain this. It would be nice to
+	  have this maintained throughout compilation, but that may not
+	  be trivial.
+          </description>
+          <type name="ExtLink">
+            <targets>
+              <target mandatory="no">
+                <node name="Ap" />
+                <phases>
+                  <range from="opt_saacyc_edfa" to="opt_saacyc_edfa" />
+                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
+                  <range from="opt_saacyc_pwlf" to="opt_saacyc_pwlf" />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
+        <attribute name="RtspecId" inconstructor="no">
+          <description>Used by rtspec to uniquely identify a function</description>
+          <type name="String">
+            <targets>
+              <target mandatory="no">
+                <any />
+                <phases>
+                  <all />
+                </phases>
+              </target>
+            </targets>
+          </type>
+        </attribute>
       </attributes>
       <flags>
         <flag name="IsMain">
@@ -5750,6 +5862,9 @@ N_tfarg :
         <flag name="IsSlowClone" default="FALSE">
           <description>This function is a slow clone</description>
         </flag>
+        <flag name="DistMemHasSideEffects" default="FALSE">
+          <description>This function has side effects and may only be executed by the master node when the distributed memory backend is used.</description>
+        </flag>
       </flags>
     <checks>
       <check name="CHKfundefVardecExtrema" />
@@ -5859,6 +5974,9 @@ N_tfarg :
         <flag name="IsRefcounted" default="TRUE" />
         <flag name="HasLinksignInfo" />
 	<flag name="IsUnique" />
+  <flag name="DistMemIsUniqueLeaf" default="FALSE" >
+	  <description> Indicates that this argument is unique and that it is not passed to another function. </description>
+  </flag>
 	<flag name="IsInUse" default="FALSE" >
 	  <description> Used to mark unused function arguments in DeadCodeRemoval. Marked arguments are removed in signature simplification.
 	  </description>
@@ -6865,6 +6983,26 @@ N_tfarg :
               </phases>
             </target>
           </targets>
+	  <description>
+	  Argument list for function invocation
+          </description>
+        </son>
+        <son name="LoopCount" default="NULL">
+          <targets>
+            <target mandatory="no">
+              <node name="Exprs" />
+              <phases>
+                <all />
+              </phases>
+            </target>
+          </targets>
+	  <description>
+	  If AP_FUNDEF is a LOOPFUN, we may be able to deduce the
+	  iteration count for the loop. If so, AP_LOOPCOUNT is an N_exprs
+	  that is the count; else NULL.
+	  The count may be a constant ( e.g., 42), or it may be symbolic
+	  ( e.g., UB-LB).
+          </description>
         </son>
       </sons>
       <attributes>
@@ -6921,6 +7059,9 @@ N_tfarg :
           <description>
             This node calls a function which contains spawns
           </description>
+        </flag>
+        <flag name="DistMemHasSideEffects" default="FALSE">
+          <description>This function application has side effects and may only be executed by the master node when the distributed memory backend is used.</description>
         </flag>
       </flags>
     <checks>
@@ -8676,23 +8817,6 @@ N_tfarg :
             </targets>
           </type>
         </attribute>
-	<attribute name="PolylibColumnIndex" default="-1" >
-	  <description> 
-	  This is used by PHUTcollectAffineExprs to assign an
-	  origin-1 column number to each distinct name found in
-	  any particular affine expression tree.
-	  </description>
-          <type name="Integer">
-            <targets>
-              <target mandatory="no">
-                <any />
-                <phases>
-                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
-                </phases>
-              </target>
-            </targets>
-          </type>
-        </attribute>	 
 	<attribute name="Npart" default="NULL" >
 	  <description> 
 	  Pointer to the N_part that defines this variable, if
@@ -8708,7 +8832,7 @@ N_tfarg :
               <target mandatory="no">
                 <any />
                 <phases>
-                  <range from="opt_saacyc_pogo" to="opt_saacyc_pogo" />
+                  <range from="opt_saacyc_polys" to="final" />
                 </phases>
               </target>
             </targets>
@@ -8795,12 +8919,6 @@ N_tfarg :
 	    this thread function. Used by the mutc backend.
 	  </description>
 	</flag>
-	<flag name="IsWLFolded" default="FALSE">
-	  <description>
-             If true, the given variable is the result of a producerWL
-             that has been folded out of existence.
-	  </description>
-	</flag>
         <flag name="IsHostReferenced" default="FALSE">
 	</flag>
         <flag name="IsMinHandled" default="FALSE">
@@ -8867,6 +8985,12 @@ N_tfarg :
             this function
           </description>
         </flag>
+        <flag name="DistMemSuballoc" default="FALSE">
+          <description>
+            This variable is allocated using a suballoc. It may need to be allocated in the
+            DSM memory.
+          </description>
+        </flag>
         <flag name="NeedBlocked" default="FALSE" >
           <description>
                   If true, the given variable is a loop index and the loop needs to be blocked
@@ -8886,12 +9010,28 @@ N_tfarg :
 	  more than once.
 	  </description>
         </flag>	 
-      </flags>
-    <checks>
-      <check name="CHKavisReflection" />
-      <check name="CHKavisSsaassignNodeType" />
-    </checks>
-    </node>
+	<flag name="IsHasAft" default="FALSE" >
+	  <description> 
+	  This flag is used by PHUT to keep track of N_id nodes that
+	  have already had an Affine Function Tree (AFT) built for them, so
+	  that we do not put redundant constraints into ISL input files.
+	  The extremely high cost of polyhedral model analysis 
+	  make this quite important.
+	  </description>
+        </flag>	 
+  <flag name="DistMemIsDistributable" default="TRUE" >
+	  <description> 
+	  This flag indicates whether the array is distributable. 
+    That is not the case if the array is written to in the body of a parallel genarray/modarray with-loop
+    (including nested with-loops) but it is not the result of the (outermost) with-loop.
+	  </description>
+  </flag>	 
+  </flags>
+  <checks>
+    <check name="CHKavisReflection" />
+    <check name="CHKavisSsaassignNodeType" />
+  </checks>
+  </node>
 <!--
 
   N_mt :
@@ -11404,6 +11544,12 @@ N_tfarg :
         <flag name="IsCReturn" />
         <flag name="WasRemoved" default="FALSE" />
         <flag name="IsUnique" default="FALSE" />
+        <flag name="DistMemBroadcastArg" default="FALSE">
+          <description>
+            This return value needs to be broadcast
+            and is therefore allocated in DSM memory.
+          </description>
+        </flag>
       </flags>
     </node>
 <!--
