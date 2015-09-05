@@ -3,7 +3,7 @@
 #include <regex.h>
 #include <err.h>
 #include <yajl/yajl_tree.h>
-#include "validator.h"
+#include "ast-builder.h"
 #include "gen.h"
 
 
@@ -270,8 +270,8 @@ gen_node_son_check (FILE *  f, yajl_val nodesets, const char *  node_name_upper,
   struct node_name *  nn;
 
   if (!strcmp (x, "any"))
-    json_err ("the son `%s' of the node `%s' has target that contains \"any\"",
-              son_name_upper, node_name_upper);
+    ab_err ("the son `%s' of the node `%s' has target that contains \"any\"",
+            son_name_upper, node_name_upper);
 
   HASH_FIND_STR (node_names, x, nn);
   assert (nn);

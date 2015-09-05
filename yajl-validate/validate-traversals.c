@@ -5,7 +5,7 @@
 #include <yajl/yajl_tree.h>
 
 //#include "uthash.h"
-#include "validator.h"
+#include "ast-builder.h"
 #include "validate-traversals.h"
 
 
@@ -33,8 +33,8 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
 
   if (trav_nodelist && YAJL_ARRAY_LENGTH (trav_nodelist) == 0)
     {
-      json_warn ("the array `%s' in the traversal `%s' is empty, consider removing it",
-                 nodelist_name, tn->name);
+      ab_warn ("the array `%s' in the traversal `%s' is empty, consider removing it",
+                nodelist_name, tn->name);
       return true;
     }
 
@@ -45,8 +45,8 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
 
       if (!trav_node)
         {
-          json_err ("the element %zu of travuser array of traversal `%s' is not a string",
-                    i, tn->name);
+          ab_err ("the element %zu of travuser array of traversal `%s' is not a string",
+                  i, tn->name);
           return false;
         }
 
@@ -55,16 +55,16 @@ traversal_validate_nodes (yajl_val traversal, const char *  nodelist_name,
       HASH_FIND_STR (node_names, trav_node, nn);
       if (!nn)
         {
-          json_err ("%s of the `%s' in the traversal `%s' is not a node or a nodeset",
-                    trav_node, nodelist_name, tn->name);
+          ab_err ("%s of the `%s' in the traversal `%s' is not a node or a nodeset",
+                  trav_node, nodelist_name, tn->name);
           return false;
         }
 
       HASH_FIND_STR (tn->traversal_nodes, trav_node, trn);
       if (trn)
         {
-          json_err ("%s node `%s' in the traversal `%s' has been already specified in `%s'",
-                    nodelist_name, trn->name, tn->name, trav_node_type_name (trn->node_type));
+          ab_err ("%s node `%s' in the traversal `%s' has been already specified in `%s'",
+                  nodelist_name, trn->name, tn->name, trav_node_type_name (trn->node_type));
 
           return false;
         }
@@ -95,7 +95,7 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
   /* The top-level AST has to be an object.  */
   if (!YAJL_IS_OBJECT (traversals))
     {
-      json_err ("top-level node of `%s' must be an object", fname);
+      ab_err ("top-level node of `%s' must be an object", fname);
       return false;
     }
 
@@ -109,15 +109,15 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
          regular expression.  */
       if (!match_regexp (rxp_traversal_name, name))
         {
-          json_err ("the traversal name `%s' doesn't match the regexp `%s'",
-                     name, regexp_txt[rxp_traversal_name]);
+          ab_err ("the traversal name `%s' doesn't match the regexp `%s'",
+                  name, regexp_txt[rxp_traversal_name]);
           return false;
         }
 
       yajl_val traversal = YAJL_OBJECT_VALUES (traversals)[i];
       if (!YAJL_IS_OBJECT (traversal))
         {
-          json_err ("traversal `%s' must be of json type object", name);
+          ab_err ("traversal `%s' must be of json type object", name);
           return false;
         }
 
@@ -127,8 +127,8 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
           const char *  x = YAJL_OBJECT_KEYS (traversal)[i];
           if (!traversal_field_allowed_p (x))
             {
-              json_err ("traversal `%s' contains unallowed field `%s'",
-                        name, x);
+              ab_err ("traversal `%s' contains unallowed field `%s'",
+                      name, x);
               return false;
             }
         }
@@ -137,14 +137,14 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
       yajl_val xdefault = yajl_tree_get (traversal, (const char *[]){"default", 0}, yajl_t_string);
       if (!xdefault)
         {
-          json_err ("traversal `%s' does not specify `default'", name);
+          ab_err ("traversal `%s' does not specify `default'", name);
           return false;
         }
 
       yajl_val include = yajl_tree_get (traversal, (const char *[]){"include", 0}, yajl_t_string);
       if (!include)
         {
-          json_err ("traversal `%s' does not specify `include'", name);
+          ab_err ("traversal `%s' does not specify `include'", name);
           return false;
         }
       
@@ -170,8 +170,8 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
       if (!generated_file_p && !find_file (path, include_str))
         {
 
-          json_err ("file `%s' included in the traversal `%s' not found",
-                    YAJL_GET_STRING (include), name);
+          ab_err ("file `%s' included in the traversal `%s' not found",
+                  YAJL_GET_STRING (include), name);
 
           return false;
         }
@@ -179,7 +179,7 @@ load_and_validate_traversals (yajl_val traversals, const char *  fname)
       HASH_FIND_STR (traversal_names, name, tn);
       if (tn)
         {
-          json_err ("traversal `%s' is specified more than once", name);
+          ab_err ("traversal `%s' is specified more than once", name);
           return false;
         }
 

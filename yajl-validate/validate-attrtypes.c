@@ -3,7 +3,7 @@
 #include <regex.h>
 #include <yajl/yajl_tree.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 #include "validate-attrtypes.h"
 
 static inline bool
@@ -23,7 +23,7 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
   /* The top-level AST has to be an object.  */
   if (!YAJL_IS_OBJECT (attrtypes))
     {
-      json_err ("top-level node of `%s' must be an object", fname);
+      ab_err ("top-level node of `%s' must be an object", fname);
       return false;
     }
 
@@ -38,8 +38,8 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
          regular expression.  */
       if (!match_regexp (rxp_node_name, name))
         {
-          json_err ("the attribute type name `%s' doesn't match the regexp `%s'",
-                    name, regexp_txt[rxp_attrtype_name]);
+          ab_err ("the attribute type name `%s' doesn't match the regexp `%s'",
+                  name, regexp_txt[rxp_attrtype_name]);
           return false;
         }
 
@@ -50,8 +50,8 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
 
           if (!attrtype_field_allowed_p (x))
             {
-              json_err ("the attribute type `%s' contains invalid field `%s'",
-                        name, x);
+              ab_err ("the attribute type `%s' contains invalid field `%s'",
+                      name, x);
               return false;
             }
         }
@@ -60,7 +60,7 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
       HASH_FIND_STR (attrtype_names, name, atn);
       if (atn)
         {
-          json_err ("the node name `%s' is specified more than once", name);
+          ab_err ("the node name `%s' is specified more than once", name);
           return false;
         }
 
@@ -74,7 +74,7 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
       enum attrtype_copy_type copy_type;
       if (!copy)
         {
-          json_err ("attrtype `%s' does not have `copy' tag", name);
+          ab_err ("attrtype `%s' does not have `copy' tag", name);
           return false;
         }
 
@@ -88,16 +88,16 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
         copy_type = act_hash;
       else
         {
-          json_err ("attrtype `%s' copy attribute contains invalid value `%s';"
-                    "allowed values are: `function', `hash' or `literal'",
-                    name, YAJL_GET_STRING (copy));
+          ab_err ("attrtype `%s' copy attribute contains invalid value `%s';"
+                  "allowed values are: `function', `hash' or `literal'",
+                  name, YAJL_GET_STRING (copy));
           return false;
         }
 
       /* Check that ctype exists.  */
       if (!ctype)
         {
-          json_err ("attrtype `%s' does not contain `ctype' tag", name);
+          ab_err ("attrtype `%s' does not contain `ctype' tag", name);
           return false;
         }
       const char *  ctype_name = YAJL_GET_STRING (ctype);
@@ -105,7 +105,7 @@ load_attrtype_names (yajl_val attrtypes, const char *  fname)
       /* Check that `init' exists.  */
       if (!init)
         {
-          json_err ("attrtype `%s' does not contain `init' tag", name);
+          ab_err ("attrtype `%s' does not contain `init' tag", name);
           return false;
         }
       const char *  init_name = YAJL_GET_STRING (init);

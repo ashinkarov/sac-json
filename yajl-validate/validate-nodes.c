@@ -5,7 +5,7 @@
 #include <regex.h>
 #include <yajl/yajl_tree.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 #include "validate-nodes.h"
 
 
@@ -66,7 +66,7 @@ load_node_names (yajl_val ast, const char *  fname)
   /* The top-level AST has to be an object.  */
   if (!YAJL_IS_OBJECT (ast))
     {
-      json_err ("top-level node of `%s' must be an object", fname);
+      ab_err ("top-level node of `%s' must be an object", fname);
       return false;
     }
 
@@ -80,8 +80,8 @@ load_node_names (yajl_val ast, const char *  fname)
          regular expression.  */
       if (!match_regexp (rxp_node_name, name))
         {
-          json_err ("the node name `%s' doesn't match node regexp `%s'",
-                      name, regexp_txt[rxp_node_name]);
+          ab_err ("the node name `%s' doesn't match node regexp `%s'",
+                  name, regexp_txt[rxp_node_name]);
           return false;
         }
 
@@ -96,7 +96,7 @@ load_node_names (yajl_val ast, const char *  fname)
         }
       else
         {
-          json_err ("the node name `%s' is specified more than once", name);
+          ab_err ("the node name `%s' is specified more than once", name);
           return false;
         }
     }
@@ -110,16 +110,16 @@ validate_description (const char *  node_name, const char *  text, const yajl_va
   /* Check that description is of type array.  */
   if (desc && !YAJL_IS_ARRAY (desc))
     {
-      json_err ("`description' field %s of node `%s' must be an array of strings",
-                text, node_name);
+      ab_err ("`description' field %s of node `%s' must be an array of strings",
+              text, node_name);
       return false;
     }
 
   for (size_t i = 0; desc && i < YAJL_ARRAY_LENGTH (desc); i++)
     if (!YAJL_IS_STRING (YAJL_ARRAY_VALUES (desc)[i]))
       {
-        json_err ("`description' field %s of node `%s' must be an array of strings",
-                  text, node_name);
+        ab_err ("`description' field %s of node `%s' must be an array of strings",
+                text, node_name);
         return false;
       }
 
@@ -183,8 +183,8 @@ validate_target (const char *  node_name, const char *  son_attr_name,
       const char *  x = YAJL_OBJECT_KEYS (target)[i];
       if (!target_field_allowed_p (x))
         {
-          json_err ("`%s' field of the target %sof %sof the node `%s' is not allowed",
-                    x, tn, sa, node_name);
+          ab_err ("`%s' field of the target %sof %sof the node `%s' is not allowed",
+                  x, tn, sa, node_name);
           //return false;
         }
     }
@@ -193,22 +193,22 @@ validate_target (const char *  node_name, const char *  son_attr_name,
   const yajl_val phases = yajl_tree_get (target, (const char *[]){"phases", 0}, yajl_t_any);
   if (!phases)
     {
-      json_err ("the target %sof %sof the node `%s' does not have `phases' field",
-                tn, sa, node_name);
+      ab_err ("the target %sof %sof the node `%s' does not have `phases' field",
+              tn, sa, node_name);
       return false;
     }
 
   if (!YAJL_IS_STRING (phases) && !YAJL_IS_OBJECT (phases) && !YAJL_IS_ARRAY (phases))
     {
-      json_err ("the `phases' field of the target %sof %sof the node `%s' must be of "
-                "type string, object or array", tn, sa, node_name);
+      ab_err ("the `phases' field of the target %sof %sof the node `%s' must be of "
+              "type string, object or array", tn, sa, node_name);
       return false;
     }
 
   if (YAJL_IS_OBJECT (phases) && !valid_range_p (phases))
     {
-      json_err ("the `phases' field of the target %sof %sof the node `%s' "
-                "define an invalid range", tn, sa, node_name);
+      ab_err ("the `phases' field of the target %sof %sof the node `%s' "
+              "define an invalid range", tn, sa, node_name);
       return false;
     }
 
@@ -219,15 +219,15 @@ validate_target (const char *  node_name, const char *  son_attr_name,
 
         if (!YAJL_IS_STRING (x) && !YAJL_IS_OBJECT (x))
           {
-            json_err ("the item #%zu of `phases' of the target %sof %sof the node `%s' "
-                      "is not a string or an object", i+1, tn, sa, node_name);
+            ab_err ("the item #%zu of `phases' of the target %sof %sof the node `%s' "
+                    "is not a string or an object", i+1, tn, sa, node_name);
             return false;
           }
 
         if (YAJL_IS_OBJECT (x) && !valid_range_p (x))
           {
-            json_err ("the item #%zu of `phases' of the target %sof %sof the node `%s' "
-                      "specified invalid range", i+1, tn, sa, node_name);
+            ab_err ("the item #%zu of `phases' of the target %sof %sof the node `%s' "
+                    "specified invalid range", i+1, tn, sa, node_name);
             return false;
           }
       }
@@ -236,15 +236,15 @@ validate_target (const char *  node_name, const char *  son_attr_name,
   const yajl_val contains = yajl_tree_get (target, (const char *[]){"contains", 0}, yajl_t_any);
   if (!contains)
     {
-      json_err ("the target %sof %sof the node `%s' does not have `contains' field",
-                tn, sa, node_name);
+      ab_err ("the target %sof %sof the node `%s' does not have `contains' field",
+              tn, sa, node_name);
       return false;
     }
 
   if (!YAJL_IS_STRING (contains) && !YAJL_IS_ARRAY (contains))
     {
-      json_err ("the `contains' field of the target %sof %sof the node `%s' must be of "
-                "type string or array", tn, sa, node_name);
+      ab_err ("the `contains' field of the target %sof %sof the node `%s' must be of "
+              "type string or array", tn, sa, node_name);
       return false;
     }
 
@@ -253,8 +253,8 @@ validate_target (const char *  node_name, const char *  son_attr_name,
       const char *  x = YAJL_GET_STRING (contains);
       if (son_p && !strcmp (x, "any"))
         {
-          json_err ("the value of `contains' in the target %sof %sof the node `%s' must not "
-                    "be `any'", tn, sa, node_name);
+          ab_err ("the value of `contains' in the target %sof %sof the node `%s' must not "
+                  "be `any'", tn, sa, node_name);
           return false;
         }
      
@@ -263,8 +263,8 @@ validate_target (const char *  node_name, const char *  son_attr_name,
       HASH_FIND_STR (node_names, x, nn);
       if (!nn && strcmp (x, "any"))
         {
-          json_err ("the value `%s' of `contains' in the target %sof %sof the node `%s' is not "
-                    "a valid node or nodeset", x, tn, sa, node_name);
+          ab_err ("the value `%s' of `contains' in the target %sof %sof the node `%s' is not "
+                  "a valid node or nodeset", x, tn, sa, node_name);
           return false;
         }
     }
@@ -273,8 +273,8 @@ validate_target (const char *  node_name, const char *  son_attr_name,
     for (size_t i = 0; i < YAJL_ARRAY_LENGTH (contains); i++)
       if (!YAJL_IS_STRING (YAJL_ARRAY_VALUES (contains)[i]))
         {
-          json_err ("the value of the #%zu item in `contains' of the target %sof %sof the "
-                    "node `%s' is not string", i+1, tn, sa, node_name);
+          ab_err ("the value of the #%zu item in `contains' of the target %sof %sof the "
+                  "node `%s' is not string", i+1, tn, sa, node_name);
           return false;
         }
       else
@@ -285,8 +285,8 @@ validate_target (const char *  node_name, const char *  son_attr_name,
           HASH_FIND_STR (node_names, x, nn);
           if (!nn && strcmp (x, "any"))
             {
-              json_err ("the value `%s' of the #%zu item in `contains' of the target %sof %sof the "
-                        "node `%s' is not a node or a nodeset", x, i+1, tn, sa, node_name);
+              ab_err ("the value `%s' of the #%zu item in `contains' of the target %sof %sof the "
+                      "node `%s' is not a node or a nodeset", x, i+1, tn, sa, node_name);
               return false;
             }
         }
@@ -295,15 +295,15 @@ validate_target (const char *  node_name, const char *  son_attr_name,
   const yajl_val mandatory = yajl_tree_get (target, (const char *[]){"mandatory", 0}, yajl_t_any);
   if (!mandatory)
     {
-      json_err ("the target %sof %sof the node `%s' does not have `mandatory' field",
-                tn, sa, node_name);
+      ab_err ("the target %sof %sof the node `%s' does not have `mandatory' field",
+              tn, sa, node_name);
       return false;
     }
 
   if (!YAJL_IS_TRUE (mandatory) && !YAJL_IS_FALSE (mandatory))
     {
-      json_err ("the `mandatory' of the target %sof %sof the node `%s' must be boolean",
-                tn, sa, node_name);
+      ab_err ("the `mandatory' of the target %sof %sof the node `%s' must be boolean",
+              tn, sa, node_name);
       return false;
     }
 
@@ -330,9 +330,9 @@ target_all_speicified_once_p (const yajl_val targets, const char *  node_name,
       const char *  x;
       if (phases && YAJL_IS_STRING (phases) && !strcmp (x=YAJL_GET_STRING (phases), "all"))
         {
-          json_err ("target #%zu of %s `%s' of node `%s' is specified for all phases, "
-                    "but there are other targets for this son/attribute",
-                    i+1, son_p ? "son" : "attribute", son_attr_name, node_name);
+          ab_err ("target #%zu of %s `%s' of node `%s' is specified for all phases, "
+                  "but there are other targets for this son/attribute",
+                  i+1, son_p ? "son" : "attribute", son_attr_name, node_name);
           return false;
         }
     }
@@ -350,8 +350,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
       const char *  x = YAJL_OBJECT_KEYS (attribute)[i];
       if (!attribute_field_allowed_p (x))
         {
-          json_err ("`%s' field of attribute `%s' of the node `%s' is not allowed",
-                    x, attr_name, node_name);
+          ab_err ("`%s' field of attribute `%s' of the node `%s' is not allowed",
+                  x, attr_name, node_name);
           //return false;
         }
     }
@@ -370,8 +370,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   const yajl_val incons = yajl_tree_get (attribute, (const char *[]){"inconstructor", 0}, yajl_t_any);
   if (incons && !YAJL_IS_TRUE (incons) && !YAJL_IS_FALSE (incons))
     {
-      json_err ("`inconstructor' field of attribute `%s' of node `%s' must be of type boolean",
-                attr_name, node_name);
+      ab_err ("`inconstructor' field of attribute `%s' of node `%s' must be of type boolean",
+              attr_name, node_name);
       return false;
     }
 
@@ -379,8 +379,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   const yajl_val type = yajl_tree_get (attribute, (const char *[]){"type", 0}, yajl_t_string);
   if (!type)
     {
-      json_err ("`type' field of attribute `%s' of node `%s' is mandatory and "
-                "must be of type string", attr_name, node_name);
+      ab_err ("`type' field of attribute `%s' of node `%s' is mandatory and "
+              "must be of type string", attr_name, node_name);
       return false;
     }
 
@@ -391,7 +391,7 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   HASH_FIND_STR (attrtype_names, type_name, atn);
   if (!atn)
     {
-      json_err ("invalid `type' value of attribute `%s' of node `%s'", attr_name, node_name);
+      ab_err ("invalid `type' value of attribute `%s' of node `%s'", attr_name, node_name);
       return false;
     }
 
@@ -399,8 +399,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   const yajl_val targets = yajl_tree_get (attribute, (const char *[]){"targets", 0}, yajl_t_any);
   if (!targets)
     {
-      json_err ("attribute `%s' of node `%s' does not specify `targets'",
-                attr_name, node_name);
+      ab_err ("attribute `%s' of node `%s' does not specify `targets'",
+              attr_name, node_name);
       return false;
     }
 
@@ -417,8 +417,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
     }
   else
     {
-      json_err ("`targets' of attribute `%s' of node `%s' must be of type object or array",
-                attr_name, node_name);
+      ab_err ("`targets' of attribute `%s' of node `%s' must be of type object or array",
+              attr_name, node_name);
       return false;
     }
 
@@ -429,8 +429,8 @@ validate_attribute (const char *  node_name, const char *  attr_name, const yajl
   const yajl_val def = yajl_tree_get (attribute, (const char *[]){"default", 0}, yajl_t_any);
   if (def && !YAJL_IS_STRING (def))
     {
-      json_err ("`default' field of attribute `%s' of node `%s' must be of type string",
-                attr_name, node_name);
+      ab_err ("`default' field of attribute `%s' of node `%s' must be of type string",
+              attr_name, node_name);
       return false;
     }
 
@@ -446,8 +446,8 @@ validate_son (const char *  node_name, const char *  son_name, const yajl_val so
       const char *  x = YAJL_OBJECT_KEYS (son)[i];
       if (!son_field_allowed_p (x))
         {
-          json_err ("`%s' field of son `%s' of the node `%s' is not allowed",
-                    x, son_name, node_name);
+          ab_err ("`%s' field of son `%s' of the node `%s' is not allowed",
+                  x, son_name, node_name);
           //return false;
         }
     }
@@ -466,15 +466,15 @@ validate_son (const char *  node_name, const char *  son_name, const yajl_val so
   const yajl_val def = yajl_tree_get (son, (const char *[]){"default", 0}, yajl_t_any);
   if (def && !YAJL_IS_STRING (def))
     {
-      json_err ("`default' field of son `%s' of node `%s' must be of type string",
-                son_name, node_name);
+      ab_err ("`default' field of son `%s' of node `%s' must be of type string",
+              son_name, node_name);
       return false;
     }
 
   const yajl_val targets = yajl_tree_get (son, (const char *[]){"targets", 0}, yajl_t_any);
   if (!targets)
     {
-      json_err ("son `%s' of node `%s' does not specify `targets'", son_name, node_name);
+      ab_err ("son `%s' of node `%s' does not specify `targets'", son_name, node_name);
       return false;
     }
 
@@ -491,8 +491,8 @@ validate_son (const char *  node_name, const char *  son_name, const yajl_val so
     }
   else
     {
-      json_err ("`targets' of son `%s' of node `%s' must be of type object or array",
-                son_name, node_name);
+      ab_err ("`targets' of son `%s' of node `%s' must be of type object or array",
+              son_name, node_name);
       return false;
     }
 
@@ -509,8 +509,8 @@ validate_flag (const char *  node_name, const char *  flag_name, const yajl_val 
       const char *  x = YAJL_OBJECT_KEYS (flag)[i];
       if (!flag_field_allowed_p (x))
         {
-          json_err ("`%s' field of flag `%s' of the node `%s' is not allowed",
-                    x, flag_name, node_name);
+          ab_err ("`%s' field of flag `%s' of the node `%s' is not allowed",
+                  x, flag_name, node_name);
           //return false;
         }
     }
@@ -530,8 +530,8 @@ validate_flag (const char *  node_name, const char *  flag_name, const yajl_val 
   const yajl_val def = yajl_tree_get (flag, (const char *[]){"default", 0}, yajl_t_any);
   if (def && !YAJL_IS_STRING (def))
     {
-      json_err ("`default' field of flag `%s' of node `%s' must be of type string",
-                flag_name, node_name);
+      ab_err ("`default' field of flag `%s' of node `%s' must be of type string",
+              flag_name, node_name);
       return false;
     }
 
@@ -554,8 +554,8 @@ validate_ast (const yajl_val ast)
           const char *  x = YAJL_OBJECT_KEYS (node)[i];
           if (!node_field_allowed_p (x))
             {
-              json_err ("non allowed field `%s' found in the ast node `%s'",
-                        x, name);
+              ab_err ("non allowed field `%s' found in the ast node `%s'",
+                      x, name);
               return false;
             }
         }
@@ -565,7 +565,7 @@ validate_ast (const yajl_val ast)
       /* Check that description is present.  */
       if (!description)
         {
-          //json_err ("node `%s' does not specify mandatory field `description'", name);
+          //ab_err ("node `%s' does not specify mandatory field `description'", name);
           // FIXME turn this on when all the descriptions are fixed;
           //return false;
         }
@@ -578,7 +578,7 @@ validate_ast (const yajl_val ast)
       /* If attributes exist, check that they are of the right json type.  */
       if (attribs && !YAJL_IS_OBJECT (attribs))
         {
-          json_err ("`attributes` field of node `%s' must be of type object", name);
+          ab_err ("`attributes` field of node `%s' must be of type object", name);
           return false;
         }
 
@@ -594,7 +594,7 @@ validate_ast (const yajl_val ast)
       /* If sons exist, check that they are of the right json type.  */
       if (sons && !YAJL_IS_OBJECT (sons))
         {
-          json_err ("`sons` field of node `%s' must be of type object", name);
+          ab_err ("`sons` field of node `%s' must be of type object", name);
           return false;
         }
 
@@ -610,7 +610,7 @@ validate_ast (const yajl_val ast)
       /* If flags exist, check that they are of the right json type.  */
       if (flags && !YAJL_IS_OBJECT (flags))
         {
-          json_err ("`flags` field of node `%s' must be of type object", name);
+          ab_err ("`flags` field of node `%s' must be of type object", name);
           return false;
         }
 
@@ -626,15 +626,15 @@ validate_ast (const yajl_val ast)
       if (checks)
         if (!YAJL_IS_ARRAY (checks))
           {
-            json_err ("`checks' field of node `%s' must be of type array", name);
+            ab_err ("`checks' field of node `%s' must be of type array", name);
             return false;
           }
 
       for (size_t i = 0; checks && i < YAJL_ARRAY_LENGTH (checks); i++)
         if (!YAJL_IS_STRING (YAJL_ARRAY_VALUES (checks)[i]))
           {
-            json_err ("the item #%zu of `checks' in the node `%s' must be string",
-                      i+1, name);
+            ab_err ("the item #%zu of `checks' in the node `%s' must be string",
+                    i+1, name);
             return false;
           }
     }

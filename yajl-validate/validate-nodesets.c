@@ -3,7 +3,7 @@
 #include <regex.h>
 #include <yajl/yajl_tree.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 #include "validate-nodesets.h"
 
 
@@ -24,7 +24,7 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
   /* The top-level AST has to be an object.  */
   if (!YAJL_IS_OBJECT (nodesets))
     {
-      json_err ("top-level node of `%s' must be an object", fname);
+      ab_err ("top-level node of `%s' must be an object", fname);
       return false;
     }
 
@@ -38,8 +38,8 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
          regular expression.  */
       if (!match_regexp (rxp_node_name, name))
         {
-          json_err ("the node name `%s' doesn't match node regexp `%s'",
-                      name, regexp_txt[rxp_node_name]);
+          ab_err ("the node name `%s' doesn't match node regexp `%s'",
+                   name, regexp_txt[rxp_node_name]);
           return false;
         }
 
@@ -51,8 +51,8 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
           /* The definiton of the nodeset is of type ARRAY.  */
           if (!YAJL_IS_ARRAY (nodes))
             {
-              json_err ("json value of the key `%s' in the file `%s' "
-                        "must be of type array", name, fname);
+              ab_err ("json value of the key `%s' in the file `%s' "
+                      "must be of type array", name, fname);
               return false;
             }
         
@@ -60,8 +60,8 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
           /* The nodeset contains at least one element.  */
           if (YAJL_ARRAY_LENGTH (nodes) < 1)
             {
-              json_err ("the length of the `%s' nodeset array is "
-                        "less than 1", name);
+              ab_err ("the length of the `%s' nodeset array is "
+                      "less than 1", name);
               return false;
             }
 
@@ -74,8 +74,8 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
 
               if (!YAJL_IS_STRING (nname))
                 {
-                  json_err ("json value in the node definition of the"
-                            "nodeset `%s' at the position %zu must be"
+                  ab_err ("json value in the node definition of the"
+                          "nodeset `%s' at the position %zu must be"
                             "of type string", name, i);
                   return false;
                 }
@@ -83,15 +83,15 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
               HASH_FIND_STR (node_names,  YAJL_STRING_VALUE (nname), n);
               if (!n)
                 {
-                  json_err ("invalid node `%s' in the definition of nodeset `%s'",
-                            YAJL_STRING_VALUE (nname), name);
+                  ab_err ("invalid node `%s' in the definition of nodeset `%s'",
+                          YAJL_STRING_VALUE (nname), name);
                   return false;
                 }
 
               if (n->name_type != nnt_node)
                 {
-                  json_err ("the nodeset `%s' contains definition of `%s', which "
-                            "is not an ast node", name, YAJL_STRING_VALUE (nname));
+                  ab_err ("the nodeset `%s' contains definition of `%s', which "
+                          "is not an ast node", name, YAJL_STRING_VALUE (nname));
                   return false;
                 }
             }
@@ -104,7 +104,7 @@ load_and_validate_nodesets (yajl_val nodesets, const char *  fname)
         }
       else
         {
-          json_err ("the node name `%s' is specified more than once", name);
+          ab_err ("the node name `%s' is specified more than once", name);
           return false;
         }
     }

@@ -4,7 +4,7 @@
 #include <err.h>
 #include <yajl/yajl_tree.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 #include "gen.h"
 
 

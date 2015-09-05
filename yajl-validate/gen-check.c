@@ -3,7 +3,7 @@
 #include <regex.h>
 #include <err.h>
 #include <yajl/yajl_tree.h>
-#include "validator.h"
+#include "ast-builder.h"
 #include "gen.h"
 
 
@@ -219,7 +219,7 @@ gen_node_son_check_target (FILE *  f, yajl_val targets, const char *  node_name_
   const char * s;
 
   /*if (!contains)
-    json_warn ("the target of son `%s' of the node `%s' does not have `contains' tag",
+    ab_warn ("the target of son `%s' of the node `%s' does not have `contains' tag",
                son_name_upper, node_name_upper);*/
   assert (contains);
 
@@ -295,7 +295,7 @@ gen_node_attrib_check_target (FILE *  f, yajl_val targets, const char *  node_na
   const char * s;
 
   /*if (!contains)
-    json_warn ("the target of son `%s' of the node `%s' does not have `contains' tag",
+    ab_warn ("the target of son `%s' of the node `%s' does not have `contains' tag",
                son_name_upper, node_name_upper);*/
   assert (contains);
 

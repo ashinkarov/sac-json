@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <err.h>
 #include <fcntl.h>
-#include <dirent.h>  
+#include <dirent.h>
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
@@ -16,7 +16,7 @@
 #include <yajl/yajl_tree.h>
 #include <yajl/yajl_parse.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 
 
 /* Compiler a regular expression or output an error to stderr in
@@ -63,11 +63,11 @@ match_regexp (enum tree_regexps r, const char *txt)
 
 
 void
-json_err (const char *format, ...)
+ab_err (const char *format, ...)
 {
   va_list args;
 
-  fprintf (stderr, "json-error: ");
+  fprintf (stderr, "ast-builder error: ");
   va_start (args, format);
   vfprintf (stderr, format, args);
   va_end (args);
@@ -76,11 +76,11 @@ json_err (const char *format, ...)
 }
 
 void
-json_warn (const char *format, ...)
+ab_warn (const char *format, ...)
 {
   va_list args;
 
-  fprintf (stderr, "json-warning: ");
+  fprintf (stderr, "ast-builder warning: ");
   va_start (args, format);
   vfprintf (stderr, format, args);
   va_end (args);
@@ -107,7 +107,7 @@ parse_json (const char *txt, yajl_val *t)
     {
       unsigned char * str;
       str = yajl_get_error(hand, 1, (const unsigned char *) txt, txt_len);
-      json_err ("%s", (const char *) str);
+      ab_err ("%s", (const char *) str);
       yajl_free_error(hand, str);
       yajl_free (hand);
       return false;
@@ -117,7 +117,7 @@ parse_json (const char *txt, yajl_val *t)
 
   *t = yajl_tree_parse ((const char *)txt, errbuf, sizeof (errbuf));
 
-  assert (*t != NULL); 
+  assert (*t != NULL);
   return true;
 }
 
@@ -135,7 +135,7 @@ get_file_content (const char *fname)
   int fd;
 
   /* Open the file.  */
-  if (-1 == (fd = open (fname, O_RDONLY))) 
+  if (-1 == (fd = open (fname, O_RDONLY)))
     {
       warn ("failed to open `%s'", fname);
       return NULL;
@@ -176,18 +176,18 @@ xgetcwd ()
   while (true)
     {
       char *buffer = malloc (size);
-      
+
       if (getcwd (buffer, size) == buffer)
         return buffer;
-      
+
       free (buffer);
-      
+
       if (errno != ERANGE)
         return 0;
-      
+
       size *= 2;
     }
-} 
+}
 
 
 static bool
@@ -208,7 +208,7 @@ _find_file (const char *  fname)
 
       if (!strcmp (entry->d_name, ".") || !strcmp (entry->d_name, ".."))
         continue;
-      
+
       if (!S_ISDIR (dir_stat.st_mode))
         {
           if (!strcmp (entry->d_name, fname))
@@ -224,7 +224,7 @@ _find_file (const char *  fname)
           chdir (entry->d_name);
           found = _find_file (fname);
           chdir ("..");
-          
+
           if (found)
             {
               ret = true;

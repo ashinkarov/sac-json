@@ -9,7 +9,7 @@
 #include <regex.h>
 #include <yajl/yajl_tree.h>
 
-#include "validator.h"
+#include "ast-builder.h"
 #include "validate-nodes.h"
 #include "validate-attrtypes.h"
 #include "validate-nodesets.h"
@@ -134,26 +134,26 @@ main (int argc, char *argv[])
   const char *  prog_name = argv[0];
   int ch;
 
-  while ((ch = getopt_long(argc, argv, "s:h", long_options, NULL)) != -1)
+  while ((ch = getopt_long (argc, argv, "s:h", long_options, NULL)) != -1)
     switch (ch)
-    {
-    case 's':
-      sac2cbase = strdup (optarg);
-      break;
+      {
+      case 's':
+        sac2cbase = strdup (optarg);
+        break;
 
-    case 'h':
-      exit (usage (prog_name));
+      case 'h':
+        exit (usage (prog_name));
 
-    case '?':
-      break;
+      case '?':
+        break;
 
-    default:
-      abort ();
-    }
+      default:
+        abort ();
+      }
 
   if (!sac2cbase && !getenv ("SAC2CBASE"))
     {
-      json_err ("The location of sac2c is unknown");
+      ab_err ("The location of sac2c is unknown");
       return EXIT_FAILURE;
     }
   else

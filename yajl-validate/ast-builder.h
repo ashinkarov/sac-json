@@ -189,11 +189,11 @@ void free_regexps ();
 
 
 /* Wrapper for printing errors on STDERR.  */
-void json_err (const char *format, ...) PRINTF_FORMAT (1, 2);
+void ab_err (const char *format, ...) PRINTF_FORMAT (1, 2);
 
 
 /* Wrapper for printing warnings on STDERR.  */
-void json_warn (const char *format, ...) PRINTF_FORMAT (1, 2);
+void ab_warn (const char *format, ...) PRINTF_FORMAT (1, 2);
 
 
 /* Parse json file TXT or print an error and return FALSE.  */
