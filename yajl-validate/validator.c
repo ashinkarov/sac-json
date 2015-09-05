@@ -166,8 +166,8 @@ main (int argc, char *argv[])
   yajl_val attrtype_node = NULL;
   yajl_val traversal_node = NULL;
 
-  const char ast_fname[] = "../ast-upd.json";
-  const char attrtype_fname[] = "../attr-types.json";
+  const char ast_fname[] = "../ast.json";
+  const char attrtype_fname[] = "../attrtypes.json";
   const char nodeset_fname[] = "../nodesets.json";
   const char traversal_fname[] = "../traversals.json";
 

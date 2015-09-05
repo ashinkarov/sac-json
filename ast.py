@@ -2,14 +2,6 @@ import xml.etree.ElementTree as et
 import sys
 import json
 
-# helper variable to store attributes of a certain node
-node_attributes = []
-
-def collect_attribs (n):
-    for a in n.attrib:
-        if a not in node_attributes:
-            node_attributes.append (a)
-
 # generic parsing
 def die (s):
     print >>sys.stderr, s
@@ -29,21 +21,54 @@ def dump_stderr (t):
     sys.stdout.flush ()
     sys.stdout = mystdout
 
-def attrib_list (t):
-    return {x : t.attrib[x] for x in t.attrib}
+def one_attrtype (t):
+    d = {x : t.attrib[x] for x in t.attrib}
+    name = d["name"]
+    d.pop ("name", None)
+
+    if "persist" in d:
+        if d["persist"] == "no":
+            d["persist"] = False
+        elif d["persist"] == "yes":
+            d["persist"] = True
+        else:
+            die ("attribute name %s contains %s value in 'persist' attribute" % (name, d["persist"]))
+    
+    return (name, d)
 
 def parse_attrtypes (t):
-    return [attrib_list (at) for at in t]
+    d = {}
+    for at in t:
+        name, val = one_attrtype (at)
+        d[name] = val
+
+    return d
 
 def parse_traversals (t): 
-    lst = []
+    d = {}
     for tr in t:
         trd = {a: tr.attrib[a] for a in tr.attrib}
         for trc in tr:
             trd[trc.tag] = [x.attrib["name"] for x in trc]
-        lst.append (trd)
+        
+        trav_name = trd["id"]
+        trd.pop ("id", None)
+        
+        if "travuser" in trd and trd["travuser"] == []:
+          trd.pop ("travuser")
+        
+        if "traverror" in trd and trd["traverror"] == []:
+          trd.pop ("traverror")
+
+        if "travsons" in trd and trd["travsons"] == []:
+          trd.pop ("travsons")
+
+        if "travnone" in trd and trd["travnone"] == []:
+          trd.pop ("travnone")
+
+        d[trav_name] = trd
     
-    return lst
+    return d
 
 # syntaxtree node-specific
 def parse_phases (ph, field_name):
@@ -291,31 +316,39 @@ def parse_syntaxtree (t):
 
 # nodesets
 def parse_nodesets (t):
-    lst = []
+    d = {}
     for ns in t:
-        lst.append ({ns.attrib["name"] : [x.attrib["name"] for x in ns.find ("target")]})
+        d[ns.attrib["name"]] = [x.attrib["name"] for x in ns.find ("target")]
     
-    return lst
+    return d
 
 t = et.parse ("ast.xml")
 root = t.getroot ()
 
+import ast_upd
+
 for child in root:
     if child.tag == "attributetypes":
-        print json.dumps ({"attribtypes" : parse_attrtypes (child)}, indent=4)
-        pass
+        with open ("attrtypes.json", "w") as outfile:
+            json.dump (parse_attrtypes (child), outfile, indent=4, sort_keys=True)
+            print >>outfile
+    
     elif child.tag == "traversals":
-        print json.dumps ({"traversals" : parse_traversals (child)}, indent=4)
-        pass
+        with open ("traversals.json", "w") as outfile:
+            json.dump (parse_traversals (child), outfile, indent=4, sort_keys=True)
+            print >>outfile
+    
     elif child.tag == "syntaxtree":
-        print json.dumps ({"syntaxtree" : parse_syntaxtree (child)}, indent=4)
-        pass
+        t = ast_upd.update_ast ({"syntaxtree": parse_syntaxtree (child)})
+        with open ("ast.json", "w") as outfile:
+            json.dump (t, outfile, indent=4)
+            print >>outfile
+    
     elif child.tag == "nodesets":
-        print json.dumps ({"nodesets" : parse_nodesets (child)}, indent=4)
-        pass
+        with open ("nodesets.json", "w") as outfile:
+            json.dump (parse_nodesets (child), outfile, indent=4, sort_keys=True)
+            print >>outfile
+    
     else:
         die ("unknown tag `%s' found in ast.xml" % child.tag)
-
-#print node_attributes
-# FIXME attribute/type is not considered (when it is a Link)
 

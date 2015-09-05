@@ -36,6 +36,17 @@
         "Globobj",
         "Nested_init"
     ],
+    "IntValue": [
+        "Num",
+        "Array",
+        "Id"
+    ],
+    "Interface": [
+        "Import",
+        "Export",
+        "Use",
+        "Provide"
+    ],
     "Stmt": [
         "Let",
         "Cond",
@@ -46,12 +57,6 @@
         "Icm",
         "Cudast"
     ],
-    "Interface": [
-        "Import",
-        "Export",
-        "Use",
-        "Provide"
-    ],
     "WithOp": [
         "Genarray",
         "Modarray",
@@ -59,11 +64,6 @@
         "Fold",
         "Break",
         "Propagate"
-    ],
-    "IntValue": [
-        "Num",
-        "Array",
-        "Id"
     ],
     "Withloop": [
         "With",
