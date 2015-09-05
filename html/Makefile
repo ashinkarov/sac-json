@@ -1,9 +1,9 @@
 
 
-AST        := ../ast-upd.json
+AST        := ../ast.json
 NODESETS   := ../nodesets.json
 TRAVERSALS := ../traversals.json
-ATTRTYPES  := ../attr-types.json
+ATTRTYPES  := ../attrtypes.json
 
 
 ast.js: $(AST) $(NODESETS) $(TRAVERSALS) $(ATTRTYPES)

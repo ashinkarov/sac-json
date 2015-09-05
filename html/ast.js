@@ -1094,6 +1094,22 @@ var syntaxtree_json =
                     "mandatory": false
                 }
             }, 
+            "SourceName": {
+                "default": "NULL", 
+                "inconstructor": false, 
+                "type": "String", 
+                "targets": {
+                    "phases": {
+                        "to": "final", 
+                        "from": "pc_rid"
+                    }, 
+                    "contains": "any", 
+                    "mandatory": false
+                }, 
+                "description": [
+                    "original name of a function"
+                ]
+            }, 
             "WrapperType": {
                 "default": "NULL", 
                 "inconstructor": false, 
@@ -1570,6 +1586,77 @@ var syntaxtree_json =
                 "description": [
                     "Used by mutc backend for lifting desc mallocs up"
                 ]
+            }, 
+            "Callerfundef": {
+                "default": "NULL", 
+                "inconstructor": false, 
+                "type": "ExtLink", 
+                "targets": {
+                    "phases": [
+                        {
+                            "to": "opt_saacyc_edfa", 
+                            "from": "opt_saacyc_edfa"
+                        }, 
+                        {
+                            "to": "opt_saacyc_pogo", 
+                            "from": "opt_saacyc_pogo"
+                        }, 
+                        {
+                            "to": "opt_saacyc_pwlf", 
+                            "from": "opt_saacyc_pwlf"
+                        }
+                    ], 
+                    "contains": "Assign", 
+                    "mandatory": false
+                }, 
+                "description": [
+                    "For a LACFUN, this attribute points to the N_fundef code of its external caller.", 
+                    "Other functions have NULL here. Valid only during EDFA, POGO, and PWLF. Referenced", 
+                    "in PHUT, so any PHUT callers must maintain this. It would be nice to have this maintained", 
+                    "throughout compilation, but that may not be trivial."
+                ]
+            }, 
+            "Callap": {
+                "default": "NULL", 
+                "inconstructor": false, 
+                "type": "ExtLink", 
+                "targets": {
+                    "phases": [
+                        {
+                            "to": "opt_saacyc_edfa", 
+                            "from": "opt_saacyc_edfa"
+                        }, 
+                        {
+                            "to": "opt_saacyc_pogo", 
+                            "from": "opt_saacyc_pogo"
+                        }, 
+                        {
+                            "to": "opt_saacyc_pwlf", 
+                            "from": "opt_saacyc_pwlf"
+                        }
+                    ], 
+                    "contains": "Ap", 
+                    "mandatory": false
+                }, 
+                "description": [
+                    "If this function is a LACFUN, this attribute points to the N_assign node for the", 
+                    "N_ap that invokes the LACFUN from outside the LACFUN; else NULL. Valid only during", 
+                    "EDFA, POGO, and PWLF. Referenced in PHUT, so any PHUT callers must maintain this.", 
+                    "It would be nice to have this maintained throughout compilation, but that may not", 
+                    "be trivial."
+                ]
+            }, 
+            "RtspecId": {
+                "targets": {
+                    "phases": "all", 
+                    "contains": "any", 
+                    "mandatory": false
+                }, 
+                "inconstructor": false, 
+                "type": "String", 
+                "description": [
+                    "Used by rtspec to uniquely identify a function"
+                ]
             }
         }, 
         "sons": {
@@ -1897,6 +1984,13 @@ var syntaxtree_json =
                 "desc": [
                     "This function is a slow clone"
                 ]
+            }, 
+            "DistMemHasSideEffects": {
+                "default": "FALSE", 
+                "desc": [
+                    "This function has side effects and may only be executed by the master node when the", 
+                    "distributed memory backend is used."
+                ]
             }
         }, 
         "checks": [
@@ -1952,6 +2046,12 @@ var syntaxtree_json =
             }, 
             "HasLinksignInfo": {}, 
             "IsUnique": {}, 
+            "DistMemIsUniqueLeaf": {
+                "default": "FALSE", 
+                "desc": [
+                    "Indicates that this argument is unique and that it is not passed to another function."
+                ]
+            }, 
             "IsInUse": {
                 "default": "FALSE", 
                 "desc": [
@@ -2869,7 +2969,23 @@ var syntaxtree_json =
                     "phases": "all", 
                     "contains": "Exprs", 
                     "mandatory": false
-                }
+                }, 
+                "description": [
+                    "Argument list for function invocation"
+                ]
+            }, 
+            "LoopCount": {
+                "default": "NULL", 
+                "targets": {
+                    "phases": "all", 
+                    "contains": "Exprs", 
+                    "mandatory": false
+                }, 
+                "description": [
+                    "If AP_FUNDEF is a LOOPFUN, we may be able to deduce the iteration count for the loop.", 
+                    "If so, AP_LOOPCOUNT is an N_exprs that is the count; else NULL. The count may be", 
+                    "a constant ( e.g., 42), or it may be symbolic ( e.g., UB-LB)."
+                ]
             }
         }, 
         "flags": {
@@ -2892,6 +3008,13 @@ var syntaxtree_json =
             "ToSpawn": {
                 "desc": [
                     "This node calls a function which contains spawns"
+                ]
+            }, 
+            "DistMemHasSideEffects": {
+                "default": "FALSE", 
+                "desc": [
+                    "This function application has side effects and may only be executed by the master", 
+                    "node when the distributed memory backend is used."
                 ]
             }
         }, 
@@ -4138,13 +4261,6 @@ var syntaxtree_json =
                     "Used by the mutc backend."
                 ]
             }, 
-            "IsWLFolded": {
-                "default": "FALSE", 
-                "desc": [
-                    "If true, the given variable is the result of a producerWL that has been folded out", 
-                    "of existence."
-                ]
-            }, 
             "IsHostReferenced": {
                 "default": "FALSE"
             }, 
@@ -4216,6 +4332,13 @@ var syntaxtree_json =
                     "MUTC: This var is from a suballoc where the desc is passed in to this function"
                 ]
             }, 
+            "DistMemSuballoc": {
+                "default": "FALSE", 
+                "desc": [
+                    "This variable is allocated using a suballoc. It may need to be allocated in the DSM", 
+                    "memory."
+                ]
+            }, 
             "NeedBlocked": {
                 "default": "FALSE", 
                 "desc": [
@@ -4233,6 +4356,23 @@ var syntaxtree_json =
                 "desc": [
                     "Used by LACSO to indicate that a small array argument or result has been scalarized.", 
                     "Its only function is to prevent us from doing the scalarization more than once."
+                ]
+            }, 
+            "IsHasAft": {
+                "default": "FALSE", 
+                "desc": [
+                    "This flag is used by PHUT to keep track of N_id nodes that have already had an Affine", 
+                    "Function Tree (AFT) built for them, so that we do not put redundant constraints into", 
+                    "ISL input files. The extremely high cost of polyhedral model analysis make this quite", 
+                    "important."
+                ]
+            }, 
+            "DistMemIsDistributable": {
+                "default": "TRUE", 
+                "desc": [
+                    "This flag indicates whether the array is distributable. That is not the case if the", 
+                    "array is written to in the body of a parallel genarray/modarray with-loop (including", 
+                    "nested with-loops) but it is not the result of the (outermost) with-loop."
                 ]
             }
         }, 
@@ -4680,28 +4820,12 @@ var syntaxtree_json =
                     "Strictly local, and could be eliminated with a bit of work."
                 ]
             }, 
-            "PolylibColumnIndex": {
-                "default": "-1", 
-                "targets": {
-                    "phases": {
-                        "to": "opt_saacyc_pogo", 
-                        "from": "opt_saacyc_pogo"
-                    }, 
-                    "contains": "any", 
-                    "mandatory": false
-                }, 
-                "type": "Integer", 
-                "description": [
-                    "This is used by PHUTcollectAffineExprs to assign an origin-1 column number to each", 
-                    "distinct name found in any particular affine expression tree."
-                ]
-            }, 
             "Npart": {
                 "default": "NULL", 
                 "targets": {
                     "phases": {
-                        "to": "opt_saacyc_pogo", 
-                        "from": "opt_saacyc_pogo"
+                        "to": "final", 
+                        "from": "opt_saacyc_polys"
                     }, 
                     "contains": "any", 
                     "mandatory": false
@@ -6922,6 +7046,12 @@ var syntaxtree_json =
             }, 
             "IsUnique": {
                 "default": "FALSE"
+            }, 
+            "DistMemBroadcastArg": {
+                "default": "FALSE", 
+                "desc": [
+                    "This return value needs to be broadcast and is therefore allocated in DSM memory."
+                ]
             }
         }
     }, 
@@ -8770,13 +8900,14 @@ var traversals_json =
             "With", 
             "Withid", 
             "Exprs", 
-            "Module"
+            "Module", 
+            "Genarray"
         ]
     }, 
     "DLIRMOV": {
         "default": "sons", 
         "include": "loop_invariant_removal.h", 
-        "name": "Loop Invariants Move Traversal", 
+        "name": "Loop Invariant Move Traversal", 
         "travuser": [
             "Id", 
             "Withid", 
@@ -8784,6 +8915,36 @@ var traversals_json =
             "Block", 
             "Let", 
             "Ids"
+        ]
+    }, 
+    "DMIDA": {
+        "default": "sons", 
+        "include": "identify_distributable_arrays.h", 
+        "name": "Identify distributable arrays for the distributed memory backend", 
+        "travuser": [
+            "Let", 
+            "Ids"
+        ]
+    }, 
+    "DMISEF": {
+        "default": "sons", 
+        "include": "identify_side_effect_functions.h", 
+        "name": "Identify side effect functions for the distributed memory backend", 
+        "travuser": [
+            "Fundef", 
+            "Arg", 
+            "Ap", 
+            "Exprs", 
+            "Ret"
+        ]
+    }, 
+    "DMISEFA": {
+        "default": "sons", 
+        "include": "identify_side_effect_function_aps.h", 
+        "name": "Identify function applications with side-effects for the distributed memory backend", 
+        "travuser": [
+            "Ap", 
+            "Fundef"
         ]
     }, 
     "DMUI": {
@@ -10762,6 +10923,21 @@ var traversals_json =
             "Part", 
             "With", 
             "Assign", 
+            "Ap", 
+            "Let", 
+            "Prf"
+        ]
+    }, 
+    "POLYS": {
+        "default": "sons", 
+        "include": "polyhedral_setup.h", 
+        "name": "Polyhedral Analysis Setup", 
+        "travuser": [
+            "Fundef", 
+            "Part", 
+            "With", 
+            "Assign", 
+            "Ap", 
             "Let", 
             "Prf"
         ]
@@ -10819,7 +10995,8 @@ var traversals_json =
             "With", 
             "Modarray", 
             "Part", 
-            "Prf"
+            "Prf", 
+            "Ap"
         ]
     }, 
     "RC": {
@@ -11691,6 +11868,16 @@ var traversals_json =
             "Fundef"
         ]
     }, 
+    "UID": {
+        "default": "sons", 
+        "include": "runtime_function_id.h", 
+        "name": "Set unique ids for generic functions", 
+        "travuser": [
+            "Module", 
+            "Fundef", 
+            "Arg"
+        ]
+    }, 
     "UPRF": {
         "default": "sons", 
         "include": "prfunroll.h", 
@@ -11935,7 +12122,7 @@ var traversals_json =
     "WLIR": {
         "default": "sons", 
         "include": "withloop_invariant_removal.h", 
-        "name": "Loop Invariants Traversal", 
+        "name": "With-Loop Invariant Traversal", 
         "travuser": [
             "Ids", 
             "Assign", 
@@ -12202,6 +12389,17 @@ var nodesets_json =
         "Globobj",
         "Nested_init"
     ],
+    "IntValue": [
+        "Num",
+        "Array",
+        "Id"
+    ],
+    "Interface": [
+        "Import",
+        "Export",
+        "Use",
+        "Provide"
+    ],
     "Stmt": [
         "Let",
         "Cond",
@@ -12212,12 +12410,6 @@ var nodesets_json =
         "Icm",
         "Cudast"
     ],
-    "Interface": [
-        "Import",
-        "Export",
-        "Use",
-        "Provide"
-    ],
     "WithOp": [
         "Genarray",
         "Modarray",
@@ -12225,11 +12417,6 @@ var nodesets_json =
         "Fold",
         "Break",
         "Propagate"
-    ],
-    "IntValue": [
-        "Num",
-        "Array",
-        "Id"
     ],
     "Withloop": [
         "With",
