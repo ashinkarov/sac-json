@@ -62,7 +62,7 @@
             .cntr {
                 text-align: center;
             }
-            
+
             .button {
                 text-align: center;
                 cursor: pointer;
@@ -75,7 +75,10 @@
             }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
+        <script src="./js/json2html.js"></script>
+        <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
+        <script src="./js/FileSaver.js"></script>
         <script src="./ast.js"></script>
         <script>
         </script>
@@ -95,64 +98,29 @@
         </div>
         <div id="main">
             <table id="attrtype-table">
+                <tr>
+                    <th>Name</th>
+                    <th>C type</th>
+                    <th class='cntr'>Initial value</th>
+                    <th>Copy</th>
+                    <th>Persist</th>
+                    <th>VType</th>
+                    <th class='cntr'>Del</th>
+                </tr>
             </table>
             <div id="button-row">
-                <div id="btn-addrow" class="button" onclick="javascript:add_row();">Add Type</div>
-                &nbsp;&nbsp;
-                <div id="btn-get-json" class="button" onclick="javascript:get_json();">Get JSON</div>
+                <button id="btn-addrow" class="button" onclick="javascript:add_row();">Add Type</button>
+                <button id="btn-get-json" class="button" onclick="get_json();">Get JSON</button>
             </div>
-            <pre id="json-out" contenteditable="true" style="visibility:hidden"><pre>
         </div>
 
         <script>
-            // FIXME(artem) we don't display VTYPE and PERSISTENT
-            function gen_row (name, val) {
-              return  "<tr>"
-              +  "<td contenteditable='true'>" + name + "</td>"
-              +  "<td class='ctype' contenteditable='true'>" + val['ctype'] + "</td>"
-              +  "<td class='cntr' contenteditable='true'>" + val['init'] + "</td>"
-              +  "<td contenteditable='true'>" + val['copy'] + "</td>"
-              +  "<td class='cntr'><div class='button' onclick='del_row(this)'>&#x2717;</div></td>"
-              +  "</tr>"
-            }
-
-            function del_row (el) {
-                var name = $('td:first', $(el).closest ('tr')).text();
-                var r = confirm ("Are you sure you want to delete " + name + "?" )
-                if (r) {
-                    $(el).closest ('tr').remove ();
-                }
-            }
-
-            function add_row () {
-                $("#attrtype-table").append (gen_row ("&lt;name&gt;", 
-                                                      {"ctype":"&lt;ctype&gt;",
-                                                       "init": "&lt;init&gt;",
-                                                       "copy": "&lt;copy&gt;"}));
-            }
-
-            // FIXME(artem) we don't display VTYPE and PERSISTENT
-            function gen_rows (obj) {
-                var t = "<tr>"
-                      + "<th>Name</th>"
-                      + "<th>C type</th>"
-                      + "<th class='cntr'>Initial value</th>"
-                      + "<th>Copy</th>"
-                      + "<th class='cntr'>Del</th>"
-                      + "</tr>"
-
-                $.each (obj, function (name, val) {
-                    t += gen_row (name, val)
-                });
-                return t
-            }
-
             function get_json() {
                 names = [];
                 $("#attrtype-table tr").each (function (i, n) {
                     if (i == 0)
                         return;
-                    
+
                     var r = $(n);
                     var name = r.find('td:eq(0)').text();
                     names.push (name);
@@ -176,13 +144,37 @@
                 });
 
                 // FIXME Sort the object over the key.
+                var blob = new Blob([JSON.stringify(attrtypes_json, undefined, 4)], {type: "application/json;charset=utf-8"});
+                saveAs(blob, "attrtypes_ast.json");
+            }
 
-                $("#json-out").html (JSON.stringify(attrtypes_json, undefined, 4));
-                $("#json-out").css('visibility', 'visible');
+            var transform_attr = {"<>":"tr","html":[
+                {"<>":"td","contenteditable":"true","html":"${name}"},
+                {"<>":"td","class":"ctype","contenteditable":"true","html":"${ctype}"},
+                {"<>":"td","class":"cntr","contenteditable":"true","html":"${init}"},
+                {"<>":"td","contenteditable":"true","html":"${copy}"},
+                {"<>":"td","contenteditable":"true","html":"${persist}"},
+                {"<>":"td","class": "ctype", "contenteditable":"true","html":"${vtype}"},
+                {"<>":"td","class":"cntr","html":[
+                    {"<>":"div","class":"button","onclick": function(e) {
+                        if (confirm ("Are you sure you want to delete " + e.obj.name + "?" )) {
+                            $(e.event.target).closest("tr").remove();
+                        }},
+                        "html":"✗"}
+                ]}
+            ]};
+
+            function ast2Array (ast) {
+                var attr_data = [];
+                $.each(ast, function(name, val) {
+                    val['name'] = name;
+                    attr_data.push(val);
+                });
+                return attr_data;
             }
 
             $(document).ready (function () {
-                $("#attrtype-table").html (gen_rows (attrtypes_json));
+                $("#attrtype-table").json2html(ast2Array(attrtypes_json), transform_attr)
             });
         </script>
     </body>

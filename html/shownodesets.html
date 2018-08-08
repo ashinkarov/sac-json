@@ -53,6 +53,8 @@
             }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
+        <script src="./js/json2html.js"></script>
+        <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
         <script src="./ast.js"></script>
         <script>
@@ -73,43 +75,39 @@
         </div>
         <div id="main">
             <table id="nodesets-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Nodes</th>
+                </tr>
             </table>
         </div>
 
         <script>
-            function gen_links (arr) {
-                var t = ""
-                var len = arr.length
-
-                for (var i = 0; i < len; i++) {
-                    t += "<a href='showtree.html#node_" + arr[i] + "'>"
-                       + arr[i]
-                       + "</a>"
-
-                    if (i != len - 1)
-                        t += ", "
-                }
-                return t
-            }
-            function gen_rows (obj) {
-                var t = "<tr>"
-                      + "<th>Name</th>"
-                      + "<th>Nodes</th>"
-                      + "</tr>"
-
-                $.each (obj, function (name, val) {
-                    t += "<tr>"
-                      +  "<td id='ns_" + name + "'>"
-                      +  name 
-                      +  "</td>"
-                      +  "<td>" + gen_links (val) + "</td>"
-                      +  "</tr>"
+            function ast2Array (ast) {
+                var nodeset_data = [];
+                $.each(ast, function(name, val) {
+                    nodeset_data.push({'name': name, 'nodes': val});
                 });
-                return t
+                return nodeset_data;
             }
+
+            var transform_nodeset = {"<>":"tr","html":[
+                {"<>":"td","id":"ns_${name}","html":"${name}"},
+                {"<>":"td","html": function () {
+                    var t = ""; var len = this.nodes.length;
+                    for (var i = 0; i < len; i++) {
+                        t += "<a href='showtree.html#node_" + this.nodes[i] + "'>"
+                            + this.nodes[i]
+                            + "</a>";
+
+                        if (i != len - 1)
+                            t += ", ";
+                    }
+                    return t;
+            }}]};
 
             $(document).ready (function () {
-                $("#nodesets-table").html (gen_rows (nodesets_json));
+                $("#nodesets-table").json2html(ast2Array(nodesets_json), transform_nodeset);
             });
         </script>
     </body>

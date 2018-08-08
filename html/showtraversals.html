@@ -53,6 +53,8 @@
             }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
+        <script src="./js/json2html.js"></script>
+        <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
         <script src="./ast.js"></script>
         <script>
@@ -73,27 +75,30 @@
         </div>
         <div id="main">
             <table id="traversals-table">
+                <tr>
+                    <th>Acronym</th>
+                    <th>Name</th>
+                </tr>
             </table>
         </div>
 
         <script>
-            function gen_rows (obj) {
-                var t = "<tr>"
-                      + "<th>Acronym</th>"
-                      + "<th>Name</th>"
-                      + "</tr>"
+            var transform_traversals = {"<>":"tr","html":[
+                {"<>":"td","id":"trav_${acro}","html":"${acro}"},
+                {"<>":"td","html":"${name}"}
+            ]};
 
-                $.each (obj, function (name, val) {
-                    t += "<tr>"
-                      +  "<td id='trav_" + name + "'>" + name + "</td>"
-                      +  "<td>" + val['name'] + "</td>"
-                      +  "</tr>"
+            function ast2Array (ast) {
+                var trav_data = [];
+                $.each(ast, function(name, val) {
+                    val['acro'] = name;
+                    trav_data.push(val);
                 });
-                return t
+                return trav_data;
             }
 
             $(document).ready (function () {
-                $("#traversals-table").html (gen_rows (traversals_json));
+                $("#traversals-table").json2html(ast2Array(traversals_json), transform_traversals);
             });
         </script>
     </body>
