@@ -56,6 +56,7 @@
         <script src="./js/json2html.js"></script>
         <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
+        <script src="./js/sac-ast.js"></script>
         <script src="./ast.js"></script>
         <script>
         </script>
@@ -83,29 +84,6 @@
         </div>
 
         <script>
-            function ast2Array (ast) {
-                var nodeset_data = [];
-                $.each(ast, function(name, val) {
-                    nodeset_data.push({'name': name, 'nodes': val});
-                });
-                return nodeset_data;
-            }
-
-            var transform_nodeset = {"<>":"tr","html":[
-                {"<>":"td","id":"ns_${name}","html":"${name}"},
-                {"<>":"td","html": function () {
-                    var t = ""; var len = this.nodes.length;
-                    for (var i = 0; i < len; i++) {
-                        t += "<a href='showtree.html#node_" + this.nodes[i] + "'>"
-                            + this.nodes[i]
-                            + "</a>";
-
-                        if (i != len - 1)
-                            t += ", ";
-                    }
-                    return t;
-            }}]};
-
             $(document).ready (function () {
                 $("#nodesets-table").json2html(ast2Array(nodesets_json), transform_nodeset);
             });

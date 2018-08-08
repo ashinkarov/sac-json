@@ -79,6 +79,7 @@
         <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
         <script src="./js/FileSaver.js"></script>
+        <script src="./js/sac-ast.js"></script>
         <script src="./ast.js"></script>
         <script>
         </script>
@@ -115,74 +116,6 @@
         </div>
 
         <script>
-            function get_json() {
-                names = [];
-                $("#attrtype-table tr").each (function (i, n) {
-                    if (i == 0)
-                        return;
-
-                    var r = $(n);
-                    var name = r.find('td:eq(0)').text();
-                    names.push (name);
-
-                    var o = {};
-                    if (attrtypes_json.hasOwnProperty (name))
-                        o = attrtypes_json[name];
-
-                    o['ctype'] = r.find('td:eq(1)').text();
-                    o['init'] = r.find('td:eq(2)').text();
-                    o['copy'] = r.find('td:eq(3)').text();
-                    attrtypes_json[name] = o;
-                });
-
-                // Get rid of the old keys that are not in the table
-                // --- they might have been renamed or derleted.
-                Object.keys (attrtypes_json).forEach (function(n) {
-                    if (!names.includes (n)) {
-                        delete attrtypes_json[n];
-                    }
-                });
-
-                // FIXME Sort the object over the key.
-                var blob = new Blob([JSON.stringify(attrtypes_json, undefined, 4)], {type: "application/json;charset=utf-8"});
-                saveAs(blob, "attrtypes_ast.json");
-            }
-
-            var transform_attr = {"<>":"tr","html":[
-                {"<>":"td","contenteditable":"true","html":"${name}"},
-                {"<>":"td","class":"ctype","contenteditable":"true","html":"${ctype}"},
-                {"<>":"td","class":"cntr","contenteditable":"true","html":"${init}"},
-                {"<>":"td","contenteditable":"true","html":"${copy}"},
-                {"<>":"td","contenteditable":"true","html":"${persist}"},
-                {"<>":"td","class": "ctype", "contenteditable":"true","html":"${vtype}"},
-                {"<>":"td","class":"cntr","html":[
-                    {"<>":"div","class":"button","onclick": function(e) {
-                        if (confirm ("Are you sure you want to delete " + e.obj.name + "?" )) {
-                            $(e.event.target).closest("tr").remove();
-                        }},
-                        "html":"✗"}
-                ]}
-            ]};
-
-            function add_row () {
-                $("#attrtype-table").json2html({
-                    'name': 'name',
-                    'ctype': 'ctype',
-                    'init': 'init',
-                    'copy': 'copy',
-                    'persist': '',
-                    'vtype': ''}, transform_attr);
-            }
-
-            function ast2Array (ast) {
-                var attr_data = [];
-                $.each(ast, function(name, val) {
-                    val['name'] = name;
-                    attr_data.push(val);
-                });
-                return attr_data;
-            }
-
             $(document).ready (function () {
                 $("#attrtype-table").json2html(ast2Array(attrtypes_json), transform_attr)
             });
