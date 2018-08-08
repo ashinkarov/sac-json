@@ -164,6 +164,16 @@
                 ]}
             ]};
 
+            function add_row () {
+                $("#attrtype-table").json2html({
+                    'name': 'name',
+                    'ctype': 'ctype',
+                    'init': 'init',
+                    'copy': 'copy',
+                    'persist': '',
+                    'vtype': ''}, transform_attr);
+            }
+
             function ast2Array (ast) {
                 var attr_data = [];
                 $.each(ast, function(name, val) {
