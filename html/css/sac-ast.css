@@ -5,18 +5,6 @@
     font-family: 'PT Serif', serif;
 }
 
-body{
-    overflow: hidden;
-    padding-top: 100px;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    top: 0;
-    bottom: 0;
-}
-
 a, a:hover {
     color: #336699;
     text-decoration: none;
@@ -33,16 +21,6 @@ h1,h2,h3,h4,h5,h6,span.item-name{
 }
 
 #ast-desc .node-container {
-}
-
-#header {
-    position: absolute;
-    height: 100px;
-    width: 100%;
-    top: 0;
-    left: 0;
-    border-bottom: 1px #ccc solid;
-    text-align: center;
 }
 
 #menu {

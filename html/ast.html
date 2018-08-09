@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>SaC Abstract Syntax Tree</title>
-        <meta name="description" content="An HTML representation of the internal AST format of SaC">
+        <title>SaC Attribute Types</title>
+        <meta name="description" content="An HTML representation of the attribute types used in AST of SaC">
 
         <!-- Define a viewport to mobile devices to use - telling the browser to assume that the page is
              as wide as the device (width=device-width) and setting the initial page zoom level to be 1
@@ -13,25 +13,109 @@
         <link rel="stylesheet" href="./css/style.min.css" />
         <link rel="stylesheet" type="text/css" href="./css/sac-ast.css">
         <style>
+            nav {
+                position: fixed;
+                left: 0;
+                top: 10px;
+                right: 0;
+                text-align: center;
+                z-index: 9999;
+                width: 100%;
+            }
+            
+            main {
+                margin: 0 auto;
+                margin-top: 50px;
+            }
+
+            table {
+                max-width: 900px;
+                margin: 15px auto;
+                border-collapse: collapse;
+            }
+
+            button.tab-btn {
+                cursor: pointer;
+                width: 150px;
+                display: inline-block;
+                border: none;
+                padding: 10px;
+                text-align: center;
+                transition: .25s ease;
+            }
+
+            button.tab-btn:focus {
+                background-color: blue;
+                outline: none;
+            }
+
+            button.tab-btn.selected {
+                background-color: red;
+            }
+
+            section {
+                display: none;
+            }
+
+            section.selected {
+                display: block;
+            }
+
+            #button-row {
+                max-width: 300px;
+                margin: auto;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            td, th {
+                padding: .5em;
+            }
+
+            th {
+                text-align: left;
+                padding-bottom: 15px;
+                /*background:#ccc;*/
+                /*border-bottom: 2px solid #ccc;*/
+            }
+
+            tr:nth-child(even) td {
+                background:#eee;
+            }
+
+            .cntr {
+                text-align: center;
+            }
+
+            .button {
+                text-align: center;
+                cursor: pointer;
+                color: #963;
+                display: inline;
+            }
+
+            td.ctype {
+                font-family: monospace;
+            }
+
+            /* AST related */
+            section:before {
+                content: "";
+                display: inline-block;
+            }
+
             #ast-tree {
-                padding-left: 20px;
-                /*padding-top: 20px;*/
-                top: 100px;
-                bottom: 0;
-                width: 25%;
-                float:left;
-                position: absolute;
-                overflow: auto;
+                display: inline-block;
+                height: 100vh;
+                vertical-align: top;
+                overflow-y: scroll;
             }
 
             #ast-desc {
-                position: fixed;
-                top: 100px;
-                bottom: 0;
-                left: 25%;
-                width: 75%;
+                display: inline-block;
+                vertical-align: top;
                 overflow: auto;
-                padding-left: 20px;
             }
 
             .item-description {
@@ -92,8 +176,11 @@
             }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
-        <script src="./js/jquery.scrollTo.min.js"></script>
+        <script src="./js/json2html.js"></script>
+        <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
+        <script src="./js/FileSaver.js"></script>
+        <script src="./js/sac-ast.js"></script>
         <script src="./ast.js"></script>
         <script>
             var ast_json = [];
@@ -228,9 +315,9 @@
 
                         t += gen_name (attr_name);
                         t += " :: <span class='attribute-type'>"
-                           + "<a href='showattrtypes.html#attrt_" 
+                           + "<a href='#' onclick='return goTo(\"#attrt_" 
                            + val['type'] 
-                           + "'>" 
+                           + "\")'>" 
                            + val['type']
                            + "</a>"
                            + "</span> ";
@@ -269,56 +356,97 @@
         </script>
     </head>
     <body>
-        <div id="header">
-            <div id="menu">
-                <ul>
-                    <li class="selected"><a href="showtree.html">SaC AST</a></li>
-                    <li><a href="showattrtypes.html">SaC Attribute Types</a></li>
-                    <li><a href="showtraversals.html">SaC Traversals</a></li>
-                    <li><a href="shownodesets.html">SaC Nodesets</a></li>
-                </ul>
-            </div>
-            <h1>SaC Abstract Syntax Tree</h1>
-        </div>
-        <div id="ast-tree"></div>
-        <div id="ast-desc"></div>
-
+        <nav>
+            <button class="tab-btn selected" data-tab="0">SaC Tree</button>
+            <button class="tab-btn" data-tab="1">SaC Attribute Types</button>
+            <button class="tab-btn" data-tab="2">SaC Nodesets</button>
+            <button class="tab-btn" data-tab="3">SaC Traversals</button>
+        </nav>
+        <main>
+            <section class="selected" data-tab="0">
+                <div id="ast-tree"></div>
+                <div id="ast-desc"></div>
+            </section>
+            <section data-tab="1">
+                <table id="attrtype-table">
+                    <tr>
+                        <th>Name</th>
+                        <th>C type</th>
+                        <th class='cntr'>Initial value</th>
+                        <th>Copy</th>
+                        <th>Persist</th>
+                        <th>VType</th>
+                        <th class='cntr'>Del</th>
+                    </tr>
+                </table>
+                <div id="button-row">
+                    <button id="btn-addrow" class="button" onclick="add_row();">Add Type</button>
+                    <button id="btn-get-json" class="button" onclick="get_json();">Get JSON</button>
+                </div>
+            </section>
+            <section data-tab="2">
+                <table id="nodesets-table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Nodes</th>
+                    </tr>
+                </table>
+            </section>
+            <section data-tab="3">
+                <table id="traversals-table">
+                    <tr>
+                        <th>Acronym</th>
+                        <th>Name</th>
+                    </tr>
+                </table>
+            </section>
+        </main>
         <script>
-            // Remember a hash link when loading the page
-            var anchor = window.location.hash;
+            $(document).ready (function () {
+                // Remember a hash link when loading the page
+                var anchor = window.location.hash;
 
-            $("#ast-tree").jstree({
-                "core": {
-                    "data": ast_json,
-                    "check_callback" : true
-                },
+                // set tab onclick event
+                $(".tab-btn").click(function () {
+                    var tab = $(this).data("tab");
+                    switchTab (tab);
+                });
+                // lets get data
+                $("#attrtype-table").json2html(ast2Array(attrtypes_json), transform_attr);
+                $("#nodesets-table").json2html(ast2Array(nodesets_json), transform_nodeset);
+                $("#traversals-table").json2html(ast2Array(traversals_json), transform_traversals);
 
-                "plugins": ["sort"]
-            })
-            // Bind a function that selects a node passed via hash link
-            // in case such a node is valid.
-            .bind("loaded.jstree", function () {
-                if ($(anchor).length > 0) {
-                    // Select a node stored in ANCHOR and send an event to trigger redrawing.
-                    $("#ast-tree").jstree("select_node", anchor).trigger("select_node.jstree");
+                $("#ast-tree").jstree({
+                    "core": {
+                        "data": ast_json,
+                        "check_callback" : true
+                    },
 
-                    // Scroll a page to the selected node.
-                    $("#ast-tree").scrollTo (anchor);
-                }
-            });
+                    "plugins": ["sort"]
+                })
+                // Bind a function that selects a node passed via hash link
+                // in case such a node is valid.
+                    .bind("loaded.jstree", function () {
+                        if ($(anchor).length > 0) {
+                            // Select a node stored in ANCHOR and send an event to trigger redrawing.
+                            $("#ast-tree").jstree("select_node", anchor).trigger("select_node.jstree");
+
+                            // Scroll a page to the selected node.
+                            $("#ast-tree").scrollTo (anchor);
+                        }
+                    });
 
 
-            $('#ast-tree').on("changed.jstree", function (e, data) {
-                $('#ast-desc').html ("");
+                $('#ast-tree').on("changed.jstree", function (e, data) {
+                    $('#ast-desc').html ("");
 
-                $.each (data.selected, function (i, val) {
-                    var id = val.replace(/node_(.*)/, "$1");
-                    var txt = gen_node (id, syntaxtree_json[id]);
-                    $('#ast-desc').append (txt + "<br/>");
+                    $.each (data.selected, function (i, val) {
+                        var id = val.replace(/node_(.*)/, "$1");
+                        var txt = gen_node (id, syntaxtree_json[id]);
+                        $('#ast-desc').append (txt + "<br/>");
+                    });
                 });
             });
-
-
         </script>
     </body>
 </html>

@@ -12,7 +12,7 @@ var transform_traversals = {"<>":"tr","html":[
 ]};
 
 var transform_attr = {"<>":"tr","html":[
-    {"<>":"td","contenteditable":"true","html":"${id}"},
+    {"<>":"td","id":"attrt_${id}","contenteditable":"true","html":"${id}"},
     {"<>":"td","class":"ctype","contenteditable":"true","html":"${ctype}"},
     {"<>":"td","class":"cntr","contenteditable":"true","html":"${init}"},
     {"<>":"td","contenteditable":"true","html":"${copy}"},
@@ -32,7 +32,7 @@ var transform_nodeset = {"<>":"tr","html":[
     {"<>":"td","html": function () {
         var t = ""; var len = this.nodes.length;
         for (var i = 0; i < len; i++) {
-            t += "<a href='showtree.html#node_" + this.nodes[i] + "'>"
+            t += "<a href='#' onclick='return goTo(\"#node_" + this.nodes[i] + "\")'>"
                 + this.nodes[i]
                 + "</a>";
 
@@ -113,4 +113,36 @@ function get_json() {
     // FIXME Sort the object over the key.
     var blob = new Blob([JSON.stringify(attrtypes_json, undefined, 4)], {type: "application/json;charset=utf-8"});
     saveAs(blob, "attrtypes_ast.json");
+}
+
+/* Page movement functions */
+
+function switchTab (tabid) {
+    if (! $("section[data-tab='" + tabid + "']").hasClass('selected')) {
+        $("section[class*='selected']").removeClass('selected');
+        $("section[data-tab='" + tabid + "']").addClass('selected');
+    }
+    if (! $(".tab-btn[data-tab='" + tabid + "']").hasClass('selected')) {
+        $(".tab-btn[class*='selected']").removeClass('selected');
+        $(".tab-btn[data-tab='" + tabid + "']").addClass('selected');
+    }
+}
+
+function goTo (tag) {
+    if (tag.startsWith('#attrt_')) {
+        // attribute tab/page
+        switchTab (1);
+        $('html, body').animate({
+            scrollTop: $(tag).offset().top
+        }, 1);
+    } else if (tag.startsWith('#node_')) {
+        // tree tab/page
+        switchTab (0);
+        $('html, body').animate({
+            scrollTop: $(tag).offset().top
+        }, 1);
+    } else {
+        console.log ("Unknown attribute tag passed...");
+    }
+    return false;
 }
