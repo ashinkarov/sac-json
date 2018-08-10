@@ -129,20 +129,27 @@ function switchTab (tabid) {
 }
 
 function goTo (tag) {
+    // sane default
+    var tab = 0;
+
     if (tag.startsWith('#attrt_')) {
         // attribute tab/page
-        switchTab (1);
-        $('html, body').animate({
-            scrollTop: $(tag).offset().top
-        }, 1);
+        tab = 1;
     } else if (tag.startsWith('#node_')) {
         // tree tab/page
-        switchTab (0);
-        $('html, body').animate({
-            scrollTop: $(tag).offset().top
-        }, 1);
+        tab = 0;
+    } else if (tag.startsWith('#ns_')) {
+        // tree nodeset tab/page
+        tab = 2;
     } else {
-        console.log ("Unknown attribute tag passed...");
+        console.log ("Unknown tag " + tag + " passed...");
+        return true;
     }
-    return false;
+
+    switchTab (tab);
+    if (tab == 0) {
+        click_tree (tag);
+    } else {
+        $.scrollTo (tag, {offset: -50});
+    }
 }

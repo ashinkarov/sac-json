@@ -5,6 +5,11 @@
     font-family: 'PT Serif', serif;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 a, a:hover {
     color: #336699;
     text-decoration: none;

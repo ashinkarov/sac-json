@@ -18,11 +18,12 @@
                 left: 0;
                 top: 10px;
                 right: 0;
+                height: 40px;
                 text-align: center;
                 z-index: 9999;
                 width: 100%;
             }
-            
+
             main {
                 margin: 0 auto;
                 margin-top: 50px;
@@ -105,15 +106,22 @@
                 display: inline-block;
             }
 
+            /* flex container */
+            .flex {
+                display: flex
+            }
+
             #ast-tree {
-                display: inline-block;
-                height: 100vh;
+                position: fixed;
+                height: 100%;
+                width: 19%;
                 vertical-align: top;
                 overflow-y: scroll;
             }
 
             #ast-desc {
-                display: inline-block;
+                width: 80%;
+                margin-left: 20%;
                 vertical-align: top;
                 overflow: auto;
             }
@@ -176,11 +184,11 @@
             }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
+        <script src="./js/jquery.scrollTo.min.js"></script>
         <script src="./js/json2html.js"></script>
         <script src="./js/jquery.json2html.js"></script>
         <script src="./js/jstree.min.js"></script>
         <script src="./js/FileSaver.js"></script>
-        <script src="./js/sac-ast.js"></script>
         <script src="./ast.js"></script>
         <script>
             var ast_json = [];
@@ -238,19 +246,19 @@
                     t += "<span class='target-contains'>Any</span>";
                 else if (contains instanceof Array)
                     t += $.map (contains, function (val) {
-                             var href = 
+                             var span =
                                  val in nodesets_json
-                                 ? "shownodesets.html#ns_" + val
-                                 : "javascript:click_tree (\"#node_" + val + "\")"
+                                 ? "<span class='target-type'><a href='#' onclick='goTo(\"#ns_" + val + "\"); return false'>" + val + "</a></span>"
+                                 : "<span class='target-type'><a href='javascript:click_tree (\"#node_" + val + "\")'>" + val + "</a></span>";
 
-                             return "<span class='target-type'><a href='" + href + "'>" + val + "</a></span>";
+                             return span;
                          }).join (", ");
                 else {
-                    var href = contains in nodesets_json
-                               ? "shownodesets.html#ns_" + contains
-                               : "javascript:click_tree (\"#node_" + contains + "\")"
+                    var span = contains in nodesets_json
+                               ? "<span class='target-type'><a href='#' onclick='goTo(\"#ns_" + contains + "\"); return false'>" + contains + "</a></span>"
+                               : "<span class='target-type'><a href='javascript:click_tree (\"#node_" + contains + "\")'>" + contains + "</a></span>";
 
-                    t += "<span class='target-type'><a href='" + href + "'>" + contains + "</a></span>";
+                    t += span;
                 }
 
                 t += "<span class='target-phases'>";
@@ -315,9 +323,9 @@
 
                         t += gen_name (attr_name);
                         t += " :: <span class='attribute-type'>"
-                           + "<a href='#' onclick='return goTo(\"#attrt_" 
-                           + val['type'] 
-                           + "\")'>" 
+                           + "<a href='#' onclick='goTo(\"#attrt_"
+                           + val['type']
+                           + "\"); return false'>"
                            + val['type']
                            + "</a>"
                            + "</span> ";
@@ -354,6 +362,7 @@
                 return t;
             }
         </script>
+        <script src="./js/sac-ast.js"></script>
     </head>
     <body>
         <nav>
@@ -364,8 +373,10 @@
         </nav>
         <main>
             <section class="selected" data-tab="0">
-                <div id="ast-tree"></div>
-                <div id="ast-desc"></div>
+                <div class="flex">
+                    <div id="ast-tree"></div>
+                    <div id="ast-desc"></div>
+                </div>
             </section>
             <section data-tab="1">
                 <table id="attrtype-table">
