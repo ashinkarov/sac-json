@@ -62,7 +62,7 @@
                 display: block;
             }
 
-            #button-row {
+            .button-row {
                 max-width: 300px;
                 margin: auto;
                 margin-top: 15px;
@@ -404,7 +404,7 @@
                         <th class='cntr'>Del</th>
                     </tr>
                 </table>
-                <div id="button-row">
+                <div class="button-row">
                     <button class="button" onclick="add_attrtypes_row();">Add Type</button>
                     <button class="button" onclick="get_attrtypes_json ();">Get JSON</button>
                 </div>
@@ -414,8 +414,14 @@
                     <tr>
                         <th>Name</th>
                         <th>Nodes</th>
+                        <th class='cntr'>Del</th>
+                        <th class='cntr'>Edit</th>
                     </tr>
                 </table>
+                <div class="button-row">
+                    <button class="button" onclick="add_nodesets_row();">Add Nodeset</button>
+                    <button class="button" onclick="get_nodesets_json ();">Get JSON</button>
+                </div>
             </section>
             <section data-tab="3">
                 <table id="traversals-table">
@@ -430,7 +436,7 @@
                         <th class='cntr'>Edit</th>
                     </tr>
                 </table>
-                <div id="button-row">
+                <div class="button-row">
                     <button class="button" onclick="add_traversals_row();">Add Traversal</button>
                     <button class="button" onclick="get_traversals_json ();">Get JSON</button>
                 </div>

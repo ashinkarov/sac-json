@@ -95,12 +95,10 @@ var transform_traversals = {"<>":"tr", "class":"traversal_row", "html":[
                         l.html (nodes_to_list (o.travuser));
                     // Make travnone editable
                     l = $(e.event.target).closest("tr").find(".travnone");
-                    o = traversals_json[e.obj.id];
                     if (o.hasOwnProperty ("travnone"))
                         l.html (nodes_to_list (o.travnone));
                     // Make traverror editable
                     l = $(e.event.target).closest("tr").find(".traverror");
-                    o = traversals_json[e.obj.id];
                     if (o.hasOwnProperty ("traverror"))
                         l.html (nodes_to_list (o.traverror));
                 }
@@ -189,7 +187,7 @@ var transform_attr = {"<>":"tr","html":[
     {"<>":"td","class": "ctype", "contenteditable":"true","html":"${vtype}"},
     {"<>":"td","class":"cntr","html":[
         {"<>":"div","class":"button","onclick": function(e) {
-            if (confirm ("Are you sure you want to delete " + e.obj.name + "?" )) {
+            if (confirm ("Are you sure you want to delete " + e.obj.id + "?" )) {
                 $(e.event.target).closest("tr").remove();
             }},
             "html":"✗"}
@@ -249,27 +247,83 @@ function add_attrtypes_row () {
 
 
 
+
+
+var transform_nodeset = {"<>":"tr","html":[
+    {"<>":"td","id":"ns_${id}", "class":"editable", "html":"${id}"},
+    {"<>":"td", "class":"nodeset_nodes editable", "html": function () { return nodes_to_hreflist (this.nodes) }},
+    {"<>":"td","class":"cntr","html":[
+        {"<>":"div","class":"button","onclick": function(e) {
+            if (confirm ("Are you sure you want to delete " + e.obj.id + "?" )) {
+                $(e.event.target).closest("tr").remove();
+                // FIXME update json
+            }},
+            "html":"✗"}
+    ]},
+    {"<>":"td","class":"cntr","html":[
+        {"<>":"div","class":"button","onclick": function(e) {
+                $(e.event.target).closest("tr").find(".editable").prop("contenteditable", "true");
+                var l = $(e.event.target).closest("tr").find(".nodeset_nodes");
+                var o = nodesets_json[e.obj.id];
+                // In case we didn't save JSON yet, `o` can be undefined.
+                if (typeof o != 'undefined') 
+                    l.html (nodes_to_list (o));
+            },
+            "html":"Edit"}
+    ]}
+]};
+
+
+// uses FileSaver.js
+function update_nodesets () {
+    names = [];
+    $("#nodesets-table tr").each (function (i, n) {
+        if (i == 0)
+            return;
+
+        var r = $(n);
+        var name = r.find('td:eq(0)').text();
+        names.push (name);
+
+        let sep = /\s*,\s*/;
+        let nodes = r.find (".nodeset_nodes").text ();
+        nodesets_json[name] = nodes.split (sep);
+    });
+
+    // Get rid of the old keys that are not in the table
+    // --- they might have been renamed or derleted.
+    Object.keys (nodesets_json).forEach (function(n) {
+        if (!names.includes (n)) {
+            delete nodesets_json[n];
+        }
+    });
+
+    // FIXME Sort the object over the key.
+}
+
+function get_nodesets_json () {
+    update_nodesets ();
+    get_json (nodesets_json, "nodesets_ast.json")
+}
+
+function add_nodesets_row () {
+    // FIXME we need to generalise this
+    $("#nodesets-table").json2html({
+        'id': 'NodesetName',
+        'nodes': []},
+        transform_nodeset);
+}
+
+
+
+
+
+
 function get_json (o, fname) {
     var blob = new Blob([JSON.stringify(o, undefined, 4)], {type: "application/json;charset=utf-8"});
     saveAs(blob, fname);
 }
 
-
-
-var transform_nodeset = {"<>":"tr","html":[
-    {"<>":"td","id":"ns_${id}","html":"${id}"},
-    {"<>":"td","html": function () {
-        var t = ""; var len = this.nodes.length;
-        for (var i = 0; i < len; i++) {
-            t += "<a href='#' onclick='return goTo(\"#node_" + this.nodes[i] + "\")'>"
-                + this.nodes[i]
-                + "</a>";
-
-            if (i != len - 1)
-                t += ", ";
-        }
-        return t;
-}}]};
 
 /*
  * This function taks the AST JSON, which is typically formatted as:
