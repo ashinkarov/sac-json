@@ -182,6 +182,20 @@
             .target-phases {
                 margin-left: 30px;
             }
+            .trav_prop_table {
+                margin: 0px;
+            }
+            .trav_prop_table tr td {
+                background:none;
+                padding: 0px;
+                padding-left: .5em;
+            }
+            .trav_prop_name {
+                color: #999;
+            }
+            .dontshow {
+                visibility: collapse;
+            }
         </style>
         <script src="./js/jquery-3.3.1.min.js"></script>
         <script src="./js/jquery.scrollTo.min.js"></script>
@@ -391,8 +405,8 @@
                     </tr>
                 </table>
                 <div id="button-row">
-                    <button id="btn-addrow" class="button" onclick="add_row();">Add Type</button>
-                    <button id="btn-get-json" class="button" onclick="get_json();">Get JSON</button>
+                    <button class="button" onclick="add_attrtypes_row();">Add Type</button>
+                    <button class="button" onclick="get_attrtypes_json ();">Get JSON</button>
                 </div>
             </section>
             <section data-tab="2">
@@ -408,8 +422,18 @@
                     <tr>
                         <th>Acronym</th>
                         <th>Name</th>
+                        <th>Properties</th>
+                        <th>Travuser</th>
+                        <th>Traverror</th>
+                        <th>Travnone</th>
+                        <th class='cntr'>Del</th>
+                        <th class='cntr'>Edit</th>
                     </tr>
                 </table>
+                <div id="button-row">
+                    <button class="button" onclick="add_traversals_row();">Add Traversal</button>
+                    <button class="button" onclick="get_traversals_json ();">Get JSON</button>
+                </div>
             </section>
         </main>
         <script>
