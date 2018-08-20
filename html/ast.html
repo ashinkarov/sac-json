@@ -16,17 +16,21 @@
             nav {
                 position: fixed;
                 left: 0;
-                top: 10px;
+                top: 0;
                 right: 0;
-                height: 40px;
+                height: 60px;
                 text-align: center;
                 z-index: 9999;
                 width: 100%;
+                margin: none;
+                background: inherit;
+                border: none;
             }
 
             main {
                 margin: 0 auto;
-                margin-top: 50px;
+                margin-top: 70px;
+                padding-top: 0;
             }
 
             table {
@@ -36,26 +40,29 @@
             }
 
             button.tab-btn {
+                font-size: 120%;
                 cursor: pointer;
-                width: 150px;
+                width: 250px;
                 display: inline-block;
                 border: none;
-                padding: 10px;
                 text-align: center;
                 transition: .25s ease;
+                height: 60px;
+                background-color: inherit;
             }
-
-            button.tab-btn:focus {
-                background-color: blue;
-                outline: none;
+            
+            button.tab-btn:hover {
+                background-color: #ddd;
             }
 
             button.tab-btn.selected {
-                background-color: red;
+                font-weight: 800;
+                text-decoration: underline;
             }
 
             section {
                 display: none;
+                margin: none;
             }
 
             section.selected {
@@ -77,12 +84,10 @@
             th {
                 text-align: left;
                 padding-bottom: 15px;
-                /*background:#ccc;*/
-                /*border-bottom: 2px solid #ccc;*/
             }
 
             tr:nth-child(even) td {
-                background:#eee;
+                background:#e9e9e9;
             }
 
             .cntr {
@@ -100,12 +105,6 @@
                 font-family: monospace;
             }
 
-            /* AST related */
-            section:before {
-                content: "";
-                display: inline-block;
-            }
-
             /* flex container */
             .flex {
                 display: flex
@@ -113,17 +112,28 @@
 
             #ast-tree {
                 position: fixed;
-                height: 100%;
+                top: 70px;
+                bottom: 0px;
                 width: 19%;
                 vertical-align: top;
                 overflow-y: scroll;
             }
 
             #ast-desc {
-                width: 80%;
+                width: 700px;
                 margin-left: 20%;
                 vertical-align: top;
                 overflow: auto;
+            }
+            
+            #ast-edit {
+                width: 700px;
+                margin-left: none;
+                background-color: #f3f3f3;
+                border: none;
+                border-left: 1px solid #ccc;
+                visibility: hidden;
+                font-size: 80%;
             }
 
             .item-description {
@@ -305,6 +315,10 @@
 
             function gen_node (name, node) {
                 var t = "<div class='node-container'>";
+                t += "<div>"
+                  +  "<button class='button' onclick='load_ast_edit ();'>Edit</button> "
+                  // +  "<button class='button' onclick='get_astnode_json ();'>Get JSON</button>"
+                  +  "</div>";
 
                 t += "<h1>" + name + "</h1>"
                 if (node.hasOwnProperty ('description'))
@@ -390,6 +404,7 @@
                 <div class="flex">
                     <div id="ast-tree"></div>
                     <div id="ast-desc"></div>
+                    <textarea id="ast-edit"></textarea>
                 </div>
             </section>
             <section data-tab="1">
@@ -460,9 +475,10 @@
                 $("#ast-tree").jstree({
                     "core": {
                         "data": ast_json,
-                        "check_callback" : true
+                        "check_callback" : true,
+                        // Disable the ability to select multiple nodes from the tree.
+                        multiple : false
                     },
-
                     "plugins": ["sort"]
                 })
                 // Bind a function that selects a node passed via hash link
@@ -480,12 +496,29 @@
 
                 $('#ast-tree').on("changed.jstree", function (e, data) {
                     $('#ast-desc').html ("");
+                    $('#ast-edit').html ("");
+                    $('#ast-edit').css ("visibility", "hidden");
 
                     $.each (data.selected, function (i, val) {
                         var id = val.replace(/node_(.*)/, "$1");
                         var txt = gen_node (id, syntaxtree_json[id]);
                         $('#ast-desc').append (txt + "<br/>");
                     });
+                });
+
+                $('#ast-edit').on('input paste', function() {
+                    // We assume that we have only one node in the #ast-desc.
+                    var id = $("#ast-desc").find (".node-container").find ("h1").text ();
+                    console.log ("Changing edit", id); 
+                    try {
+                        o = JSON.parse ($("#ast-edit").val ());
+                        syntaxtree_json[id] = o;
+                        $("#ast-desc").css ("background-color", "inherit");
+                        $("#ast-desc").html (gen_node (id, o));
+                    } catch (e) {
+                        // Didn't parse
+                        $("#ast-desc").css ("background-color", "#FFCCCC");
+                    }
                 });
             });
         </script>

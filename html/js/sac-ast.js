@@ -325,6 +325,22 @@ function get_json (o, fname) {
 }
 
 
+function load_ast_edit () {
+    $("#ast-desc").find (".node-container").find ("h1").each (function (i, o) {
+        var id = $(o).text ();
+        var jo = syntaxtree_json[id];
+        $("#ast-edit").val (JSON.stringify (jo, undefined, 4));
+        $("#ast-edit").css ("visibility", "visible");
+    });
+}
+
+
+function get_astnode_json () {
+    let id =  $("#ast-desc").find (".node-container").find ("h1").text ();
+    // XXX we don't need this for the time being. 
+}
+
+
 /*
  * This function taks the AST JSON, which is typically formatted as:
  *   { 'object': { 'attr': 'foo', ... }, ... }
